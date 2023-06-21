@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import homeIcon from '../../../assets/images/home.svg';
 import logoIcon from '../../../assets/images/logo.svg';
 import multiBetIcon from '../../../assets/images/multi_bet.svg';
@@ -6,6 +6,8 @@ import newsIcon from '../../../assets/images/news.svg';
 import collectionIcon from '../../../assets/images/tip_collection.svg';
 
 import settings from '../../../misc'
+import { ReducerContext } from '../../../context/ReducerContext';
+import { setTipCollectionModalStatus } from '../../../feature/appAction';
 
 /**
  * 
@@ -14,6 +16,10 @@ import settings from '../../../misc'
  */
 
 const AppFooter = () => {
+    const {dispatch, tipsCollection} = useContext(ReducerContext);
+    const handleShow = () => {
+        setTipCollectionModalStatus(dispatch, true);
+      }
   return (
     <div className='footer'>
         <div className='footer-item'>
@@ -33,9 +39,9 @@ const AppFooter = () => {
             <p>{settings.staticString.news}</p>
         </div>
         <div className='footer-item tip_collection'>
-            {true && <div className='tip_collection_icon'>
+            {tipsCollection?.length > 0 && <div className='tip_collection_icon' onClick={handleShow}>
                 <img src={collectionIcon} alt='collection'/>
-                <span>5</span>
+                <span>{tipsCollection?.length}</span>
             </div>}
             <div>
                 <p>{settings.staticString.poweredBy}</p>

@@ -1,7 +1,9 @@
 
 @import './misc/_variables.scss';
 body{
-    background-color: $main-bg-color;
+    background-color: $main-bg-color !important;
+    margin: 0;
+    font-family: 'Jaldi', sans-serif !important;
 }
 .header{
     height: 43px;
@@ -28,6 +30,7 @@ body{
         color: $white;
         margin: 0;
         padding: 0;
+        font-size: 15px;
     }
 }
 
@@ -50,7 +53,6 @@ body{
             p{
                 transform: rotate(270deg);
                 line-height: unset;
-                width: fit-content;
                 height: 30px;
                 position: absolute;
                 left: -46px;
@@ -129,9 +131,11 @@ body{
                 color: $white;
                 p{
                     font-size: 12px;
+                    margin: 0;
                 }
                 h5 {
                     font-size: 14px;
+                    margin: 0;
                 }
             }
         }
@@ -148,6 +152,7 @@ body{
             overflow-y: hidden;
             overflow-x: auto;
             padding: 0;
+            margin: 14px 0px;
             &[data-scrollable]::-webkit-scrollbar {
                 display: none;
                 -webkit-appearance: none;
@@ -174,12 +179,18 @@ body{
 }
 
 .lig_slider{
-    .lig_slider_item:first-child{
-        margin-left: 14px;
+    .swiper-slide{
+        &:first-child{
+            margin-left: 14px;
+        }
+    //   width: auto!important;  
     }
+    // .lig_slider_item
     .lig_slider_item{
+        
         height: 170px;
-        width: 302px;
+        // min-width: 302px;
+        // width: 302px;
         border-radius: 4px;
         padding: 0px 10px;
         background-color: #37003E;
@@ -296,6 +307,7 @@ body{
         h2 {
             margin: 0;
             font-size: 16px;
+            font-weight: bold;
         }
         .share_icon{
             display: flex;
@@ -354,12 +366,12 @@ body{
                 background-color: #F0F0F0;
                 border-radius: 4px;
                 padding: 0px 11px 0px 5px;
-                height: fit-content;
                 gap: 10px;
                 height: 30px;
                 align-items: center;
                 justify-content: space-between;
                 width: 66px;
+                cursor: pointer;
                 &.selected{
                     background-color: #2D2A2B;
                     color: $white;
@@ -381,6 +393,25 @@ body{
     }
 }
 
+.tip_collection_modal {
+    .modal-dialog-centered{
+        align-items: end !important;
+    }
+    .modal-content{
+        margin-bottom: 54px;
+        border-radius: 4px;
+    }
+    .modal-header{
+        padding: 10px 20px;
+        .modal-title{
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .btn-close{
+            font-size: 12px;
+        }
+    }
+}
 .footer {
     display: flex;
     background-color: $black;
@@ -392,6 +423,7 @@ body{
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 1100;
     .footer-item {
         text-align: center;
         &.tip_collection{

@@ -43,7 +43,6 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection }) => {
       <div className='popular_matches_content'>
         {data?.map((item) => {
           const isSelected = tipsCollection?.some(elm => elm.eventId === item?.eventId)
-          console.log('isSelected: ', isSelected);
           return (
             <div key={item?.eventId} className='popular_match_item'>
               <div className='left_content'>

@@ -10,7 +10,7 @@ import images from '../../../constants/allAssets';
  * 
  */
 
-const TeaserSlider = ({data}) => {
+const TeaserSlider = ({data, handleSelectTeaser}) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   return (
     <div className='first_slider'>
@@ -51,7 +51,7 @@ const TeaserSlider = ({data}) => {
                 <div className='dec'>
                   <p>{item?.stats}</p>
                 </div>
-                <div className='odds_section'>
+                <div className='odds_section' onClick={()=> handleSelectTeaser(item)}>
                   <p>{item?.title}</p>
                   <h5>{item?.odds_decimal}</h5>
                 </div>

@@ -4,16 +4,20 @@ import { AppContext } from '../../context/AppContext';
 import SportsMenu from '../../components/sportsMenu';
 import LigSlider from '../../components/ligSlider';
 import PopularOdds from './components/PopularOdds';
-import { addPopularOddToCollection } from '../../feature/appAction';
+import { addPopularOddToCollection, addTeaserItemToCollection } from '../../feature/appAction';
+import { ReducerContext } from '../../context/ReducerContext';
+import { addLigItemToCollection } from '../../feature/appAction';
 
 /**
  * HomePage - component it's first page which is show app started.
  */
 
 const HomePage = () => {
-  const {dispatch, fireBaseTeaserDataBase, fireBaseAllLeaguesDataBase, fireBaseFeaturedDataBase, fireBasePopularOddsDataBase, reducerState} = useContext(AppContext);
+  const {fireBaseTeaserDataBase, fireBaseAllLeaguesDataBase, fireBaseFeaturedDataBase, fireBasePopularOddsDataBase, fireBaseHomePageSliderDataBase} = useContext(AppContext);
 
-  // const selectedMenuTab = fireBaseAllLeaguesDataBase && Object.keys(fireBaseAllLeaguesDataBase)?.[0];
+  const {tipsCollection, dispatch} = useContext(ReducerContext);
+
+  // @futureUse const selectedMenuTab = fireBaseAllLeaguesDataBase && Object.keys(fireBaseAllLeaguesDataBase)?.[0];
 
   const handleSelect = (item) => {
     console.log('item: ', item);
@@ -24,15 +28,22 @@ const HomePage = () => {
   // }, [fireBaseAllLeaguesDataBase])
   
   const handleSelectOdd = (data) => {
-    addPopularOddToCollection(dispatch, data)
+    addPopularOddToCollection(dispatch, data);
+  }
+  
+  const handleSelectLigItem = (data) => {
+    addLigItemToCollection(dispatch, data);
   }
 
+  const handleSelectTeaserItem = (data) => {
+    addTeaserItemToCollection(dispatch, data);
+  }
   return (
     <div className='home_page_container'>
-      <TeaserSlider data={fireBaseTeaserDataBase} />
+      <TeaserSlider data={fireBaseTeaserDataBase} handleSelectTeaser={handleSelectTeaserItem}/>
       <SportsMenu data={fireBaseAllLeaguesDataBase} handleSelect={handleSelect} selectedItem={''} />
-      <LigSlider data={fireBaseFeaturedDataBase}/>
-      <PopularOdds data={fireBasePopularOddsDataBase} handleSelectOdd={handleSelectOdd} tipsCollection={reducerState?.tipsCollection}/>
+      <LigSlider data={fireBaseHomePageSliderDataBase} handleSelectLig={handleSelectLigItem} tipsCollection={tipsCollection}/>
+      <PopularOdds data={fireBasePopularOddsDataBase} handleSelectOdd={handleSelectOdd} tipsCollection={tipsCollection}/>
     </div>
   )
 }

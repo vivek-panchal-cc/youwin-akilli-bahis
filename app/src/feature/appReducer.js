@@ -1,8 +1,9 @@
-import { ADD_POPULAR_ODD_TO_COLLECTION, SELECT_SPORT_MENU } from "./types";
+import { ADD_LIG_ITEM_TO_COLLECTION, ADD_POPULAR_ODD_TO_COLLECTION, ADD_TEASER_ITEM_TO_COLLECTION, SELECT_SPORT_MENU, SET_TIP_COLLECTION_MODAL_STATUS } from "./types";
 
 const initialState = {
   tipsCollection: [],
-  selectedSportMenu: []
+  selectedSportMenu: [],
+  isModalShow: false,
 }
 
 const appReducer =  (state = initialState, action) => {
@@ -29,6 +30,32 @@ const appReducer =  (state = initialState, action) => {
     return {
       ...state,
       selectedSportMenu: action.payload
+    }
+  case ADD_LIG_ITEM_TO_COLLECTION:
+    const { eventId, selectionId } = action.payload;
+    const isExistsWithEventId = state.tipsCollection.some(elm => elm.eventId === eventId);
+    const isExistsWithSelectionId = state.tipsCollection.some(elm => elm.eventId === eventId && elm.selectionId === selectionId);
+
+    let tipsCollectionArr = state.tipsCollection.filter(item => item.eventId !== eventId);
+
+    if (!isExistsWithEventId || !isExistsWithSelectionId) {
+      tipsCollectionArr.push(action.payload);
+    }
+
+    return {
+      ...state,
+      tipsCollection: tipsCollectionArr
+    }
+  case ADD_TEASER_ITEM_TO_COLLECTION: 
+    const isExistsTip = state.tipsCollection.some(elm => elm.eventId === action.payload?.eventId);
+    return {
+      ...state,
+      tipsCollection: !isExistsTip ? [...state.tipsCollection, action.payload] : [...state.tipsCollection] 
+    }
+  case SET_TIP_COLLECTION_MODAL_STATUS:
+    return {
+      ...state, 
+      isModalShow: action.payload
     }
   default:
     return state

@@ -1,11 +1,5 @@
-import React, { createContext, useMemo, useReducer } from 'react'
+import React, { createContext, useMemo } from 'react';
 import useAppState from '../hooks/useAppState';
-import appReducer from '../feature/appReducer';
-
-
-const reducerInitState = {
-    tipsCollection: [], 
-}
 
 const appInitState = {
     fireBaseHomePageSliderDataBase: null,
@@ -14,19 +8,15 @@ const appInitState = {
     fireBaseAllMarketsDataBase: null,
     fireBasePopularOddsDataBase: null,
     fireBaseTeaserDataBase:  null,
-    reducerState: reducerInitState,
-    dispatch: () => {},
 }
 
 export const AppContext = createContext({...appInitState});
 
 const AppContextProvider = ({children}) => {
     const {appState} = useAppState();
-    const [state, dispatch] = useReducer(appReducer, reducerInitState);
     
-    const value =  useMemo(() => ({...appState,  reducerState: state, dispatch}),[appState, state])
+    const value =  useMemo(() => ({...appState}),[appState])
     
-    console.log('AKILLI-BAHIS || reducers state', state);
     console.log('AKILLII-BAHIS || firebaseData: ', appState);
 
     return (
