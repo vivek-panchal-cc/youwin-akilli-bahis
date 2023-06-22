@@ -13,7 +13,7 @@ import { addLigItemToCollection } from '../../feature/appAction';
  */
 
 const HomePage = () => {
-  const {fireBaseTeaserDataBase, fireBaseAllLeaguesDataBase, fireBaseFeaturedDataBase, fireBasePopularOddsDataBase, fireBaseHomePageSliderDataBase} = useContext(AppContext);
+  const {fireBaseTeaserDataBase, fireBaseAllLeaguesDataBase, fireBaseFeaturedDataBase, fireBasePopularOddsDataBase} = useContext(AppContext);
 
   const {tipsCollection, dispatch} = useContext(ReducerContext);
 
@@ -42,7 +42,7 @@ const HomePage = () => {
     <div className='home_page_container'>
       <TeaserSlider data={fireBaseTeaserDataBase} handleSelectTeaser={handleSelectTeaserItem}/>
       <SportsMenu data={fireBaseAllLeaguesDataBase} handleSelect={handleSelect} selectedItem={''} />
-      <LigSlider data={fireBaseHomePageSliderDataBase} handleSelectLig={handleSelectLigItem} tipsCollection={tipsCollection}/>
+      <LigSlider data={fireBaseFeaturedDataBase} handleSelectLig={handleSelectLigItem} tipsCollection={tipsCollection}/>
       <PopularOdds data={fireBasePopularOddsDataBase} handleSelectOdd={handleSelectOdd} tipsCollection={tipsCollection}/>
     </div>
   )

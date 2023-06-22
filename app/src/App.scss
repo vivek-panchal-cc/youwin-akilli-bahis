@@ -103,6 +103,7 @@ body{
                     h5{
                         font-size: 14px;
                         margin: 0;
+                        font-weight: bold;
                     }
                     img {
                         width: 15px;
@@ -117,12 +118,14 @@ body{
                     font-size: 10px;
                     color: $white;
                     margin: 0;
+                    line-height: 1;
                 }
             }
             .odds_section{
                 background: $green;
                 border-radius: 4px;
                 height: 26px;
+                min-height: 26px;
                 width: 80%;
                 display: flex;
                 align-items: center;
@@ -400,15 +403,131 @@ body{
     .modal-content{
         margin-bottom: 54px;
         border-radius: 4px;
+        border: 1px solid #F0F0F0;
     }
     .modal-header{
         padding: 10px 20px;
+        border-color: #F2F2F2;
         .modal-title{
             font-size: 16px;
             font-weight: bold;
         }
         .btn-close{
             font-size: 12px;
+        }
+    }
+    .modal-body {
+    
+        .odds_container {
+            margin: 5px;
+            background: $white;
+            border-radius: 4px;
+            .matches_content{
+                // padding: 0px 20px 10px;
+                .popular_match_item{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 5px;
+                    border-bottom: 1px solid #F8F8F8;
+                    .left_content{
+                        display: flex;
+                        justify-content: center;
+                        gap: 10px;
+                        width: 100%;
+                        .team_section{
+                            &:nth-child(1){
+                                justify-content: end;
+                                text-align: end;
+                            }
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+                            flex-basis: 50%;
+                            img {
+                                height: 20px;
+                            }
+                            p {
+                                font-size: 12px;
+                                margin: 0;
+                            }
+                        }
+                    }
+                    .odd_button{
+                        display: flex;
+                        background-color: #F0F0F0;
+                        border-radius: 4px;
+                        padding: 0px 11px 0px 5px;
+                        gap: 10px;
+                        height: 30px;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 66px;
+                        min-width: 66px;
+                        cursor: pointer;
+                        &.selected{
+                            background-color: #2D2A2B;
+                            color: $white;
+                        }
+                        :last-child{
+                            font-weight: bold;
+                        }
+                        p{
+                            &:first-child{
+                                line-height: 1;
+                                text-align: center;
+                                width: 20px;
+                            }
+                            margin: 0;
+                            font-size: 13px;
+                        }
+                    }
+                }
+               
+            }
+        }
+        .empty_text{
+            text-align: center;
+            font-size: 14px;
+            color: #A2A2A2;
+            padding: 50px 0px;
+        }
+        .total_odds{
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+            p{
+                margin: 0;
+                font-size: 18px;
+                color: #707070;
+                line-height: 2;
+            }
+            h5 {
+                margin: 0;
+                color: #000000;
+                font-size: 18px;
+                line-height: 2;
+                font-weight: bold;
+            }
+        }
+        .share_button {
+            border: 1px solid #A2A2A2;
+            border-radius: 2px;
+            color: #707070;
+            background: transparent;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            width: 205px;
+            font-size: 12px;
+            justify-content: center;
+            margin: 25px auto 0px auto;
+            svg {
+                fill: #A2A2A2;
+                height: 16px;
+            }
         }
     }
 }
