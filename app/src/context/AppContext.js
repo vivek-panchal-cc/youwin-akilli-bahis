@@ -1,6 +1,7 @@
 import React, { createContext, useMemo } from 'react';
 import useAppState from '../hooks/useAppState';
 
+// InitState use for context
 const appInitState = {
     fireBaseHomePageSliderDataBase: null,
     fireBaseAllEventsDataBase: null,
@@ -11,6 +12,13 @@ const appInitState = {
 }
 
 export const AppContext = createContext({...appInitState});
+
+/**
+ * AppContextProvider - context provider use for manage global state for firebase data.
+ * 
+ * @param {children} - react element
+ * 
+ */
 
 const AppContextProvider = ({children}) => {
     const {appState} = useAppState();

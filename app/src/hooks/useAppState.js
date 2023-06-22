@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue} from "firebase/database";
 
+/**
+ * useAppState - create custom hooks for manage all firebase data,
+ * 
+ * @returns {appState} - apps state contains all firebase object.
+ */
+
 const useAppState = () => {
   const [appState, setAppState] = useState();
   const db = getDatabase();

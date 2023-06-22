@@ -5,7 +5,12 @@ const initialState = {
   selectedSportMenu: [],
   isModalShow: false,
 }
-
+/**
+ * appReducer - use for reducer manage all state
+ * @param {state} - initial state 
+ * @param {action} - action come from reducers
+ * 
+ */
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POPULAR_ODD_TO_COLLECTION:
