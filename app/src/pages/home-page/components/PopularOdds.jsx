@@ -2,6 +2,7 @@ import React from 'react'
 import { ShareIcon } from '../../../assets/svgs'
 import { getFormattedTime, getMonthNameWithDate } from '../../../utils/dateFormat';
 import settings from '../../../misc';
+import { getCurrentOddStatus } from '../../../services/vefaAppService';
 
 /**
  * 
@@ -13,24 +14,6 @@ import settings from '../../../misc';
 
 const PopularOdds = ({ data, handleSelectOdd, tipsCollection }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
-  
-  // function use for odd button status return
-  const getCurrentOddStatus  = (oddName, line) => {
-    if(oddName === "Home"){
-      return "1"
-    }else if(oddName === "Away"){
-      return "2"
-    }else if(oddName === "Draw"){
-      return "X"
-    }
-    else if(oddName === "Under"){
-      return `U +${line}`
-    }else if(oddName === "Over"){
-      return `A -${line}`
-    }else {
-      return ""
-    }
-  }
 
   return (
     <div className='popular_odds_container'>

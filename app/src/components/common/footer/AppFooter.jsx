@@ -4,11 +4,11 @@ import logoIcon from '../../../assets/images/logo.svg';
 import multiBetIcon from '../../../assets/images/multi_bet.svg';
 import newsIcon from '../../../assets/images/news.svg';
 import collectionIcon from '../../../assets/images/tip_collection.svg';
+import tipCollectionTop from '../../../assets/images/tip_collection_top.svg';
 
 import settings from '../../../misc'
 import { ReducerContext } from '../../../context/ReducerContext';
 import { setTipCollectionModalStatus } from '../../../feature/appAction';
-
 /**
  * 
  * AppFooter - common component use for show footer in layout.
@@ -16,7 +16,7 @@ import { setTipCollectionModalStatus } from '../../../feature/appAction';
  */
 
 const AppFooter = () => {
-    const {dispatch, tipsCollection} = useContext(ReducerContext);
+    const {dispatch, tipsCollection, isModalShow} = useContext(ReducerContext);
     const handleShow = () => {
         setTipCollectionModalStatus(dispatch, true);
       }
@@ -32,7 +32,7 @@ const AppFooter = () => {
         </div>
         <div className='footer-item'>
             <img src={multiBetIcon} alt='multi bet'/>
-            <p>{settings.staticString.freeTips}</p>
+            <p>{settings.staticString.multiBet}</p>
         </div>
         <div className='footer-item'>
             <img src={newsIcon} alt='news'/>
@@ -40,7 +40,7 @@ const AppFooter = () => {
         </div>
         <div className='footer-item tip_collection'>
             {tipsCollection?.length > 0 && <div className='tip_collection_icon' onClick={handleShow}>
-                <img src={collectionIcon} alt='collection'/>
+                <img src={ isModalShow ? tipCollectionTop : collectionIcon} alt='collection'/>
                 <span>{tipsCollection?.length}</span>
             </div>}
             <div>

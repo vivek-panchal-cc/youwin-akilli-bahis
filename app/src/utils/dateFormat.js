@@ -1,3 +1,4 @@
+// function return current day and date and suffix base on date, e.g "Mon 5th"
 export const getDateWithOrdinalSuffix = (fullDate) => {
     const d = new Date(fullDate);
     const date = d.getDate();
@@ -6,12 +7,14 @@ export const getDateWithOrdinalSuffix = (fullDate) => {
     return day + " " + date + suffixes
 }
 
+// function return current day base on date which is pass in argument
 export const getOrdinalDay = (date) => {
     const DAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const d = new Date(date);
     return DAY[d.getDay()]
 }
 
+// function return suffix which is use after number e.g "th", "st", "nd", "rd".
 export const getOrdinalSuffix = (day) => {
     const suffixes = ["th", "st", "nd", "rd"];
     const specialCases = [11, 12, 13];
@@ -23,6 +26,7 @@ export const getOrdinalSuffix = (day) => {
     }
 }
 
+// function returns formatted time e.g "10:30"
 export const getFormattedTime = (fullDate) => {
     const d = new Date(fullDate);
 
@@ -32,6 +36,7 @@ export const getFormattedTime = (fullDate) => {
     return hours + ":" + minutes;
 }
 
+// function return month name with date e.g "15 Jun"
 export const getMonthNameWithDate = (fullDate) => {
   const d = new Date(fullDate);
   
