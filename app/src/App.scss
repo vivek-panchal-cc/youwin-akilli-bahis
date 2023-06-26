@@ -396,6 +396,254 @@ body{
     }
 }
 
+.calendar {
+    display: flex;    
+    align-items: center;    
+    justify-content: center;
+    text-align: left;
+    letter-spacing: 0px;
+    color: #707070;
+    font-size: 11px;
+    opacity: 1;
+    padding-bottom: 15px;    
+    border-bottom: 1px solid #F2F2F2;
+    .month_name{
+        display: flex;
+        // flex-basis: 20%;
+        align-items: center;
+    }
+    .day_date_name{
+        display: flex;
+        // flex-basis: 80%;
+        align-items: center;
+        > .date{
+            margin: 15px 0 0 20px;
+            text-align: center;
+        }
+    }
+    svg{
+        stroke: #2D2A2B;        
+        height: 20px;
+        width: fit-content;
+        margin-top: 18px;
+        // margin-left: 20px;
+        margin-right: 5px;
+    }
+    h1{
+        text-align: left;
+        letter-spacing: 0px;
+        color: #2D2A2B;
+        opacity: 1;
+        font-size: 11px;
+        margin-top: 25px;
+    }
+    .next_dates_column {
+        display: flex;        
+        align-items: center;
+        gap: 0px
+    }
+    .date {
+        margin-top: 15px; 
+        padding: 3px 3px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        width: 34px;
+        height: 34px;
+        text-align: center;       
+        span{
+            display: block;
+            line-height: 1.2;
+        }
+        .day_of-week{
+            text-align: center;
+        }
+        .date_number{
+            letter-spacing: 0px;
+            color: #2D2A2B;
+            opacity: 1;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .number{
+            color: #2D2A2B;
+            opacity: 1;
+            font-size: 11px;
+            font-weight: bold;
+        }
+    }  
+    .selected {
+        border-color: #000;
+    }
+}
+
+.odd_section_container {
+    .odd_section_header{  
+        h2{
+            text-align: left;    
+            letter-spacing: 0px;
+            color: #000000;
+            opacity: 1;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 0px 0px 15px;
+        }
+    }
+}
+
+.odds_section_container {
+    margin: 14px;
+    background: $white;
+    border-radius: 4px;    
+    hr{
+        border: 1px solid #F2F2F2;
+        opacity: 1;
+        height: 0px
+    }
+    .odds_section_content{
+        .no_data_found{
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+        }
+        // padding: 0px 20px 10px;
+        .odds_section_item{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            // margin: 15px 0px;
+            padding: 15px 20px;
+            border-bottom: 1px solid #F2F2F2;
+            .left_content{
+                display: flex;
+                justify-content: center;
+                gap: 0px;
+                width: 100%;
+                .team_section{
+                    &:nth-child(1){
+                        justify-content: end;
+                        max-width: 70px;
+                        text-align: end;
+                    }
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    // flex-basis: 40%;
+                    img {
+                        height: 43px;
+                    }
+                    p {
+                        font-size: 12px;
+                        margin: 0;
+                    }
+                }
+                .team_section img:nth-child(1) {
+                    position: relative;
+                    z-index: 2;
+                    top: -13px;
+                    left: 16px;
+                  }
+                  
+                .team_section img:nth-child(2) {
+                    position: relative;
+                    left: -17px;
+                    z-index: 1;
+                    top: 14px;
+                  }
+                .time_section{
+                    text-align: center;
+                    flex-basis: 20%;
+                    p{
+                        &:first-child{
+                            font-weight: bold;
+                            line-height: 1;
+                        }
+                        margin: 0;
+                        color: #707070;
+                        font-size: 11px;
+                    }
+                }
+                .odd_section_details{ 
+                    .event_kick_off{   
+                        display: flex;            
+                            .event_details{
+                                text-align: left;
+                                font-size: 12px;
+                                font-weight: bold;
+                                letter-spacing: 0px;
+                                color: #707070;
+                                opacity: 1;
+                                margin: 0px;
+                                max-width: calc(100% - 53px);
+                                display: block;
+                                white-space: normal;
+                                word-break: break-all;
+                            }
+                            .kick_off_time{
+                                text-align: left;
+                                font-size: 10px;
+                                letter-spacing: 0px;
+                                color: #707070;
+                                opacity: 1;
+                                margin: 0px;
+                                display: flex;
+                                line-height: 1;
+                                padding-left: 10px;
+                                min-width: 55px;
+                                padding-top: 3px;
+                            }
+                        }
+                    .team_details{
+                        text-align: left;
+                        font-size: 12px;
+                        font-weight: bold;                        
+                        letter-spacing: 0px;
+                        color: #000000;
+                        opacity: 1;
+                        margin: 0px;
+                    }
+                    .stats{
+                        text-align: left;
+                        font-size: 12px;                        
+                        letter-spacing: 0px;
+                        color: #707070;
+                        opacity: 1;
+                        margin: 0px;
+                    }
+                }
+            }
+            .odd_button{
+                display: flex;
+                background-color: #F0F0F0;
+                border-radius: 4px;
+                padding: 0px 11px 0px 5px;
+                gap: 10px;
+                height: 30px;
+                align-items: center;
+                justify-content: space-between;
+                width: 66px;
+                cursor: pointer;
+                &.selected{
+                    background-color: #2D2A2B;
+                    color: $white;
+                }
+                :last-child{
+                    font-weight: bold;
+                }
+                p{
+                    &:first-child{
+                        line-height: 1;
+                        text-align: center;
+                        width: 20px;
+                    }
+                    margin: 0;
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+}
+
 .tip_collection_modal {
     .modal-dialog-centered{
         align-items: end !important;

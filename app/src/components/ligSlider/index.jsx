@@ -15,6 +15,9 @@ import { getCurrentOddStatus } from "../../services/vefaAppService";
 const LigSlider = ({ data, handleSelectLig, tipsCollection }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
 
+  // Define the custom order of odd item statuses
+  const order = ["home", "draw", "away"];
+
   return (
     <div className="lig_slider">
       <Swiper
@@ -87,27 +90,36 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection }) => {
                 <div className={`odd_items ${elm?.odds ? "multiple" : ""}`}>
                   {/* NOTE - 'multiple' class add when odd_item is more than one */}
                   {elm?.odds ? (
-                    oddsValue?.map((odd, index) => (
-                      <div
-                        key={odd?.selectionId}
-                        className={`odd_item ${
-                          matchedItem[0]?.selectionId === odd.selectionId
-                            ? "selected"
-                            : ""
-                        }`}
-                        onClick={() =>
-                          handleSelectLig({
-                            ...elm,
-                            ...odd,
-                            name_en: oddsKeys[index],
-                          })
-                        }
-                      >
-                        {/* NOTE - add 'selected' class when odd_item is select */}
-                        <p>{getCurrentOddStatus(oddsKeys[index])}</p>
-                        <p>{odd?.odds_decimal}</p>
-                      </div>
-                    ))
+                    order?.map((status) => {
+                      const oddIndex = oddsKeys.indexOf(status);
+                      const odd = oddsValue[oddIndex];
+
+                      return (
+                        <div
+                          key={odd?.selectionId}
+                          className={`odd_item ${
+                            matchedItem[0]?.selectionId === odd?.selectionId
+                              ? "selected"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            handleSelectLig({
+                              ...elm,
+                              ...odd,
+                              name_en: oddsKeys[oddIndex],
+                            })
+                          }
+                        >
+                          {/* NOTE - add 'selected' class when odd_item is select */}
+                          <p>{getCurrentOddStatus(oddsKeys[oddIndex])}</p>
+                          {typeof odd?.odds_decimal === "string" ? (
+                            <p>{parseFloat(odd?.odds_decimal).toFixed(2)}</p>
+                          ) : (
+                            <p>{odd?.odds_decimal.toFixed(2)}</p>
+                          )}
+                        </div>
+                      );
+                    })
                   ) : (
                     <div
                       className={`odd_item ${
@@ -117,7 +129,11 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection }) => {
                     >
                       {/* NOTE - add 'selected' class when odd_item is select */}
                       <p>{elm?.title}</p>
-                      <p>{elm?.odds_decimal}</p>
+                      {typeof elm?.odds_decimal === "string" ? (
+                        <p>{parseFloat(elm?.odds_decimal).toFixed(2)}</p>
+                      ) : (
+                        <p>{elm?.odds_decimal.toFixed(2)}</p>
+                      )}
                     </div>
                   )}
                 </div>

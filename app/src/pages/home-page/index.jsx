@@ -1,51 +1,76 @@
-import React, { useContext } from 'react'
-import TeaserSlider from './components/TeaserSlider';
-import { AppContext } from '../../context/AppContext';
-import SportsMenu from '../../components/sportsMenu';
-import LigSlider from '../../components/ligSlider';
-import PopularOdds from './components/PopularOdds';
-import { addPopularOddToCollection, addTeaserItemToCollection } from '../../feature/appAction';
-import { ReducerContext } from '../../context/ReducerContext';
-import { addLigItemToCollection } from '../../feature/appAction';
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import TeaserSlider from "./components/TeaserSlider";
+import { AppContext } from "../../context/AppContext";
+import SportsMenu from "../../components/sportsMenu";
+import LigSlider from "../../components/ligSlider";
+import PopularOdds from "./components/PopularOdds";
+import {
+  addPopularOddToCollection,
+  addTeaserItemToCollection,
+} from "../../feature/appAction";
+import { ReducerContext } from "../../context/ReducerContext";
+import { addLigItemToCollection } from "../../feature/appAction";
 
 /**
  * HomePage - component it's first page which is show app started.
  */
 
 const HomePage = () => {
-  const {fireBaseTeaserDataBase, fireBaseAllLeaguesDataBase, fireBaseFeaturedDataBase, fireBasePopularOddsDataBase} = useContext(AppContext);
+  const {
+    fireBaseTeaserDataBase,
+    fireBaseAllLeaguesDataBase,
+    fireBaseFeaturedDataBase,
+    fireBasePopularOddsDataBase,
+  } = useContext(AppContext);
 
-  const {tipsCollection, dispatch} = useContext(ReducerContext);
-
+  const { tipsCollection, dispatch } = useContext(ReducerContext);
+  const navigate = useNavigate();
   // @futureUse const selectedMenuTab = fireBaseAllLeaguesDataBase && Object.keys(fireBaseAllLeaguesDataBase)?.[0];
 
   const handleSelect = (item) => {
-    console.log('item: ', item);
-  }
+    console.log("item: ", item);
+    navigate(`/free-tips/${item}`)
+  };
 
   // useEffect(() => {
   //   setSportMenu(dispatch, selectedMenuTab)
   // }, [fireBaseAllLeaguesDataBase])
-  
+
   const handleSelectOdd = (data) => {
     addPopularOddToCollection(dispatch, data);
-  }
-  
+  };
+
   const handleSelectLigItem = (data) => {
     addLigItemToCollection(dispatch, data);
-  }
+  };
 
   const handleSelectTeaserItem = (data) => {
     addTeaserItemToCollection(dispatch, data);
-  }
+  };
   return (
-    <div className='home_page_container'>
-      <TeaserSlider data={fireBaseTeaserDataBase} handleSelectTeaser={handleSelectTeaserItem}/>
-      <SportsMenu data={fireBaseAllLeaguesDataBase} handleSelect={handleSelect} selectedItem={''} />
-      <LigSlider data={fireBaseFeaturedDataBase} handleSelectLig={handleSelectLigItem} tipsCollection={tipsCollection}/>
-      <PopularOdds data={fireBasePopularOddsDataBase} handleSelectOdd={handleSelectOdd} tipsCollection={tipsCollection}/>
+    <div className="home_page_container">
+      <TeaserSlider
+        data={fireBaseTeaserDataBase}
+        handleSelectTeaser={handleSelectTeaserItem}
+      />
+      <SportsMenu
+        data={fireBaseAllLeaguesDataBase}
+        handleSelect={handleSelect}
+        selectedItem={""}
+      />
+      <LigSlider
+        data={fireBaseFeaturedDataBase}
+        handleSelectLig={handleSelectLigItem}
+        tipsCollection={tipsCollection}
+      />
+      <PopularOdds
+        data={fireBasePopularOddsDataBase}
+        handleSelectOdd={handleSelectOdd}
+        tipsCollection={tipsCollection}
+      />
     </div>
-  )
-}
+  );
+};
 
 export default HomePage;

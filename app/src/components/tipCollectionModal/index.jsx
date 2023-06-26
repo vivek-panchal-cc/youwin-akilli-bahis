@@ -26,6 +26,15 @@ const TipCollectionModal = () => {
   const handleRemoveOdds = (eventId) => {
     removeItemFromTipCollection(dispatch, eventId);
   };
+
+  const calculateTotalOdds = () => {
+    let totalOdds = 1;
+    tipsCollection.forEach((item) => {
+      totalOdds *= item.odds_decimal;
+    });
+    return totalOdds.toFixed(2);
+  };
+
   return (
     <div className="">
       <Modal
@@ -90,7 +99,7 @@ const TipCollectionModal = () => {
               </div>
               <div className="total_odds">
                 <p>{settings.staticString.totalOdds}: </p>
-                <h5>23.75</h5>
+                <h5>{calculateTotalOdds()}</h5>
               </div>
               <div>
                 <button className="btn share_button">

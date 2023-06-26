@@ -1,10 +1,6 @@
 import React, { useContext } from "react";
-import TeaserSlider from "../home-page/components/TeaserSlider";
 import { AppContext } from "../../context/AppContext";
-import SportsMenu from "../../components/sportsMenu";
-import LigSlider from "../../components/ligSlider";
-import PopularOdds from "../home-page/components/PopularOdds";
-import OddSection from "./components/OddSection";
+import NewsSection from "./components/NewsSection";
 import settings from "../../misc";
 import {
   addPopularOddToCollection,
@@ -12,14 +8,13 @@ import {
 } from "../../feature/appAction";
 import { ReducerContext } from "../../context/ReducerContext";
 import { addLigItemToCollection } from "../../feature/appAction";
-import OddsCalendar from "./components/OddsCalendar";
 import { useNavigate, useParams } from "react-router-dom";
 
 /**
  * HomePage - component it's first page which is show app started.
  */
 
-const FreeTips = () => {
+const News = () => {
   const {
     fireBaseAllLeaguesDataBase,
     fireBaseFeaturedDataBase,
@@ -53,27 +48,12 @@ const FreeTips = () => {
   const handleSelectTeaserItem = (data) => {
     addTeaserItemToCollection(dispatch, data);
   };
-
-  const filteredLigSliderData = fireBaseHomePageSliderDataBase?.filter(
-    (item) => item.competitionId === id
-  );
-
   return (
     <div className="odd_section_container">
       <div className="odd_section_header">
-        <h2>{settings.staticString.thisWeeksTopMatches}</h2>
-      </div>
-      <SportsMenu
-        data={fireBaseAllLeaguesDataBase}
-        handleSelect={handleSelect}
-        selectedItem={id}
-      />
-      <LigSlider
-        data={filteredLigSliderData}
-        handleSelectLig={handleSelectLigItem}
-        tipsCollection={tipsCollection}
-      />
-      <OddSection
+        <h2>{settings.staticString.thisWeeksTopStories}</h2>
+      </div>      
+      <NewsSection
         data={fireBaseAllEventsDataBase}
         handleSelectOdd={handleSelectOdd}
         selectedItem={tipsCollection}
@@ -82,4 +62,4 @@ const FreeTips = () => {
   );
 };
 
-export default FreeTips;
+export default News;

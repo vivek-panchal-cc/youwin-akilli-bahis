@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react';
 
 /**
  * 
@@ -8,18 +8,40 @@ import React from 'react'
 
 
 const SportsMenu = ({ data, handleSelect, selectedItem }) => {
+    console.log('selectedItem: ', selectedItem);
     
     const mergedObj = data && Object.entries(data)?.map(([key, value]) => ({
         key,
         value
     }))
+
+    const containerRef = useRef(null);
+    const selectedRef = useRef(null);
+  
+    // hooks create for scroll selected element to left
+    useEffect(() => {
+        if (containerRef.current && selectedRef.current) {
+
+        const container = containerRef.current;
+        const selected = selectedRef.current;
+  
+        const containerRect = container.getBoundingClientRect();
+        const selectedRect = selected.getBoundingClientRect();
+  
+        const scrollOffset = (selectedRect.left - containerRect.left ) - 14;
+        container.scrollTo({
+          behavior: 'smooth',
+          left: container.scrollLeft + scrollOffset,
+        });
+      }
+    }, [selectedItem, containerRef.current, selectedRef.current]);
     
     return (
         <div className='league_tabs'>
             <div className='league_tab_slider'>
-                <ul data-scrollable="true">
+                <ul ref={containerRef} data-scrollable="true">
                     {mergedObj?.map((item, index) => (
-                        <li className={selectedItem === item?.key ? "selected" : null} key={item?.key + "-"} onClick={() => handleSelect(item?.key)}>{item?.value}</li>
+                        <li ref={selectedItem === item?.key ? selectedRef : null} className={selectedItem === item?.key ? "selected" : null} key={item?.key + "-"} onClick={() => handleSelect(item?.key)}>{item?.value}</li>
                     ))}
                 </ul>
             </div>

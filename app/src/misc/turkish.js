@@ -7,7 +7,9 @@ const staticString = {
     popularOdds: "Popular Odds",
     myTipCollection: 'My Tip Collection',
     totalOdds: 'Total Odds',
-    shareMyTipCollection: 'Share My Tip Collection'
+    shareMyTipCollection: 'Share My Tip Collection',
+    thisWeeksTopMatches: 'This Week\'s Top Matches',
+    thisWeeksTopStories: 'This Week\'s Top Stories'
 }
 const settings = {
     staticString
