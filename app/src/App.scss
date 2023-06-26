@@ -185,6 +185,7 @@ body{
     .swiper-slide{
         &:first-child{
             margin-left: 14px;
+            margin-bottom: 14px;
         }
     //   width: auto!important;  
     }
@@ -298,7 +299,7 @@ body{
     }
 }
 .popular_odds_container {
-    margin: 14px;
+    margin: 0px 14px 14px 14px;
     background: $white;
     border-radius: 4px;
     .popular_odd_header {   
@@ -492,7 +493,7 @@ body{
 }
 
 .odds_section_container {
-    margin: 14px;
+    margin: 0px 14px 14px 14px;
     background: $white;
     border-radius: 4px;    
     hr{

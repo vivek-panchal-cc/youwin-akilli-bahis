@@ -35,7 +35,7 @@ const FreeTips = () => {
 
   const handleSelect = (item) => {
     console.log("item: ", item);
-    navigate(`/free-tips/${item}`)
+    navigate(`/free-tips/${item}`);
   };
 
   // useEffect(() => {
@@ -68,11 +68,13 @@ const FreeTips = () => {
         handleSelect={handleSelect}
         selectedItem={id}
       />
-      <LigSlider
-        data={filteredLigSliderData}
-        handleSelectLig={handleSelectLigItem}
-        tipsCollection={tipsCollection}
-      />
+      {filteredLigSliderData?.length > 0 && (
+        <LigSlider
+          data={filteredLigSliderData}
+          handleSelectLig={handleSelectLigItem}
+          tipsCollection={tipsCollection}
+        />
+      )}
       <OddSection
         data={fireBaseAllEventsDataBase}
         handleSelectOdd={handleSelectOdd}
