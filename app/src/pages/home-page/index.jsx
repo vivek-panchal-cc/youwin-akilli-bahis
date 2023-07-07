@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TeaserSlider from "./components/TeaserSlider";
 import { AppContext } from "../../context/AppContext";
@@ -28,6 +28,8 @@ const HomePage = () => {
   const navigate = useNavigate();
   // @futureUse const selectedMenuTab = fireBaseAllLeaguesDataBase && Object.keys(fireBaseAllLeaguesDataBase)?.[0];
 
+  const [isLoading, setIsLoading] = useState(true); // Add isLoading state
+
   const handleSelect = (item) => {
     console.log("item: ", item);
     navigate(`/free-tips/${item}`)
@@ -38,7 +40,7 @@ const HomePage = () => {
   // }, [fireBaseAllLeaguesDataBase])
 
   const handleSelectOdd = (data) => {
-    addPopularOddToCollection(dispatch, data);
+    addLigItemToCollection(dispatch, data);
   };
 
   const handleSelectLigItem = (data) => {
@@ -48,6 +50,14 @@ const HomePage = () => {
   const handleSelectTeaserItem = (data) => {
     addTeaserItemToCollection(dispatch, data);
   };
+
+  useEffect(() => {
+    // Simulate data loading delay (remove this in your actual implementation)
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+
   return (
     <div className="home_page_container">
       <TeaserSlider
@@ -63,11 +73,13 @@ const HomePage = () => {
         data={fireBaseFeaturedDataBase}
         handleSelectLig={handleSelectLigItem}
         tipsCollection={tipsCollection}
+        isLoading={isLoading} // Pass the isLoading prop
       />
       <PopularOdds
         data={fireBasePopularOddsDataBase}
         handleSelectOdd={handleSelectOdd}
         tipsCollection={tipsCollection}
+        isLoading={isLoading} // Pass the isLoading prop
       />
     </div>
   );

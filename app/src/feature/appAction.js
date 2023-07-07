@@ -5,6 +5,7 @@ import {
   REMOVE_ITEM_FROM_TIP_COLLECTION,
   SELECT_SPORT_MENU,
   SET_TIP_COLLECTION_MODAL_STATUS,
+  REMOVE_ALL_ITEMS
 } from "./types";
 
 export const addPopularOddToCollection = (dispatch, data) => {
@@ -29,4 +30,10 @@ export const setTipCollectionModalStatus = (dispatch, status) => {
 
 export const removeItemFromTipCollection = (dispatch, eventId) => {
   dispatch({ type: REMOVE_ITEM_FROM_TIP_COLLECTION, payload: eventId });
+};
+
+export const removeAllItemsFromTipCollection = () => {
+  return {
+    type: REMOVE_ALL_ITEMS,
+  };
 };

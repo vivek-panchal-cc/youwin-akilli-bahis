@@ -16,7 +16,7 @@ const useAppState = () => {
     const allEventsRef = ref(db, 'pregame/all_events');
     const allLeaguesRef = ref(db, 'pregame/all_leagues');
     const allMarketsRef = ref(db, 'pregame/all_markets');
-    const popularRef = ref(db, 'pregame/popular');
+    const popularRef = ref(db, 'popular/popular_sports');
     const teaserRef = ref(db, 'pregame/teaser');
     const featuredRef = ref(db, 'pregame/featured');
 

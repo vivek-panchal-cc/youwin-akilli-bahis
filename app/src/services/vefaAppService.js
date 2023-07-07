@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // function use for odd button status return
 export const getCurrentOddStatus = (title, line) => {
   const oddName = title?.toLowerCase();
@@ -13,5 +15,27 @@ export const getCurrentOddStatus = (title, line) => {
     return `U -${line}`;
   } else {
     return "";
+  }
+};
+
+export const multiBetAPI = async (stake, win) => {
+  try {
+    const apiUrl = `https://youwin2.bettorlogic.com/accaattack/youwinservice.svc/getmymultibetsjson?stake=${stake}&win=${win}`;
+    const response = await axios.get(apiUrl);    
+    // console.log('response :>> ', response);
+    return response.data;
+  } catch (error) {
+    console.log("Internal Server Error", error.message);
+  }
+};
+
+export const multiBetAlterSuggestionAPI = async (eventIds, groupId) => {
+  try {
+    const apiUrl = `https://youwin2.bettorlogic.com/accaattack/youwinservice.svc/GetReplaceBet?ExcludeMatches=${eventIds}&MultiGroupId=${groupId}&lang=en`;    
+    const response = await axios.get(apiUrl);    
+    // console.log('response :>> ', response);
+    return response.data;
+  } catch (error) {
+    console.log("Internal Server Error", error.message);
   }
 };

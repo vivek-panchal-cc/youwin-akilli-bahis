@@ -1,12 +1,15 @@
 import { Modal } from "react-bootstrap";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ReducerContext } from "../../context/ReducerContext";
 import {
   removeItemFromTipCollection,
   setTipCollectionModalStatus,
+  removeAllItemsFromTipCollection,
 } from "../../feature/appAction";
 import settings from "../../misc";
 import { ShareIcon } from "../../assets/svgs";
+import Spinner from "../../components/common/spinner"
+import deleteIcon from "../../assets/svgs/Delete.svg";
 import { getCurrentOddStatus } from "../../services/vefaAppService";
 
 /**
@@ -16,11 +19,20 @@ import { getCurrentOddStatus } from "../../services/vefaAppService";
 
 const TipCollectionModal = () => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
+  const [isLoading, setIsLoading] = useState(false);
 
   const { dispatch, isModalShow, tipsCollection } = useContext(ReducerContext);
 
   const handleClose = () => {
     setTipCollectionModalStatus(dispatch, false);
+  };
+
+  const handleRemoveAllOdds = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      dispatch(removeAllItemsFromTipCollection());
+    }, 2000);
   };
 
   const handleRemoveOdds = (eventId) => {
@@ -49,7 +61,10 @@ const TipCollectionModal = () => {
             {settings.staticString.myTipCollection}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body
+          className={isLoading ? "loading" : ""}
+          style={{ opacity: isLoading ? "0.5" : "1" }}
+        >
           {tipsCollection?.length <= 0 && (
             <div className="empty_text">
               <p>Empty Tip Collection</p>
@@ -90,7 +105,11 @@ const TipCollectionModal = () => {
                           <p>
                             {getCurrentOddStatus(item?.name_en, item?.line)}
                           </p>
-                          <p>{item?.odds_decimal}</p>
+                          {typeof item?.odds_decimal === "string" ? (
+                            <p>{parseFloat(item?.odds_decimal).toFixed(2)}</p>
+                          ) : (
+                            <p>{item?.odds_decimal.toFixed(2)}</p>
+                          )}
                         </div>
                       </div>
                     );
@@ -101,13 +120,28 @@ const TipCollectionModal = () => {
                 <p>{settings.staticString.totalOdds}: </p>
                 <h5>{calculateTotalOdds()}</h5>
               </div>
-              <div>
-                <button className="btn share_button">
-                  <ShareIcon />
-                  {settings.staticString.shareMyTipCollection}
-                </button>
+              <div className="tip_collection_button">
+                <div>
+                  <button
+                    className="btn delete_button"
+                    onClick={() => handleRemoveAllOdds()}
+                  >
+                    <img src={deleteIcon} alt="Delete" />
+                  </button>
+                </div>
+                <div>
+                  <button className="btn share_button">
+                    <ShareIcon />
+                    {settings.staticString.shareMyTipCollection}
+                  </button>
+                </div>
               </div>
             </>
+          )}
+          {isLoading && (
+            <div className="loading_container">
+              <div className="loading_text"><Spinner/></div>
+            </div>
           )}
         </Modal.Body>
       </Modal>

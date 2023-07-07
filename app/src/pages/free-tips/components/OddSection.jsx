@@ -45,7 +45,7 @@ const OddSection = ({ data, handleSelectOdd, selectedItem }) => {
         {filteredData && filteredData?.length > 0 ? (
           filteredData?.map((item) => {
             const isSelected = selectedItem?.some(
-              (elm) => elm.eventId === item?.eventId
+              (elm) => elm.eventId === item?.eventId && elm.selectionId === item?.selectionId
             );
             return (
               <div key={item?.eventId} className="odds_section_item">
@@ -62,7 +62,7 @@ const OddSection = ({ data, handleSelectOdd, selectedItem }) => {
                   </div>
                   <div className="odd_section_details">
                     <div className="event_kick_off">
-                      <p className="event_details">{item?.eventName}</p>
+                      <p className="event_details">{item?.groupName}</p>
                       <p className="kick_off_time">
                         {getOrdinalDay(item?.kickOffTime)} {"at"}{" "}
                         {getFormattedTime(item?.kickOffTime)}
