@@ -13,18 +13,7 @@ const initialState = {
  */
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_POPULAR_ODD_TO_COLLECTION:
-      // const isExists = state.tipsCollection.some(elm => elm.eventId === action.payload.eventId);
-      // let tipsCollectionArray = [];
-      // if (isExists) {
-      //   tipsCollectionArray = state.tipsCollection.filter(item => item.eventId !== action.payload.eventId)
-      // } else {
-      //   tipsCollectionArray = [...state.tipsCollection, action.payload];
-      // }
-      // return {
-      //   ...state,
-      //   tipsCollection: tipsCollectionArray
-      // }
+    case ADD_POPULAR_ODD_TO_COLLECTION:      
       
       const isOddExistsWithEventId = state.tipsCollection.some(elm => elm.eventId === action.payload.eventId);
       const isOddExistsWithSelectionId = state.tipsCollection.some(elm => elm.eventId === action.payload.eventId && elm.selectionId === action.payload.selectionId);

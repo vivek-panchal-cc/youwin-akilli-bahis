@@ -5,12 +5,10 @@ import { AppContext } from "../../context/AppContext";
 import SportsMenu from "../../components/sportsMenu";
 import LigSlider from "../../components/ligSlider";
 import PopularOdds from "./components/PopularOdds";
-import {
-  addPopularOddToCollection,
-  addTeaserItemToCollection,
+import {  
+  addTeaserItemToCollection, addLigItemToCollection
 } from "../../feature/appAction";
 import { ReducerContext } from "../../context/ReducerContext";
-import { addLigItemToCollection } from "../../feature/appAction";
 
 /**
  * HomePage - component it's first page which is show app started.
@@ -34,10 +32,6 @@ const HomePage = () => {
     console.log("item: ", item);
     navigate(`/free-tips/${item}`)
   };
-
-  // useEffect(() => {
-  //   setSportMenu(dispatch, selectedMenuTab)
-  // }, [fireBaseAllLeaguesDataBase])
 
   const handleSelectOdd = (data) => {
     addLigItemToCollection(dispatch, data);

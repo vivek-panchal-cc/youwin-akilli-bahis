@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import newsImage from "../../../assets/images/news_temp.png";
+import { Modal } from "react-bootstrap";
 import axios from "axios";
 
-/**
- *
- * PopularOdds - component use for all popular odds show.
- *
- * @param data - data comes from firebase.
- *
- */
-
-const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
-  const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
+const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {  
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedNews, setSelectedNews] = useState(null);
-  const [newsData, setNewsData] = useState([]);
+  const [selectedNews, setSelectedNews] = useState(null);  
   const [feedItems, setFeedItems] = useState([]);
   const URL = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH;
   const URL_ONE = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_ONE;
@@ -40,7 +29,7 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
       URL_EIGHT,
     ];
     parseRSSFeed(rssFeedUrls);
-  }, []);
+  }, [URL, URL_ONE, URL_TWO, URL_THREE, URL_FOUR, URL_FIVE, URL_SIX, URL_SEVEN, URL_EIGHT]);
 
   const parseRSSFeed = async (urls) => {
     try {

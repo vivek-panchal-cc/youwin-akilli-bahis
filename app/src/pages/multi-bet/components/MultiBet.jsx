@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ShareIcon,
   LockIcon,
   UnLockIcon,
   SyncIcon,
-  PlusIcon,
   CrossIcon,
 } from "../../../assets/svgs";
-import YouWinIcon from "../../../assets/images/youwin_share.svg";
+// import YouWinIcon from "../../../assets/images/youwin_share.svg";
 import TwitterIcon from "../../../assets/images/twitter_share.png";
 import WhatsappIcon from "../../../assets/images/whatsapp_share.png";
 import TelegramIcon from "../../../assets/images/telegram_share.png";
+import YouWinIcon from "../../../assets/images/youwin_share.png"
 import settings from "../../../misc";
 import {
   getCurrentOddStatus,
@@ -31,26 +32,16 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
   const [rangeValue, setRangeValue] = useState(1000);
   const [multiBet, setMultiBet] = useState([]);
   const [shareIconsVisible, setShareIconsVisible] = useState(false);
-  // const [isLocked, setIsLocked] = useState(false);
   const [lockedItems, setLockedItems] = useState([]);
-  const [unlockedItems, setUnlockedItems] = useState([]);
+  // const [unlockedItems, setUnlockedItems] = useState([]);
   const stack = 1000;
-
-  // useEffect(() => {
-  //   updateRangeColor();
-  //   (async () => {
-  //     const multiBetData = await multiBetAPI(1000, rangeValue);
-  //     console.log("multiBetData :>> ", multiBetData?.MultibetItems);
-  //     setMultiBet(multiBetData);
-  //   })();
-  // }, [rangeValue]);
 
   useEffect(() => {
     updateRangeColor();
     fetchMultiBetData();
   }, [rangeValue]);
 
-  const fetchMultiBetData = async () => {
+  const fetchMultiBetData = useCallback(async () => {
     try {
       let multiBetData = await multiBetAPI(stack, rangeValue);
 
@@ -67,14 +58,14 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
     } catch (error) {
       console.error("Failed to fetch multiBet data:", error);
     }
-  };
+  }, [stack, rangeValue, lockedItems]);
 
-  const handleAlterSuggestions = async () => {
+  const handleAlterSuggestions = useCallback(async () => {
     try {
       const eventIds = lockedItems?.map((item) => item.eventId).join(",");
-      const multiGroupIds = lockedItems
-        ?.map((item) => item.multiGroupId)
-        .join(",");
+      // const multiGroupIds = lockedItems
+      //   ?.map((item) => item.multiGroupId)
+      //   .join(",");
       let multiBetAlterSuggestionData = await multiBetAlterSuggestionAPI(
         eventIds,
         7
@@ -89,13 +80,16 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
         ...lockedItemsData,
         ...multiBetAlterSuggestionData.MultibetItems,
       ];
-      console.log('multiBetAlterSuggestionData :>> ', multiBetAlterSuggestionData);
+      console.log(
+        "multiBetAlterSuggestionData :>> ",
+        multiBetAlterSuggestionData
+      );
       setMultiBet(multiBetAlterSuggestionData);
-      setUnlockedItems([]);
+      // setUnlockedItems([]);
     } catch (error) {
       console.error("Failed to fetch multiBet data:", error);
     }
-  };
+  }, [lockedItems, multiBet]);
 
   const updateRangeColor = () => {
     const rangeInput = document.getElementById("vol");
@@ -108,7 +102,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
 
   const updateRangeValue = (event) => {
     setLockedItems([]);
-    setUnlockedItems([]);
+    // setUnlockedItems([]);
     const value = event.target.value;
     const winningMoreValue = document.querySelector(".winning_more_value");
     if (winningMoreValue) {
@@ -125,44 +119,26 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
     setShareIconsVisible(false);
   };
 
-  const handleLockToggle = (item) => {
-    const isItemLocked = lockedItems.some(
-      (elm) => elm.eventId === item.eventId
-    );
-
-    if (isItemLocked) {
-      // Unlock the item by removing it from the lockedItems array
-      const updatedLockedItems = lockedItems.filter(
-        (elm) => elm.eventId !== item.eventId
+  const handleLockToggle = useCallback(
+    (item) => {
+      const isItemLocked = lockedItems.some(
+        (elm) => elm.eventId === item.eventId
       );
-      setLockedItems(updatedLockedItems);
-    } else {
-      // Lock the item by adding it to the lockedItems array
-      const updatedLockedItems = [...lockedItems, item];
-      setLockedItems(updatedLockedItems);
-    }
-  };
 
-  // const handleLockToggle = (item) => {
-  //   let prevLockedItems = lockedItems;
-  //   let multiData = multiBet;
-  //   const isItemLocked = prevLockedItems.includes(item);
-  //   if (isItemLocked) {
-  //     prevLockedItems = prevLockedItems.filter(
-  //       (i) => i.eventId !== item.eventId
-  //     );
-  //   } else {
-  //     prevLockedItems = [...prevLockedItems, item];
-  //   }
-  //   setLockedItems(prevLockedItems);
-
-  //   const lockItem = prevLockedItems.map((i) => i.eventId);
-  //   let multiBetFilterItem = multiBet.MultibetItems?.filter(
-  //     (item) => !lockItem.includes(item.eventId)
-  //   );
-  //   multiData["MultibetItems"] = multiBetFilterItem;
-  //   setMultiBet(multiData);
-  // };
+      if (isItemLocked) {
+        // Unlock the item by removing it from the lockedItems array
+        const updatedLockedItems = lockedItems.filter(
+          (elm) => elm.eventId !== item.eventId
+        );
+        setLockedItems(updatedLockedItems);
+      } else {
+        // Lock the item by adding it to the lockedItems array
+        const updatedLockedItems = [...lockedItems, item];
+        setLockedItems(updatedLockedItems);
+      }
+    },
+    [lockedItems]
+  );
 
   return (
     <div className="multi_bet_odds_container">
@@ -271,7 +247,12 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
         </div>
         <div className="total_win">
           <p>{settings.staticString.totalWins}:&nbsp;</p>
-          <p className="total_wins_value">{multiBet?.TotalOdds * stack}TL</p>
+          <p className="total_wins_value">
+            {isNaN(multiBet?.TotalOdds * stack)
+              ? 0
+              : multiBet?.TotalOdds * stack}
+            TL
+          </p>
         </div>
       </div>
       <div className="multi_bet_button">

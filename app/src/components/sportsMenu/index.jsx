@@ -34,7 +34,7 @@ const SportsMenu = ({ data, handleSelect, selectedItem }) => {
           left: container.scrollLeft + scrollOffset,
         });
       }
-    }, [selectedItem, containerRef.current, selectedRef.current]);
+    }, [selectedItem]);
     
     return (
         <div className='league_tabs'>

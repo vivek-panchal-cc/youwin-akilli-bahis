@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { CalendarIcon } from "../../../assets/svgs";
 
-const OddsCalendar = ({ handleDateSelection, selectedDate }) => {
-  const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
+const OddsCalendar = ({ handleDateSelection, selectedDate }) => {  
   const currentDate = new Date();
   // Get the current date with day
   const currentDay = currentDate.getDate();
@@ -22,14 +21,12 @@ const OddsCalendar = ({ handleDateSelection, selectedDate }) => {
     "December",
   ];
   const currentDayOfWeek = daysOfWeek[currentDate.getDay()];
-  // const [selectedDate, setSelectedDate] = useState(currentDay);
-
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
   // Get the first day of the current month
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-  const startingDayOfWeek = firstDayOfMonth.getDay();
+  // const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+  // const startingDayOfWeek = firstDayOfMonth.getDay();
 
   // Calculate the next six dates with days
   const nextDates = [];
@@ -39,10 +36,6 @@ const OddsCalendar = ({ handleDateSelection, selectedDate }) => {
     const nextDayOfWeek = daysOfWeek[nextDate.getDay()];
     nextDates.push({ date: nextDay, dayOfWeek: nextDayOfWeek });
   }
-
-  // const handleDateSelection = (date) => {
-  //   setSelectedDate(date);    
-  // };
 
   return (
     <div className="calendar">

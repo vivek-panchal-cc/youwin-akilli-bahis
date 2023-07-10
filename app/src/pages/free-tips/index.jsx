@@ -1,18 +1,13 @@
 import React, { useContext } from "react";
-import TeaserSlider from "../home-page/components/TeaserSlider";
 import { AppContext } from "../../context/AppContext";
 import SportsMenu from "../../components/sportsMenu";
 import LigSlider from "../../components/ligSlider";
-import PopularOdds from "../home-page/components/PopularOdds";
 import OddSection from "./components/OddSection";
 import settings from "../../misc";
 import {
-  addPopularOddToCollection,
-  addTeaserItemToCollection,
+  addPopularOddToCollection, addLigItemToCollection
 } from "../../feature/appAction";
 import { ReducerContext } from "../../context/ReducerContext";
-import { addLigItemToCollection } from "../../feature/appAction";
-import OddsCalendar from "./components/OddsCalendar";
 import { useNavigate, useParams } from "react-router-dom";
 
 /**
@@ -21,8 +16,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const FreeTips = () => {
   const {
-    fireBaseAllLeaguesDataBase,
-    fireBaseFeaturedDataBase,
+    fireBaseAllLeaguesDataBase,    
     fireBaseAllEventsDataBase,
     fireBaseHomePageSliderDataBase,
   } = useContext(AppContext);
@@ -31,16 +25,12 @@ const FreeTips = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // @futureUse const selectedMenuTab = fireBaseAllLeaguesDataBase && Object.keys(fireBaseAllLeaguesDataBase)?.[0];
 
   const handleSelect = (item) => {
     console.log("item: ", item);
     navigate(`/free-tips/${item}`);
   };
 
-  // useEffect(() => {
-  //   setSportMenu(dispatch, selectedMenuTab)
-  // }, [fireBaseAllLeaguesDataBase])
 
   const handleSelectOdd = (data) => {
     addPopularOddToCollection(dispatch, data);
@@ -48,10 +38,6 @@ const FreeTips = () => {
 
   const handleSelectLigItem = (data) => {
     addLigItemToCollection(dispatch, data);
-  };
-
-  const handleSelectTeaserItem = (data) => {
-    addTeaserItemToCollection(dispatch, data);
   };
 
   const filteredLigSliderData = fireBaseHomePageSliderDataBase?.filter(

@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import {
-  getFormattedTime,
-  getMonthNameWithDate,
+  getFormattedTime,  
   getOrdinalDay,
 } from "../../../utils/dateFormat";
-import settings from "../../../misc";
 import { getCurrentOddStatus } from "../../../services/vefaAppService";
 import OddsCalendar from "./OddsCalendar";
 import { useParams } from "react-router-dom";

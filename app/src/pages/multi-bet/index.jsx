@@ -5,11 +5,9 @@ import {
   addPopularOddToCollection,
 } from "../../feature/appAction";
 import { ReducerContext } from "../../context/ReducerContext";
-import dummyJson from "../../constants/dummyOddsData.json"
 
 const MultiBetIndex = () => {
-  const {
-    fireBasePopularOddsDataBase,
+  const {    
     fireBaseAllEventsDataBase
   } = useContext(AppContext);
 
