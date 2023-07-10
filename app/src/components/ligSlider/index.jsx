@@ -46,12 +46,12 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
       >
         {isLoading
           ? // Render skeleton loading elements when isLoading is true
-            Array.from({ length: 3 }).map((_, index) => (
-              <SwiperSlide key={index}>
-                <div className="lig_slider_item">
-                  <Skeleton height={100} />
-                </div>
-              </SwiperSlide>
+          Array.from({ length: 3 }).map((_, index) => (
+            <SwiperSlide key={index}>
+              <div className="lig_slider_item loading">
+                <Skeleton height={100} />                
+              </div>
+            </SwiperSlide>
             ))
             // Render the actual data when isLoading is false
           : data?.map((elm) => {

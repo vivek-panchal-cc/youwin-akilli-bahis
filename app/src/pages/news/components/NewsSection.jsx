@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 
-const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {  
+const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedNews, setSelectedNews] = useState(null);  
+  const [selectedNews, setSelectedNews] = useState(null);
   const [feedItems, setFeedItems] = useState([]);
   const URL = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH;
   const URL_ONE = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_ONE;
@@ -29,7 +29,17 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
       URL_EIGHT,
     ];
     parseRSSFeed(rssFeedUrls);
-  }, [URL, URL_ONE, URL_TWO, URL_THREE, URL_FOUR, URL_FIVE, URL_SIX, URL_SEVEN, URL_EIGHT]);
+  }, [
+    URL,
+    URL_ONE,
+    URL_TWO,
+    URL_THREE,
+    URL_FOUR,
+    URL_FIVE,
+    URL_SIX,
+    URL_SEVEN,
+    URL_EIGHT,
+  ]);
 
   const parseRSSFeed = async (urls) => {
     try {
@@ -58,23 +68,51 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
             item.querySelector("description")?.textContent || "";
           let encodedContent =
             item.getElementsByTagNameNS("*", "encoded")[0]?.textContent || "";
-          const imageRegex = /<img[^>]+src=["']([^"'>]+)["'][^>]*>\s*<br\s*\/>/
-
           let imageUrl = "";
 
-          // Check if <img> tag is present in the description
+          const imageRegex = /<img[^>]+src=["']([^"'>]+)["'][^>]*>\s*<br\s*\/>/;
           const descriptionMatch = description.match(imageRegex);
           if (descriptionMatch) {
             imageUrl = descriptionMatch[1];
-            // Remove the <img> tag from the description
             description = description.replace(imageRegex, "");
           } else {
-            // If <img> tag is not found in the description, check content:encoded
-            let encodedMatch = encodedContent.match(imageRegex);
+            const encodedMatch = encodedContent.match(imageRegex);
             if (encodedMatch) {
               imageUrl = encodedMatch[1];
-              // Remove the <img> tag from the encodedContent
               encodedContent = encodedContent.replace(imageRegex, "");
+            } else {
+              const imageTagImageRegex = /<image>\s*<url>(.*?)<\/url>/;
+              const imageTagImageContent =
+                item.innerHTML.match(imageTagImageRegex);
+              if (imageTagImageContent) {
+                imageUrl = imageTagImageContent[1];
+              } else {
+                const imgRegex = /<img src="(.*?)"/;
+                const imgContent = item.innerHTML.match(imgRegex);
+                if (imgContent) {
+                  imageUrl = imgContent[1];
+                } else {
+                  const imageTagImgRegex = /<img\s+src="([^"]+)"/g;
+                  const imageTagImgContent =
+                    item.innerHTML.matchAll(imageTagImgRegex);
+                  for (const match of imageTagImgContent) {
+                    imageUrl = match[1];
+                    break; // Only take the first match
+                  }
+                  if (!imageUrl) {
+                    const imageTagRegex = /<image>([^<]+)<\/image>/;
+                    const imageTagContent = item.innerHTML.match(imageTagRegex);
+                    if (imageTagContent) {
+                      imageUrl = imageTagContent[1];
+                    } else {
+                      const enclosure = item.querySelector("enclosure");
+                      if (enclosure && enclosure.hasAttribute("url")) {
+                        imageUrl = enclosure.getAttribute("url");
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
 
@@ -84,6 +122,7 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
             pubDate,
             description,
             imageUrl,
+            encodedContent,
           });
         });
       });
@@ -97,45 +136,14 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
     }
   };
 
-  // const parseRSSFeed = async (url) => {
-  //   try {
-  //     const response = await axios.get(url, {
-  //       headers: {
-  //         Accept: "application/xml",
-  //       },
-  //     });
-  //     const xmlText = response.data;
-  //     const parser = new DOMParser();
-  //     const xmlDoc = parser.parseFromString(xmlText, "application/xml");
-
-  //     const items = xmlDoc.querySelectorAll("item");
-  //     const feedItemsData = Array.from(items).map((item) => {
-  //       const title = item.querySelector("title")?.textContent || "";
-  //       const link = item.querySelector("link")?.textContent || "";
-  //       const pubDate = item.querySelector("pubDate")?.textContent || "";
-  //       const description =
-  //         item.querySelector("description")?.textContent || "";
-  //       const encodedContent =
-  //         item.getElementsByTagNameNS("*", "encoded")[0]?.textContent || "";
-  //       const imageRegex = /<img[^>]+src=["'](.*?)["']/;
-  //       const match = encodedContent.match(imageRegex);
-  //       const imageUrl = match ? match[1] : "";
-
-  //       return {
-  //         title,
-  //         link,
-  //         pubDate,
-  //         description,
-  //         imageUrl,
-  //       };
-  //     });
-  //     feedItemsData.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-  //     setFeedItems(feedItemsData);
-  //     // console.log("Feed Data", feedItemsData);
-  //   } catch (error) {
-  //     console.log("Error fetching or parsing RSS feed:", error);
-  //   }
-  // };
+  const extractImageUrl = (content) => {
+    const imageRegex = /<img[^>]+src=["']([^"'>]+)["'][^>]*>/;
+    const matches = content.match(imageRegex);
+    if (matches) {
+      return matches[1];
+    }
+    return "";
+  };
 
   const openModal = (news) => {
     setSelectedNews(news);
@@ -147,6 +155,10 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
     setIsModalOpen(false);
   };
 
+  const sortedFeedItems = feedItems
+  ?.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
+  .slice(0, 10);
+  
   return (
     <div className="news_slider">
       {feedItems?.length > 0 &&
@@ -157,6 +169,12 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
               <div className="news_slider_content">
                 <div className="top_section">
                   {item?.imageUrl && <img src={item?.imageUrl} alt="news" />}
+                  {!item.imageUrl && item.encodedContent && (
+                    <img
+                      src={extractImageUrl(item.encodedContent)}
+                      alt="news"
+                    />
+                  )}
                   {item?.description && (
                     <p
                       dangerouslySetInnerHTML={{ __html: item.description }}
@@ -185,8 +203,14 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
             {selectedNews?.imageUrl && (
               <img src={selectedNews?.imageUrl} alt="news" />
             )}
-            <h3>{selectedNews?.title}</h3>
-            {selectedNews?.description && (
+            <h3>{selectedNews?.title}</h3>            
+            {selectedNews?.encodedContent ? (
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: selectedNews?.encodedContent,
+                }}
+              />
+            ) : (
               <p
                 dangerouslySetInnerHTML={{ __html: selectedNews?.description }}
               />

@@ -1,5 +1,10 @@
 
 @import './misc/_variables.scss';
+
+:root {
+    --loading-grey: #ededed;
+}
+
 body{
     background-color: $main-bg-color !important;
     margin: 0;
@@ -799,6 +804,9 @@ body{
             text-align: center;
             // margin: 0 14px 10px 14px;
             line-height: 1;
+            span{
+                background: transparent !important;
+            }
         }
         .close_button{
             margin-top: 4px;
@@ -1426,3 +1434,28 @@ body{
   .spb-spinner__icon .spinner-first-line {
     fill: #00ca6b;
   }
+
+  .lig_slider_item.loading {
+    background-color: var(--loading-grey);
+    background-image: linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0) 60%
+    );
+    background-size: 200% 100%;
+    background-position: 100% 50%;
+    animation: loading 1s linear infinite;
+  }
+  
+  @keyframes loading {
+    0% {
+      background-position: 100% 50%;
+    }
+    50% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: -100% 50%;
+    }
+  }  

@@ -7,7 +7,6 @@ import {
   SyncIcon,
   CrossIcon,
 } from "../../../assets/svgs";
-// import YouWinIcon from "../../../assets/images/youwin_share.svg";
 import TwitterIcon from "../../../assets/images/twitter_share.png";
 import WhatsappIcon from "../../../assets/images/whatsapp_share.png";
 import TelegramIcon from "../../../assets/images/telegram_share.png";
@@ -32,8 +31,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
   const [rangeValue, setRangeValue] = useState(1000);
   const [multiBet, setMultiBet] = useState([]);
   const [shareIconsVisible, setShareIconsVisible] = useState(false);
-  const [lockedItems, setLockedItems] = useState([]);
-  // const [unlockedItems, setUnlockedItems] = useState([]);
+  const [lockedItems, setLockedItems] = useState([]);  
   const stack = 1000;
 
   useEffect(() => {
@@ -62,10 +60,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
 
   const handleAlterSuggestions = useCallback(async () => {
     try {
-      const eventIds = lockedItems?.map((item) => item.eventId).join(",");
-      // const multiGroupIds = lockedItems
-      //   ?.map((item) => item.multiGroupId)
-      //   .join(",");
+      const eventIds = lockedItems?.map((item) => item.eventId).join(",");      
       let multiBetAlterSuggestionData = await multiBetAlterSuggestionAPI(
         eventIds,
         7
@@ -84,8 +79,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
         "multiBetAlterSuggestionData :>> ",
         multiBetAlterSuggestionData
       );
-      setMultiBet(multiBetAlterSuggestionData);
-      // setUnlockedItems([]);
+      setMultiBet(multiBetAlterSuggestionData);      
     } catch (error) {
       console.error("Failed to fetch multiBet data:", error);
     }
@@ -101,8 +95,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
   };
 
   const updateRangeValue = (event) => {
-    setLockedItems([]);
-    // setUnlockedItems([]);
+    setLockedItems([]);    
     const value = event.target.value;
     const winningMoreValue = document.querySelector(".winning_more_value");
     if (winningMoreValue) {
