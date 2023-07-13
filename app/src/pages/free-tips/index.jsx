@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import SportsMenu from "../../components/sportsMenu";
 import LigSlider from "../../components/ligSlider";
 import OddSection from "./components/OddSection";
 import settings from "../../misc";
 import {
-  addPopularOddToCollection, addLigItemToCollection
+  addPopularOddToCollection,
+  addLigItemToCollection,
 } from "../../feature/appAction";
 import { ReducerContext } from "../../context/ReducerContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,7 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const FreeTips = () => {
   const {
-    fireBaseAllLeaguesDataBase,    
+    fireBaseAllLeaguesDataBase,
     fireBaseAllEventsDataBase,
     fireBaseHomePageSliderDataBase,
   } = useContext(AppContext);
@@ -24,13 +25,27 @@ const FreeTips = () => {
   const { tipsCollection, dispatch } = useContext(ReducerContext);
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true); // Add isLoading state
 
+  useEffect(() => {
+    if (
+      fireBaseAllLeaguesDataBase &&
+      fireBaseAllEventsDataBase &&
+      fireBaseHomePageSliderDataBase
+    ) {
+      // Set isLoading to false once data is available
+      setIsLoading(false);
+    }
+  }, [
+    fireBaseAllLeaguesDataBase,
+    fireBaseAllEventsDataBase,
+    fireBaseHomePageSliderDataBase,
+  ]);
 
   const handleSelect = (item) => {
     console.log("item: ", item);
     navigate(`/free-tips/${item}`);
   };
-
 
   const handleSelectOdd = (data) => {
     addPopularOddToCollection(dispatch, data);
@@ -59,12 +74,14 @@ const FreeTips = () => {
           data={filteredLigSliderData}
           handleSelectLig={handleSelectLigItem}
           tipsCollection={tipsCollection}
+          isLoading={isLoading} // Pass the isLoading prop
         />
       )}
       <OddSection
         data={fireBaseAllEventsDataBase}
         handleSelectOdd={handleSelectOdd}
         selectedItem={tipsCollection}
+        isLoading={isLoading} // Pass the isLoading prop
       />
     </div>
   );

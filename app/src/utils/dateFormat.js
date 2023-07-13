@@ -16,13 +16,15 @@ export const getOrdinalDay = (date) => {
 
 // function return suffix which is use after number e.g "th", "st", "nd", "rd".
 export const getOrdinalSuffix = (day) => {
+  console.log('day :>> ', day);
     const suffixes = ["th", "st", "nd", "rd"];
     const specialCases = [11, 12, 13];
   
     if (specialCases.includes(day % 100)) {
       return suffixes[0];
     } else {
-      return suffixes[day % 10];
+      const lastDigit = day % 10;
+      return suffixes[lastDigit] || suffixes[0];
     }
 }
 

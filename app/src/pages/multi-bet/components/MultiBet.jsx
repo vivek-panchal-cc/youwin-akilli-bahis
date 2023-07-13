@@ -6,17 +6,21 @@ import {
   UnLockIcon,
   SyncIcon,
   CrossIcon,
+  InformationIcon,
+  LoadingIcon,
 } from "../../../assets/svgs";
 import TwitterIcon from "../../../assets/images/twitter_share.png";
 import WhatsappIcon from "../../../assets/images/whatsapp_share.png";
 import TelegramIcon from "../../../assets/images/telegram_share.png";
-import YouWinIcon from "../../../assets/images/youwin_share.png"
+import YouWinIcon from "../../../assets/images/youwin_share.png";
 import settings from "../../../misc";
 import {
   getCurrentOddStatus,
   multiBetAPI,
   multiBetAlterSuggestionAPI,
 } from "../../../services/vefaAppService";
+import { Skeleton } from "@mui/material";
+import { debounce } from "lodash";
 
 /**
  *
@@ -26,41 +30,61 @@ import {
  *
  */
 
-const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
+const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
-  const [rangeValue, setRangeValue] = useState(1000);
+  const [rangeValue, setRangeValue] = useState(5000);
   const [multiBet, setMultiBet] = useState([]);
   const [shareIconsVisible, setShareIconsVisible] = useState(false);
-  const [lockedItems, setLockedItems] = useState([]);  
+  const [lockedItems, setLockedItems] = useState([]);
+  const [isAlterSuggestion, setAlterSuggestion] = useState(false);
   const stack = 1000;
 
   useEffect(() => {
+    const fetchMultiBetData = async () => {
+      try {
+        setAlterSuggestion(true);
+        let multiBetData = await multiBetAPI(stack, rangeValue);
+
+        const lockItem = lockedItems.map((i) => i.eventId);
+
+        let multiBetFilterItem = multiBetData.MultibetItems?.filter(
+          (item) => !lockItem.includes(item.eventId)
+        );
+
+        multiBetData["MultibetItems"] = multiBetFilterItem;
+        setMultiBet(multiBetData);
+
+        console.log("multiBetFilter", multiBetFilterItem);
+      } catch (error) {
+        console.error("Failed to fetch multiBet data:", error);
+      } finally {
+        setAlterSuggestion(false);
+      }
+    };
+
+    const debouncedFetchMultiBetData = debounce(fetchMultiBetData, 500);
+
+    const updateRangeColor = () => {
+      const rangeInput = document.getElementById("vol");
+      const value =
+        ((rangeInput.value - rangeInput.min) /
+          (rangeInput.max - rangeInput.min)) *
+        100;
+      rangeInput.style.background = `linear-gradient(to right, #00CA6B 0%, #00CA6B ${value}%, #BDBDBD ${value}%, #BDBDBD 100%)`;
+    };
+
     updateRangeColor();
-    fetchMultiBetData();
+    debouncedFetchMultiBetData();
+
+    return () => {
+      debouncedFetchMultiBetData.cancel(); // Cleanup the debounce function on component unmount
+    };
   }, [rangeValue]);
-
-  const fetchMultiBetData = useCallback(async () => {
-    try {
-      let multiBetData = await multiBetAPI(stack, rangeValue);
-
-      const lockItem = lockedItems.map((i) => i.eventId);
-
-      let multiBetFilterItem = multiBetData.MultibetItems?.filter(
-        (item) => !lockItem.includes(item.eventId)
-      );
-
-      multiBetData["MultibetItems"] = multiBetFilterItem;
-      setMultiBet(multiBetData);
-
-      console.log("multiBetFilter", multiBetFilterItem);
-    } catch (error) {
-      console.error("Failed to fetch multiBet data:", error);
-    }
-  }, [stack, rangeValue, lockedItems]);
 
   const handleAlterSuggestions = useCallback(async () => {
     try {
-      const eventIds = lockedItems?.map((item) => item.eventId).join(",");      
+      setAlterSuggestion(true);
+      const eventIds = lockedItems?.map((item) => item.eventId).join(",");
       let multiBetAlterSuggestionData = await multiBetAlterSuggestionAPI(
         eventIds,
         7
@@ -79,30 +103,13 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
         "multiBetAlterSuggestionData :>> ",
         multiBetAlterSuggestionData
       );
-      setMultiBet(multiBetAlterSuggestionData);      
+      setMultiBet(multiBetAlterSuggestionData);
     } catch (error) {
       console.error("Failed to fetch multiBet data:", error);
+    } finally {
+      setAlterSuggestion(false);
     }
   }, [lockedItems, multiBet]);
-
-  const updateRangeColor = () => {
-    const rangeInput = document.getElementById("vol");
-    const value =
-      ((rangeInput.value - rangeInput.min) /
-        (rangeInput.max - rangeInput.min)) *
-      100;
-    rangeInput.style.background = `linear-gradient(to right, #00CA6B 0%, #00CA6B ${value}%, #BDBDBD ${value}%, #BDBDBD 100%)`;
-  };
-
-  const updateRangeValue = (event) => {
-    setLockedItems([]);    
-    const value = event.target.value;
-    const winningMoreValue = document.querySelector(".winning_more_value");
-    if (winningMoreValue) {
-      winningMoreValue.textContent = `${parseFloat(value).toFixed(3)}TL`;
-    }
-    setRangeValue(value);
-  };
 
   const handleShareClick = () => {
     setShareIconsVisible(true);
@@ -132,6 +139,15 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
     },
     [lockedItems]
   );
+
+  const handleRangeChange = useCallback((event) => {
+    const value = event.target.value;
+    const winningMoreValue = document.querySelector(".winning_more_value");
+    if (winningMoreValue) {
+      winningMoreValue.textContent = `${parseFloat(value).toFixed(3)}TL`;
+    }
+    setRangeValue(value);
+  }, []);
 
   return (
     <div className="multi_bet_odds_container">
@@ -170,67 +186,84 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
             min="1000"
             max="10000"
             value={rangeValue}
-            onInput={updateRangeColor}
-            onChange={updateRangeValue}
+            disabled={isAlterSuggestion}
+            onChange={handleRangeChange}
           />
         </div>
       </div>
       <div className="multi_bet_matches_content">
-        {multiBet?.MultibetItems &&
-          multiBet?.MultibetItems?.map((item) => {
-            const isSelected = tipsCollection?.some(
-              (elm) =>
-                elm.eventId === item?.eventId &&
-                elm?.selectionId === item?.selectionId
-            );
-
-            const isLocked = lockedItems.some(
-              (elm) => elm.eventId === item?.eventId
-            );
-
-            const matchItem = data?.find((i) => i.eventId === item?.eventId);
-
-            return (
-              <div key={matchItem?.eventId} className="multi_bet_match_item">
-                {isLocked ? (
-                  <LockIcon onClick={() => handleLockToggle(item)} />
-                ) : (
-                  <UnLockIcon onClick={() => handleLockToggle(item)} />
-                )}{" "}
-                <div className="left_content">
-                  <div className="team_section">
-                    <p>{item?.teamA}</p>
-                    <img
-                      src={`${IMAGE_BASE_PATH}${matchItem?.teamA_logo}`}
-                      alt="team logo"
-                    />
-                  </div>
-                  <div className="team_section">
-                    <img
-                      src={`${IMAGE_BASE_PATH}${matchItem?.teamB_logo}`}
-                      alt="team logo"
-                    />
-                    <p>{item?.teamB}</p>
-                  </div>
-                </div>
-                <div
-                  className={`odd_button ${isSelected ? "selected" : ""} `}
-                  // onClick={() => handleSelectOdd(item)}
-                >
-                  <p>{getCurrentOddStatus(item?.name_en, item?.line)}</p>
-                  {typeof item?.price === "string" ? (
-                    <p>{parseFloat(item?.price).toFixed(2)}</p>
-                  ) : (
-                    <p>{item?.price.toFixed(2)}</p>
-                  )}
-                </div>
+        {isLoading
+          ? // Skeletons
+            Array.from({ length: multiBet?.length || 0 }).map((_, index) => (
+              <div key={index} className="multi_bet_match_item skeleton">
+                <Skeleton variant="rectangular" width={60} height={40} />
+                <Skeleton variant="rectangular" width={60} height={40} />
+                <Skeleton variant="text" width={80} height={20} />
+                <Skeleton variant="text" width={80} height={20} />
+                <Skeleton variant="text" width={80} height={20} />
+                <Skeleton variant="text" width={80} height={20} />
               </div>
-            );
-          })}
+            ))
+          : multiBet?.MultibetItems &&
+            multiBet?.MultibetItems?.map((item) => {
+              const isSelected = tipsCollection?.some(
+                (elm) =>
+                  elm.eventId === item?.eventId &&
+                  elm?.selectionId === item?.selectionId
+              );
+
+              const isLocked = lockedItems.some(
+                (elm) => elm.eventId === item?.eventId
+              );
+
+              const matchItem = data?.find((i) => i.eventId === item?.eventId);
+
+              return (
+                <div key={matchItem?.eventId} className="multi_bet_match_item">
+                  {isLocked ? (
+                    <LockIcon onClick={() => handleLockToggle(item)} />
+                  ) : (
+                    <UnLockIcon onClick={() => handleLockToggle(item)} />
+                  )}{" "}
+                  <div className="left_content">
+                    <div className="team_section">
+                      <p>{item?.teamA}</p>
+                      {matchItem?.teamA_logo ? (
+                        <img
+                          src={`${IMAGE_BASE_PATH}${matchItem?.teamA_logo}`}
+                          alt="logo"
+                        />
+                      ) : (
+                        <InformationIcon />
+                      )}
+                    </div>
+                    <div className="team_section">
+                      {matchItem?.teamB_logo ? (
+                        <img
+                          src={`${IMAGE_BASE_PATH}${matchItem?.teamB_logo}`}
+                          alt="logo"
+                        />
+                      ) : (
+                        <InformationIcon />
+                      )}
+                      <p>{item?.teamB}</p>
+                    </div>
+                  </div>
+                  <div
+                    className={`odd_button ${isSelected ? "selected" : ""} `}
+                    // onClick={() => handleSelectOdd(item)}
+                  >
+                    <p>{getCurrentOddStatus(item?.name_en, item?.line)}</p>
+                    {typeof item?.price === "string" ? (
+                      <p>{parseFloat(item?.price).toFixed(2)}</p>
+                    ) : (
+                      <p>{item?.price.toFixed(2)}</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
       </div>
-      {/* <div className="add_bet">
-        <label><PlusIcon /> Add one more</label>
-      </div> */}
       <div className="total_odds_details">
         <div className="total_odds">
           <p>{settings.staticString.totalOdds}:&nbsp;</p>
@@ -243,15 +276,26 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection }) => {
           <p className="total_wins_value">
             {isNaN(multiBet?.TotalOdds * stack)
               ? 0
-              : multiBet?.TotalOdds * stack}
+              : (multiBet?.TotalOdds * stack).toFixed(2)}
             TL
           </p>
         </div>
       </div>
       <div className="multi_bet_button">
         <button onClick={handleAlterSuggestions}>
-          <SyncIcon />
-          &nbsp;Alter. Suggestions
+          {isAlterSuggestion ? (
+            <>
+              <div className="loading_icon">
+                <LoadingIcon />
+              </div>
+              <span>Loading...</span>
+            </>
+          ) : (
+            <>
+              <SyncIcon />
+              &nbsp;Alter. Suggestions
+            </>
+          )}
         </button>
       </div>
     </div>

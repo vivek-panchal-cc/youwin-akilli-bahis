@@ -5,3 +5,5 @@ export { default as UnLockIcon } from "./UnLock";
 export { default as SyncIcon } from "./Sync";
 export { default as PlusIcon } from "./Plus";
 export { default as CrossIcon } from "./Cross";
+export { default as InformationIcon } from "./Information";
+export { default as LoadingIcon } from "./Loading";

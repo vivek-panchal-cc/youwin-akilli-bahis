@@ -1,5 +1,5 @@
-import React from "react";
-import { ShareIcon } from "../../../assets/svgs";
+import React, { useState } from "react";
+import { ShareIcon, CrossIcon } from "../../../assets/svgs";
 import {
   getFormattedTime,
   getMonthNameWithDate,
@@ -7,6 +7,10 @@ import {
 import settings from "../../../misc";
 import Skeleton from "react-loading-skeleton";
 import { getCurrentOddStatus } from "../../../services/vefaAppService";
+import TwitterIcon from "../../../assets/images/twitter_share.png";
+import WhatsappIcon from "../../../assets/images/whatsapp_share.png";
+import TelegramIcon from "../../../assets/images/telegram_share.png";
+import YouWinIcon from "../../../assets/images/youwin_share.png";
 
 /**
  *
@@ -18,20 +22,58 @@ import { getCurrentOddStatus } from "../../../services/vefaAppService";
 
 const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
+  const [shareIconsVisible, setShareIconsVisible] = useState(false);
+
+  const handleShareClick = () => {
+    setShareIconsVisible(true);
+  };
+
+  const handleCrossClick = () => {
+    setShareIconsVisible(false);
+  };
 
   return (
     <div className="popular_odds_container">
-      <div className="popular_odd_header">
-        <h2>{settings.staticString.popularOdds}</h2>
-        <div className="share_icon">
-          <ShareIcon />
+      <div className={`popular_odd_header${isLoading ? " loading" : ""}`}>
+        {isLoading ? (
+          <Skeleton height={20} width={100} />
+        ) : (
+          <h2>{settings.staticString.popularOdds}</h2>
+        )}
+        <div className={`share_icon${isLoading ? " loading" : ""}`}>
+          {!shareIconsVisible ? (
+            isLoading ? (
+              <Skeleton height={20} width={20} />
+            ) : (
+              <ShareIcon onClick={handleShareClick} />
+            )
+          ) : (
+            <div className="share_icons_line">
+              {isLoading ? (
+                <>
+                  <Skeleton height={20} width={20} />
+                  <Skeleton height={20} width={20} />
+                  <Skeleton height={20} width={20} />
+                  <Skeleton height={20} width={20} />
+                </>
+              ) : (
+                <>
+                  <img src={TwitterIcon} alt="Twitter" />
+                  <img src={TelegramIcon} alt="Telegram" />
+                  <img src={WhatsappIcon} alt="WhatsApp" />
+                  <img src={YouWinIcon} alt="YouWin" />
+                </>
+              )}
+              <CrossIcon onClick={handleCrossClick} />
+            </div>
+          )}
         </div>
       </div>
       <div className="popular_matches_content">
         {isLoading
           ? // Render skeleton loading elements when isLoading is true
             Array.from({ length: 3 }).map((_, index) => (
-              <div key={index} className="popular_match_item">
+              <div key={index} className="popular_match_item loading">
                 <Skeleton height={100} />
               </div>
             ))

@@ -67,7 +67,7 @@ const TipCollectionModal = () => {
         >
           {tipsCollection?.length <= 0 && (
             <div className="empty_text">
-              <p>Empty Tip Collection</p>
+              <p>{settings.staticString.tipCollectionIsEmpty}</p>
             </div>
           )}
           {tipsCollection?.length > 0 && (
@@ -108,7 +108,7 @@ const TipCollectionModal = () => {
                           {typeof item?.odds_decimal === "string" ? (
                             <p>{parseFloat(item?.odds_decimal).toFixed(2)}</p>
                           ) : (
-                            <p>{item?.odds_decimal.toFixed(2)}</p>
+                            <p>{item?.odds_decimal?.toFixed(2)}</p>
                           )}
                         </div>
                       </div>

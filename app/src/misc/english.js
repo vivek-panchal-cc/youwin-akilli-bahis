@@ -12,7 +12,8 @@ const staticString = {
     shareMyTipCollection: 'Share My Tip Collection',
     thisWeeksTopMatches: 'This Week\'s Top Matches',
     thisWeeksTopStories: 'This Week\'s Top Stories',
-    winningMoreThan: 'Winning more than'
+    winningMoreThan: 'Winning more than',
+    tipCollectionIsEmpty: 'Tip Collection is Empty'
 }
 
 const settings = {

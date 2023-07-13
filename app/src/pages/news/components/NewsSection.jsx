@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
+import { Skeleton } from "@mui/material";
 
-const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
+const NewsSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNews, setSelectedNews] = useState(null);
   const [feedItems, setFeedItems] = useState([]);
@@ -156,41 +157,59 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
   };
 
   const sortedFeedItems = feedItems
-  ?.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
-  .slice(0, 10);
-  
+    ?.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
+    .slice(0, 10);
+
   return (
     <div className="news_slider">
-      {feedItems?.length > 0 &&
-        feedItems
-          ?.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
-          .map((item) => (
-            <div key={item?.link} className="news_slider_item">
-              <div className="news_slider_content">
-                <div className="top_section">
-                  {item?.imageUrl && <img src={item?.imageUrl} alt="news" />}
-                  {!item.imageUrl && item.encodedContent && (
-                    <img
-                      src={extractImageUrl(item.encodedContent)}
-                      alt="news"
-                    />
-                  )}
-                  {item?.description && (
-                    <p
-                      dangerouslySetInnerHTML={{ __html: item.description }}
-                      className={`news_description ${
-                        item.imageUrl ? "" : "no_image"
-                      }`}
-                    />
-                  )}
-                </div>
+      {sortedFeedItems?.length > 0 &&
+        sortedFeedItems.map((item) => (
+          <div key={item?.link} className="news_slider_item">
+            <div className="news_slider_content">
+              <div className="top_section">
+                {isLoading ? (
+                  <Skeleton variant="rectangular" width={500} height={200} />
+                ) : (
+                  <>
+                    {item?.imageUrl && <img src={item?.imageUrl} alt="news" />}
+                    {!item.imageUrl && item.encodedContent && (
+                      <img
+                        src={extractImageUrl(item.encodedContent)}
+                        alt="news"
+                      />
+                    )}
+                  </>
+                )}
 
-                <div className="news_button">
+                {isLoading ? (
+                  <>
+                    <Skeleton variant="text" width={"100%"} height={20} />
+                    <Skeleton variant="text" width={"100%"} height={20} />
+                  </>
+                ) : (
+                  <>
+                    {item?.description && (
+                      <p
+                        dangerouslySetInnerHTML={{ __html: item.description }}
+                        className={`news_description ${
+                          item.imageUrl ? "" : "no_image"
+                        }`}
+                      />
+                    )}
+                  </>
+                )}
+              </div>
+
+              <div className="news_button">
+                {isLoading ? (
+                  <Skeleton variant="rectangular" width={"100%"} height={40} />
+                ) : (
                   <button onClick={() => openModal(item)}>Read more</button>
-                </div>
+                )}
               </div>
             </div>
-          ))}
+          </div>
+        ))}
 
       <Modal
         show={isModalOpen}
@@ -203,7 +222,7 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
             {selectedNews?.imageUrl && (
               <img src={selectedNews?.imageUrl} alt="news" />
             )}
-            <h3>{selectedNews?.title}</h3>            
+            <h3>{selectedNews?.title}</h3>
             {selectedNews?.encodedContent ? (
               <p
                 dangerouslySetInnerHTML={{

@@ -5,8 +5,9 @@ import { AppContext } from "../../context/AppContext";
 import SportsMenu from "../../components/sportsMenu";
 import LigSlider from "../../components/ligSlider";
 import PopularOdds from "./components/PopularOdds";
-import {  
-  addTeaserItemToCollection, addLigItemToCollection
+import {
+  addTeaserItemToCollection,
+  addLigItemToCollection,
 } from "../../feature/appAction";
 import { ReducerContext } from "../../context/ReducerContext";
 
@@ -30,7 +31,7 @@ const HomePage = () => {
 
   const handleSelect = (item) => {
     console.log("item: ", item);
-    navigate(`/free-tips/${item}`)
+    navigate(`/free-tips/${item}`);
   };
 
   const handleSelectOdd = (data) => {
@@ -46,22 +47,34 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    // Simulate data loading delay (remove this in your actual implementation)
-    setTimeout(() => {
+    if (
+      fireBaseTeaserDataBase &&
+      fireBaseAllLeaguesDataBase &&
+      fireBaseFeaturedDataBase &&
+      fireBasePopularOddsDataBase
+    ) {
+      // Set isLoading to false once data is available
       setIsLoading(false);
-    }, 2000);
-  }, []);
+    }
+  }, [
+    fireBaseTeaserDataBase,
+    fireBaseAllLeaguesDataBase,
+    fireBaseFeaturedDataBase,
+    fireBasePopularOddsDataBase,
+  ]);
 
   return (
     <div className="home_page_container">
       <TeaserSlider
         data={fireBaseTeaserDataBase}
         handleSelectTeaser={handleSelectTeaserItem}
+        isLoading={isLoading} // Pass the isLoading prop
       />
       <SportsMenu
         data={fireBaseAllLeaguesDataBase}
         handleSelect={handleSelect}
         selectedItem={""}
+        isLoading={isLoading} // Pass the isLoading prop
       />
       <LigSlider
         data={fireBaseFeaturedDataBase}

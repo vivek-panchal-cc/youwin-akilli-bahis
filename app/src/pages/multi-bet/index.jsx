@@ -1,28 +1,33 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import MultiBet from "./components/MultiBet";
-import {
-  addPopularOddToCollection,
-} from "../../feature/appAction";
+import { addPopularOddToCollection } from "../../feature/appAction";
 import { ReducerContext } from "../../context/ReducerContext";
 
 const MultiBetIndex = () => {
-  const {    
-    fireBaseAllEventsDataBase
-  } = useContext(AppContext);
+  const { fireBaseAllEventsDataBase } = useContext(AppContext);
 
-  const { tipsCollection, dispatch } = useContext(ReducerContext);  
+  const { tipsCollection, dispatch } = useContext(ReducerContext);
+  const [isLoading, setIsLoading] = useState(true); // Add isLoading state
 
   const handleSelectOdd = (data) => {
     addPopularOddToCollection(dispatch, data);
   };
 
+  useEffect(() => {
+    if (fireBaseAllEventsDataBase) {
+      // Set isLoading to false once data is available
+      setIsLoading(false);
+    }
+  }, [fireBaseAllEventsDataBase]);
+
   return (
-    <div className="home_page_container">      
+    <div className="home_page_container">
       <MultiBet
         data={fireBaseAllEventsDataBase}
         handleSelectOdd={handleSelectOdd}
         tipsCollection={tipsCollection}
+        isLoading={isLoading} // Pass the isLoading prop
       />
     </div>
   );
