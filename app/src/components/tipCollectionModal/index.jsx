@@ -1,5 +1,5 @@
 import { Modal } from "react-bootstrap";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { ReducerContext } from "../../context/ReducerContext";
 import {
   removeItemFromTipCollection,
@@ -8,18 +8,15 @@ import {
 } from "../../feature/appAction";
 import settings from "../../misc";
 import { ShareIcon } from "../../assets/svgs";
-import Spinner from "../../components/common/spinner"
 import deleteIcon from "../../assets/svgs/Delete.svg";
 import { getCurrentOddStatus } from "../../services/vefaAppService";
 
 /**
  * TipCollectionModal - component use for tip collection modal.
- *
- */
+ **/
 
 const TipCollectionModal = () => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
-  const [isLoading, setIsLoading] = useState(false);
 
   const { dispatch, isModalShow, tipsCollection } = useContext(ReducerContext);
 
@@ -28,11 +25,7 @@ const TipCollectionModal = () => {
   };
 
   const handleRemoveAllOdds = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      dispatch(removeAllItemsFromTipCollection());
-    }, 2000);
+    dispatch(removeAllItemsFromTipCollection());
   };
 
   const handleRemoveOdds = (eventId) => {
@@ -61,10 +54,7 @@ const TipCollectionModal = () => {
             {settings.staticString.myTipCollection}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body
-          className={isLoading ? "loading" : ""}
-          style={{ opacity: isLoading ? "0.5" : "1" }}
-        >
+        <Modal.Body>
           {tipsCollection?.length <= 0 && (
             <div className="empty_text">
               <p>{settings.staticString.tipCollectionIsEmpty}</p>
@@ -137,11 +127,6 @@ const TipCollectionModal = () => {
                 </div>
               </div>
             </>
-          )}
-          {isLoading && (
-            <div className="loading_container">
-              <div className="loading_text"><Spinner/></div>
-            </div>
           )}
         </Modal.Body>
       </Modal>

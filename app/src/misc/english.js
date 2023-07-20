@@ -13,7 +13,12 @@ const staticString = {
     thisWeeksTopMatches: 'This Week\'s Top Matches',
     thisWeeksTopStories: 'This Week\'s Top Stories',
     winningMoreThan: 'Winning more than',
-    tipCollectionIsEmpty: 'Tip Collection is Empty'
+    tipCollectionIsEmpty: 'Tip Collection is Empty',
+    alterSuggestions: 'Alter. Suggestions',
+    loading: "Loading...",
+    readMore: "Read more",
+    close: "Close",
+    noDataFound: "No data found."
 }
 
 const settings = {

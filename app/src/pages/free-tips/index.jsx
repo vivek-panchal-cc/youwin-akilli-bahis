@@ -42,8 +42,7 @@ const FreeTips = () => {
     fireBaseHomePageSliderDataBase,
   ]);
 
-  const handleSelect = (item) => {
-    console.log("item: ", item);
+  const handleSelect = (item) => {    
     navigate(`/free-tips/${item}`);
   };
 

@@ -154,6 +154,7 @@ body{
                 justify-content: space-between;
                 padding: 0px 10px;
                 color: $white;
+                cursor: pointer;
                 p{
                     font-size: 12px;
                     margin: 0;
@@ -316,6 +317,7 @@ body{
                 justify-content: space-between;
                 padding: 0px 10px;
                 gap: 15px;
+                cursor: pointer;
                 &.selected{
                     background: #1C1A1B;
                     color: $white
@@ -348,6 +350,7 @@ body{
         .share_icon{
             display: flex;
             align-items: center;
+            cursor: pointer;
             .share_icons_line{
                 display: flex;
                 align-items: center;
@@ -471,6 +474,7 @@ body{
         // flex-basis: 80%;
         align-items: center;
         width: calc(100% - 70px);
+        cursor: pointer;
         > .date{
             //margin: 15px 0 0 20px;
             text-align: center;
@@ -728,6 +732,7 @@ body{
         .share_icon{
             display: flex;
             align-items: center;
+            cursor: pointer;
             .share_icons_line{
                 display: flex;
                 align-items: center;
@@ -769,6 +774,7 @@ body{
                 margin-right: 5px;
                 margin-left: 15px;
                 max-width: 30px;
+                cursor: pointer;
             }
             .left_content{
                 display: flex;
@@ -1365,6 +1371,7 @@ body{
     right: 0;
     bottom: 0;
     z-index: 1100;
+    cursor: pointer;
     .footer_item {
         text-align: center;
         &.tip_collection{
@@ -1401,7 +1408,9 @@ body{
             color: $white;
             font-size: 12px;
         }
-
+    }
+    .active p{
+        font-weight: bolder;
     }
 }
 

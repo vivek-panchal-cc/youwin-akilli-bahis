@@ -15,8 +15,7 @@ export const getOrdinalDay = (date) => {
 }
 
 // function return suffix which is use after number e.g "th", "st", "nd", "rd".
-export const getOrdinalSuffix = (day) => {
-  console.log('day :>> ', day);
+export const getOrdinalSuffix = (day) => {  
     const suffixes = ["th", "st", "nd", "rd"];
     const specialCases = [11, 12, 13];
   

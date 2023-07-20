@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import homeIcon from "../../../assets/images/home.svg";
 import logoIcon from "../../../assets/images/logo.svg";
@@ -19,8 +19,13 @@ import { AppContext } from "../../../context/AppContext";
 const AppFooter = () => {
   const { dispatch, tipsCollection, isModalShow } = useContext(ReducerContext);
   const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState(null);
 
   const { fireBaseAllLeaguesDataBase } = useContext(AppContext);
+
+  const handleItemClick = (item) => {
+    setActiveItem(item);
+  };
 
   const handleShow = () => {
     setTipCollectionModalStatus(dispatch, true);
@@ -37,25 +42,15 @@ const AppFooter = () => {
         // or
         navigate("/");
         // or
-        return (
-          <div>
-            Data is empty. Please try again later.
-          </div>
-        );
+        return <div>Data is empty. Please try again later.</div>;
       }
     } else {
       // Handle the case when fireBaseAllLeaguesDataBase is undefined or null
-      console.log(
-        "Data is undefined or null. Unable to navigate."
-      );
+      console.log("Data is undefined or null. Unable to navigate.");
       // or
       navigate("/");
       // or
-      return (
-        <div>
-          Data is not available. Please try again later.
-        </div>
-      );
+      return <div>Data is not available. Please try again later.</div>;
     }
   };
 
@@ -71,21 +66,50 @@ const AppFooter = () => {
     navigate("/multi-bet");
   };
 
+  useEffect(() => {
+    const handleLinkClick = (event) => {
+      event.preventDefault();
+    };
+
+    const links = document.querySelectorAll(".share_icons_line a");
+    links.forEach((link) => {
+      link.addEventListener("click", handleLinkClick);
+    });
+
+    return () => {
+      links.forEach((link) => {
+        link.removeEventListener("click", handleLinkClick);
+      });
+    };
+  }, []);
+
   return (
     <div className="footer">
-      <div className="footer_item">
+      <div
+        className={`footer_item ${activeItem === "home" ? "active" : ""}`}
+        onClick={() => handleItemClick("home")}
+      >
         <img src={homeIcon} alt="homeLogo" onClick={goToHome} />
         <p>{settings.staticString.home}</p>
       </div>
-      <div className="footer_item">
+      <div
+        className={`footer_item ${activeItem === "freeTips" ? "active" : ""}`}
+        onClick={() => handleItemClick("freeTips")}
+      >
         <img src={logoIcon} alt="free tips" onClick={handleFreeTips} />
         <p>{settings.staticString.freeTips}</p>
       </div>
-      <div className="footer_item">
+      <div
+        className={`footer_item ${activeItem === "multiBet" ? "active" : ""}`}
+        onClick={() => handleItemClick("multiBet")}
+      >
         <img src={multiBetIcon} alt="multi bet" onClick={handleMultiBet} />
         <p>{settings.staticString.multiBet}</p>
       </div>
-      <div className="footer_item">
+      <div
+        className={`footer_item ${activeItem === "news" ? "active" : ""}`}
+        onClick={() => handleItemClick("news")}
+      >
         <img src={newsIcon} alt="news" onClick={handleNews} />
         <p>{settings.staticString.news}</p>
       </div>

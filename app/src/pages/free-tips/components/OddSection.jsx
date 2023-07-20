@@ -4,6 +4,7 @@ import { getCurrentOddStatus } from "../../../services/vefaAppService";
 import OddsCalendar from "./OddsCalendar";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@mui/material";
+import settings from "../../../misc";
 
 /**
  *
@@ -43,13 +44,13 @@ const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
                 variant="rectangular"
                 width={60}
                 height={40}
-                className="skeleton_img_1"                
+                className="skeleton_img_1"
               />
               <Skeleton
                 variant="rectangular"
                 width={60}
                 height={40}
-                className="skeleton_img_2"                
+                className="skeleton_img_2"
               />
             </div>
             <div className="odd_section_details">
@@ -118,7 +119,7 @@ const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
       );
     });
   } else {
-    content = <p className="no_data_found">No data found.</p>;
+    content = <p className="no_data_found">{settings.staticString.noDataFound}</p>;
   }
 
   return (

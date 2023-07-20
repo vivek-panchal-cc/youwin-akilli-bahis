@@ -29,8 +29,7 @@ const HomePage = () => {
 
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
 
-  const handleSelect = (item) => {
-    console.log("item: ", item);
+  const handleSelect = (item) => {    
     navigate(`/free-tips/${item}`);
   };
 

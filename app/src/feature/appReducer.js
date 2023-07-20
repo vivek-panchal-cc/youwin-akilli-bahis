@@ -34,9 +34,7 @@ const appReducer = (state = initialState, action) => {
         selectedSportMenu: action.payload
       }
     case ADD_LIG_ITEM_TO_COLLECTION:
-      const { eventId, selectionId } = action.payload;
-      
-      console.log('action.payload :>> ', action.payload);
+      const { eventId, selectionId } = action.payload;            
 
       const isExistsWithEventId = state.tipsCollection.some(elm => elm.eventId === eventId);
       const isExistsWithSelectionId = state.tipsCollection.some(elm => elm.eventId === eventId && elm.selectionId === selectionId);

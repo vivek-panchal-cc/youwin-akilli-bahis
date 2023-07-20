@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ShareIcon,
   LockIcon,
@@ -21,6 +21,7 @@ import {
 } from "../../../services/vefaAppService";
 import { Skeleton } from "@mui/material";
 import { debounce } from "lodash";
+import html2canvas from "html2canvas";
 
 /**
  *
@@ -38,6 +39,13 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   const [lockedItems, setLockedItems] = useState([]);
   const [isAlterSuggestion, setAlterSuggestion] = useState(false);
   const stack = 1000;
+  const contentRef = useRef(null);
+  const [screenshot, setScreenshot] = useState("");
+  const [isTwitterIconClicked, setIsTwitterIconClicked] = useState(false);
+  const [isWhatsappIconClicked, setIsWhatsappIconClicked] = useState(false);
+  const [isTelegramIconClicked, setIsTelegramIconClicked] = useState(false);
+  const [isYouWinIconClicked, setIsYouWinIconClicked] = useState(false);
+  const backendUrl = "http://localhost:5000";
 
   useEffect(() => {
     const fetchMultiBetData = async () => {
@@ -53,8 +61,6 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
 
         multiBetData["MultibetItems"] = multiBetFilterItem;
         setMultiBet(multiBetData);
-
-        console.log("multiBetFilter", multiBetFilterItem);
       } catch (error) {
         console.error("Failed to fetch multiBet data:", error);
       } finally {
@@ -99,10 +105,6 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
         ...lockedItemsData,
         ...multiBetAlterSuggestionData.MultibetItems,
       ];
-      console.log(
-        "multiBetAlterSuggestionData :>> ",
-        multiBetAlterSuggestionData
-      );
       setMultiBet(multiBetAlterSuggestionData);
     } catch (error) {
       console.error("Failed to fetch multiBet data:", error);
@@ -114,7 +116,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   const handleShareClick = () => {
     setShareIconsVisible(true);
   };
-
+  
   const handleCrossClick = () => {
     setShareIconsVisible(false);
   };
@@ -148,7 +150,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
     }
     setRangeValue(value);
   }, []);
-
+  
   return (
     <div className="multi_bet_odds_container">
       <div className="multi_bet_odd_header">
@@ -191,109 +193,153 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
           />
         </div>
       </div>
-      <div className="multi_bet_matches_content">
-        {isLoading
-          ? // Skeletons
-            Array.from({ length: multiBet?.length || 0 }).map((_, index) => (
-              <div key={index} className="multi_bet_match_item skeleton">
-                <Skeleton variant="rectangular" width={60} height={40} />
-                <Skeleton variant="rectangular" width={60} height={40} />
-                <Skeleton variant="text" width={80} height={20} />
-                <Skeleton variant="text" width={80} height={20} />
-                <Skeleton variant="text" width={80} height={20} />
-                <Skeleton variant="text" width={80} height={20} />
-              </div>
-            ))
-          : multiBet?.MultibetItems &&
-            multiBet?.MultibetItems?.map((item) => {
-              const isSelected = tipsCollection?.some(
-                (elm) =>
-                  elm.eventId === item?.eventId &&
-                  elm?.selectionId === item?.selectionId
-              );
-
-              const isLocked = lockedItems.some(
-                (elm) => elm.eventId === item?.eventId
-              );
-
-              const matchItem = data?.find((i) => i.eventId === item?.eventId);
-
-              return (
-                <div key={matchItem?.eventId} className="multi_bet_match_item">
-                  {isLocked ? (
-                    <LockIcon onClick={() => handleLockToggle(item)} />
-                  ) : (
-                    <UnLockIcon onClick={() => handleLockToggle(item)} />
-                  )}{" "}
-                  <div className="left_content">
-                    <div className="team_section">
-                      <p>{item?.teamA}</p>
-                      {matchItem?.teamA_logo ? (
-                        <img
-                          src={`${IMAGE_BASE_PATH}${matchItem?.teamA_logo}`}
-                          alt="logo"
-                        />
-                      ) : (
-                        <InformationIcon />
-                      )}
-                    </div>
-                    <div className="team_section">
-                      {matchItem?.teamB_logo ? (
-                        <img
-                          src={`${IMAGE_BASE_PATH}${matchItem?.teamB_logo}`}
-                          alt="logo"
-                        />
-                      ) : (
-                        <InformationIcon />
-                      )}
-                      <p>{item?.teamB}</p>
-                    </div>
-                  </div>
-                  <div
-                    className={`odd_button ${isSelected ? "selected" : ""} `}
-                    // onClick={() => handleSelectOdd(item)}
-                  >
-                    <p>{getCurrentOddStatus(item?.name_en, item?.line)}</p>
-                    {typeof item?.price === "string" ? (
-                      <p>{parseFloat(item?.price).toFixed(2)}</p>
-                    ) : (
-                      <p>{item?.price.toFixed(2)}</p>
-                    )}
-                  </div>
+      <div ref={contentRef}>
+        <div className="multi_bet_matches_content">
+          {isLoading
+            ? // Skeletons
+              Array.from({ length: 5 }).map((_, index) => (
+                <div
+                  key={`skeleton-${index}`}
+                  className="multi_bet_match_item skeleton"
+                >
+                  <Skeleton variant="rectangular" width={20} height={20} />
+                  <Skeleton variant="text" width={80} height={20} />
+                  <Skeleton variant="text" width={80} height={20} />
+                  <Skeleton variant="text" width={80} height={20} />
+                  <Skeleton variant="text" width={80} height={20} />
                 </div>
-              );
-            })}
-      </div>
-      <div className="total_odds_details">
-        <div className="total_odds">
-          <p>{settings.staticString.totalOdds}:&nbsp;</p>
-          <p className="total_odds_value">
-            {multiBet.TotalOdds ? multiBet.TotalOdds : 0}
-          </p>
+              ))
+            : multiBet?.MultibetItems &&
+              multiBet?.MultibetItems?.map((item) => {
+                const isSelected = tipsCollection?.some(
+                  (elm) =>
+                    elm.eventId === item?.eventId &&
+                    elm?.selectionId === item?.selectionId
+                );
+
+                const isLocked = lockedItems.some(
+                  (elm) => elm.eventId === item?.eventId
+                );
+
+                const matchItem = data?.find(
+                  (i) => i.eventId === item?.eventId
+                );
+
+                return (
+                  <div
+                    key={matchItem?.eventId}
+                    className="multi_bet_match_item"
+                  >
+                    {isLocked ? (
+                      <LockIcon
+                        onClick={() => handleLockToggle(item)}
+                        style={{
+                          pointerEvents: isAlterSuggestion ? "none" : "auto",
+                        }}
+                      />
+                    ) : (
+                      <UnLockIcon
+                        onClick={() => handleLockToggle(item)}
+                        style={{
+                          pointerEvents: isAlterSuggestion ? "none" : "auto",
+                        }}
+                      />
+                    )}{" "}
+                    <div className="left_content">
+                      <div className="team_section">
+                        <p>{item?.teamA}</p>
+                        {matchItem?.teamA_logo ? (
+                          <img
+                            src={`${IMAGE_BASE_PATH}${matchItem?.teamA_logo}`}
+                            alt="logo"
+                          />
+                        ) : (
+                          <InformationIcon />
+                        )}
+                      </div>
+                      <div className="team_section">
+                        {matchItem?.teamB_logo ? (
+                          <img
+                            src={`${IMAGE_BASE_PATH}${matchItem?.teamB_logo}`}
+                            alt="logo"
+                          />
+                        ) : (
+                          <InformationIcon />
+                        )}
+                        <p>{item?.teamB}</p>
+                      </div>
+                    </div>
+                    <div
+                      className={`odd_button ${isSelected ? "selected" : ""} `}
+                      // onClick={() => handleSelectOdd(item)}
+                    >
+                      <p>{getCurrentOddStatus(item?.name_en, item?.line)}</p>
+                      {typeof item?.price === "string" ? (
+                        <p>{parseFloat(item?.price).toFixed(2)}</p>
+                      ) : (
+                        <p>{item?.price.toFixed(2)}</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
         </div>
-        <div className="total_win">
-          <p>{settings.staticString.totalWins}:&nbsp;</p>
-          <p className="total_wins_value">
+        <div className="total_odds_details">
+          <div className="total_odds">
+            <p>{settings.staticString.totalOdds}:&nbsp;</p>
+            {isLoading ? (
+              // Skeleton for totalOdds
+              <div className="total_wins_value skeleton">
+                <Skeleton variant="text" width={50} height={28} />
+              </div>
+            ) : (
+              // Actual content for totalOdds
+              <p className="total_odds_value">
+                {multiBet.TotalOdds ? multiBet.TotalOdds : 0}
+              </p>
+            )}
+            {/* <p className="total_odds_value">
+            {multiBet.TotalOdds ? multiBet.TotalOdds : 0}
+          </p> */}
+          </div>
+          <div className="total_win">
+            <p>{settings.staticString.totalWins}:&nbsp;</p>
+            {isLoading ? (
+              // Skeleton for totalWins
+              <div className="total_wins_value skeleton">
+                <Skeleton variant="text" width={70} />
+              </div>
+            ) : (
+              // Actual content for totalWins
+              <p className="total_wins_value">
+                {isNaN(multiBet?.TotalOdds * stack)
+                  ? 0
+                  : (multiBet?.TotalOdds * stack).toFixed(2)}
+                TL
+              </p>
+            )}
+            {/* <p className="total_wins_value">
             {isNaN(multiBet?.TotalOdds * stack)
               ? 0
               : (multiBet?.TotalOdds * stack).toFixed(2)}
             TL
-          </p>
+          </p> */}
+          </div>
         </div>
       </div>
       <div className="multi_bet_button">
-        <button onClick={handleAlterSuggestions}>
+        <button onClick={handleAlterSuggestions} disabled={isAlterSuggestion}>
           {isAlterSuggestion ? (
             <>
               <div className="loading_icon">
                 <LoadingIcon />
               </div>
-              <span>Loading...</span>
+              <span>{settings.staticString.loading}</span>
             </>
           ) : (
             <>
               <SyncIcon />
-              &nbsp;Alter. Suggestions
+              &nbsp;{settings.staticString.alterSuggestions}
             </>
           )}
         </button>

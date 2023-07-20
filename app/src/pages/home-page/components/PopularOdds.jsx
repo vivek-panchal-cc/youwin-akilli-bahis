@@ -72,21 +72,20 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
       <div className="popular_matches_content">
         {isLoading
           ? // Render skeleton loading elements when isLoading is true
-            Array.from({ length: 3 }).map((_, index) => (
+            Array.from({ length: 5 }).map((_, index) => (
               <div key={index} className="popular_match_item loading">
                 <Skeleton height={100} />
               </div>
             ))
-          : data?.map((item) => {
+          : data?.map((item, i) => {
               const isSelected = tipsCollection?.some(
                 (elm) =>
                   elm.eventId === item?.eventId &&
                   elm?.selectionId === item?.odds["away"]?.selectionId
-              );
-              console.log("isSelected :>> ", isSelected);
+              );              
               return (
                 <div
-                  key={`${item?.eventId}-${item?.odds["away"].selectionId}`}
+                  key={`${item?.eventId}-${item?.odds["away"].selectionId}-${i}`}
                   className="popular_match_item"
                 >
                   <div className="left_content">
@@ -124,13 +123,13 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                     </p>
                     <p>
                       {typeof item?.odds["away"]?.odds_decimal === "string" ? (
-                        <p>
+                        <span>
                           {parseFloat(
                             item?.odds["away"]?.odds_decimal
                           )?.toFixed(2)}
-                        </p>
+                        </span>
                       ) : (
-                        <p>{item?.odds["away"]?.odds_decimal?.toFixed(2)}</p>
+                        <span>{item?.odds["away"]?.odds_decimal?.toFixed(2)}</span>
                       )}
                     </p>
                   </div>

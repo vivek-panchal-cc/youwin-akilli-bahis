@@ -8,17 +8,17 @@ const Lock = (props) => (
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
     stroke="#707070"
-    stroke-width="0.00032"
+    strokeWidth="0.00032"
     transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"
     {...props}
   >
-    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
     <g
       id="SVGRepo_tracerCarrier"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       stroke="#CCCCCC"
-      stroke-width="0.44800000000000006"
+      strokeWidth="0.44800000000000006"
     ></g>
     <g id="SVGRepo_iconCarrier">
       {" "}

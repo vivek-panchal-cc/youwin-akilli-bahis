@@ -7,8 +7,7 @@ import Skeleton from "react-loading-skeleton";
  *
  */
 
-const SportsMenu = ({ data, handleSelect, selectedItem, isLoading }) => {
-  console.log("selectedItem: ", selectedItem);
+const SportsMenu = ({ data, handleSelect, selectedItem, isLoading }) => { 
 
   const mergedObj =
     data &&

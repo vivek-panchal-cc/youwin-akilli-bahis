@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 import { Skeleton } from "@mui/material";
+import settings from "../../../misc"
 
-const NewsSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
+const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNews, setSelectedNews] = useState(null);
   const [feedItems, setFeedItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const URL = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH;
   const URL_ONE = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_ONE;
   const URL_TWO = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_TWO;
@@ -44,6 +46,7 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
 
   const parseRSSFeed = async (urls) => {
     try {
+      setIsLoading(true);
       const fetchPromises = urls.map((url) => {
         return axios.get(url, {
           headers: {
@@ -128,10 +131,9 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
         });
       });
 
-      console.log("feedItemsData: ", feedItemsData);
-
       feedItemsData.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
       setFeedItems(feedItemsData);
+      setIsLoading(false);
     } catch (error) {
       console.log("Error fetching or parsing RSS feeds:", error);
     }
@@ -162,7 +164,8 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
 
   return (
     <div className="news_slider">
-      {sortedFeedItems?.length > 0 &&
+      {!isLoading &&
+        sortedFeedItems?.length > 0 &&
         sortedFeedItems.map((item) => (
           <div key={item?.link} className="news_slider_item">
             <div className="news_slider_content">
@@ -204,8 +207,22 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
                 {isLoading ? (
                   <Skeleton variant="rectangular" width={"100%"} height={40} />
                 ) : (
-                  <button onClick={() => openModal(item)}>Read more</button>
+                  <button onClick={() => openModal(item)}>{settings.staticString.readMore}</button>
                 )}
+              </div>
+            </div>
+          </div>
+        ))}
+      {isLoading &&
+        [...Array(10)].map((item,index) => (
+          <div key={index} className="news_slider_item">
+            <div className="news_slider_content">
+              <div className="top_section">
+                <Skeleton variant="rectangular" width={500} height={200} />
+                <Skeleton variant="text" width={"100%"} height={10} />
+                <div className="news_button">
+                  <Skeleton variant="rectangular" width={"100%"} height={37} />
+                </div>
               </div>
             </div>
           </div>
@@ -235,7 +252,7 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
               />
             )}
             <div className="close_button">
-              <button onClick={closeModal}>Close</button>
+              <button onClick={closeModal}>{settings.staticString.close}</button>
             </div>
           </div>
         </Modal.Body>

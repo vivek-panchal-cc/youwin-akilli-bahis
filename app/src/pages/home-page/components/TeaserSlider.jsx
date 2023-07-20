@@ -39,16 +39,16 @@ const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
             data?.map((item) => (
               <SwiperSlide key={item?.eventId}>
                 <div className="first_slider_item">
-                  <div
+                  {/* <div
                     className="slider_strip"
                     style={{ background: "#5D5858" }}
                   >
-                  {/* <img
+                  <img
                         src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
                         alt="logo"
-                    /> */}
+                    />
                     <p>title</p>
-                  </div>
+                  </div> */}
                   <div
                     className="slider_content"
                     style={{
