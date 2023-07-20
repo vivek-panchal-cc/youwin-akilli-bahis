@@ -61,6 +61,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
 
         multiBetData["MultibetItems"] = multiBetFilterItem;
         setMultiBet(multiBetData);
+        console.log('multiBetFilterItem :>> ', multiBetFilterItem);
       } catch (error) {
         console.error("Failed to fetch multiBet data:", error);
       } finally {
@@ -271,9 +272,9 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                     </div>
                     <div
                       className={`odd_button ${isSelected ? "selected" : ""} `}
-                      // onClick={() => handleSelectOdd(item)}
+                      onClick={() => handleSelectOdd(item)}
                     >
-                      <p>{getCurrentOddStatus(item?.name_en, item?.line)}</p>
+                      <p>{getCurrentOddStatus(item?.outcomeName, item?.line)}</p>
                       {typeof item?.price === "string" ? (
                         <p>{parseFloat(item?.price).toFixed(2)}</p>
                       ) : (
