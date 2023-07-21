@@ -1,0 +1,9 @@
+FROM node:16.19-alpine
+
+WORKDIR /usr/app
+
+RUN apk update && apk upgrade && apk add bash
+RUN yarn global add http-server
+RUN echo "alias ll='ls -alF'" > ~/.bashrc
+
+COPY . .
