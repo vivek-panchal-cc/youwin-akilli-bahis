@@ -229,7 +229,7 @@ body{
         // min-width: 302px;
         // width: 302px;
         border-radius: 4px;
-        padding: 0px 10px;
+        padding: 5px 16px;
         background-color: #37003E;
         .title{
             text-align: center;
@@ -245,19 +245,21 @@ body{
             // gap: 30px;
             .team_content{
                 text-align: center;
+                flex-basis: 40%;
                 img {
                     height: 53px;
                 }
                 p {
                     margin: 0;
                     color: $white;
-                    line-height: 1;
+                    line-height: 21px;
                     font-size: 13px;
                 }
             }
             .team_time{
                 margin-top: 10px;
                 text-align: center;
+                flex-basis: 25%;
                 p {
                     margin: 0;
                     font-size: 12px;
@@ -325,8 +327,8 @@ body{
                 
                 P{
                     margin: 0;
-                    font-size: 13px;
-                    line-height: 2.1;
+                    font-size: 15px;
+                    line-height: 30px;
                 }
             }
         }
@@ -1383,7 +1385,7 @@ body{
         &.tip_collection{
             margin-left: 20px;
             .tip_collection_icon {
-                top: -40%;
+                top: -30%;
                 position: absolute;
                 background-color: $green;
                 height: 45px;
@@ -1410,9 +1412,15 @@ body{
         }
         p {
             margin: 0;
-            line-height: 1;
+            // line-height: 1;
             color: $white;
             font-size: 12px;
+        }
+        :not(:last-child) p{
+            line-height: 21px;
+        }
+        :last-child p{
+            line-height: 1;            
         }
     }
     .active p{
