@@ -75,51 +75,79 @@ const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
       )
     );
   } else if (filteredData && filteredData.length > 0) {
-    content = filteredData.map((item) => {
-      const isSelected = selectedItem?.some(
-        (elm) =>
-          elm.eventId === item?.eventId && elm.selectionId === item?.selectionId
-      );
-
-      return (
-        <div key={item?.eventId} className="odds_section_item">
-          <div className="left_content">
-            <div className="team_section">
-              <img
-                src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
-                alt="team logo"
-              />
-              <img
-                src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
-                alt="team logo"
-              />
-            </div>
-            <div className="odd_section_details">
-              <div className="event_kick_off">
-                <p className="event_details">{item?.groupName}</p>
-                <p className="kick_off_time">
-                  {getOrdinalDay(item?.kickOffTime)} at{" "}
-                  {getFormattedTime(item?.kickOffTime)}
-                </p>
-              </div>
-              <p className="team_details">
-                {item?.teamA} v {item?.teamB}
-              </p>
-              <p className="stats">{item?.stats}</p>
-            </div>
-          </div>
-          <div
-            className={`odd_button ${isSelected ? "selected" : ""}`}
-            onClick={() => handleSelectOdd(item)}
-          >
-            <p>{getCurrentOddStatus(item?.name_en, item?.line)}</p>
-            <p>{item?.odds_decimal}</p>
-          </div>
-        </div>
-      );
+    const nonEmptyOddStatusItems = filteredData.filter((item) => {
+      const oddStatus =
+        item?.name_en !== ""
+          ? getCurrentOddStatus(item?.name_en, item?.line)
+          : "";
+      return oddStatus !== "";
     });
+
+    if (nonEmptyOddStatusItems.length > 0) {
+      content = nonEmptyOddStatusItems.map((item) => {
+        const isSelected = selectedItem?.some(
+          (elm) =>
+            elm.eventId === item?.eventId &&
+            elm.selectionId === item?.selectionId
+        );
+
+        // Check if item?.name_en is not blank before rendering the odd status
+        const oddStatus =
+          item?.name_en !== ""
+            ? getCurrentOddStatus(item?.name_en, item?.line)
+            : "";
+
+        // If the odd status is null, skip rendering this item
+        if (oddStatus === "") {
+          return null;
+        }
+
+        return (
+          <div key={item?.eventId} className="odds_section_item">
+            <div className="left_content">
+              <div className="team_section">
+                <img
+                  src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
+                  alt="team logo"
+                />
+                <img
+                  src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
+                  alt="team logo"
+                />
+              </div>
+              <div className="odd_section_details">
+                <div className="event_kick_off">
+                  <p className="event_details">{item?.groupName}</p>
+                  <p className="kick_off_time">
+                    {getOrdinalDay(item?.kickOffTime)} at{" "}
+                    {getFormattedTime(item?.kickOffTime)}
+                  </p>
+                </div>
+                <p className="team_details">
+                  {item?.teamA} v {item?.teamB}
+                </p>
+                <p className="stats">{item?.stats}</p>
+              </div>
+            </div>
+            <div
+              className={`odd_button ${isSelected ? "selected" : ""}`}
+              onClick={() => handleSelectOdd(item)}
+            >
+              <p>{oddStatus}</p>
+              <p>{item?.odds_decimal}</p>
+            </div>
+          </div>
+        );
+      });
+    } else {
+      content = (
+        <p className="no_data_found">{settings.staticString.noDataFound}</p>
+      );
+    }
   } else {
-    content = <p className="no_data_found">{settings.staticString.noDataFound}</p>;
+    content = (
+      <p className="no_data_found">{settings.staticString.noDataFound}</p>
+    );
   }
 
   return (

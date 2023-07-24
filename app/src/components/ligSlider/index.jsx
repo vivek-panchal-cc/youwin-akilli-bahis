@@ -126,10 +126,10 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                               <p>{getCurrentOddStatus(oddsKeys[oddIndex])}</p>
                               {typeof odd?.odds_decimal === "string" ? (
                                 <p>
-                                  {parseFloat(odd?.odds_decimal).toFixed(2)}
+                                  {parseFloat(odd?.odds_decimal)?.toFixed(2)}
                                 </p>
                               ) : (
-                                <p>{odd?.odds_decimal.toFixed(2)}</p>
+                                <p>{odd?.odds_decimal?.toFixed(2)}</p>
                               )}
                             </div>
                           );
@@ -144,9 +144,9 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                           {/* NOTE - add 'selected' class when odd_item is select */}
                           <p>{elm?.title}</p>
                           {typeof elm?.odds_decimal === "string" ? (
-                            <p>{parseFloat(elm?.odds_decimal).toFixed(2)}</p>
+                            <p>{parseFloat(elm?.odds_decimal)?.toFixed(2)}</p>
                           ) : (
-                            <p>{elm?.odds_decimal.toFixed(2)}</p>
+                            <p>{elm?.odds_decimal?.toFixed(2)}</p>
                           )}
                         </div>
                       )}

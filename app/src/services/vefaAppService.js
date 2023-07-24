@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const url = process.env.REACT_APP_YOUWIN_API;
+
 // function use for odd button status return
 export const getCurrentOddStatus = (title, line) => {
   const oddName = title?.toLowerCase();
@@ -20,7 +22,7 @@ export const getCurrentOddStatus = (title, line) => {
 
 export const multiBetAPI = async (stake, win) => {
   try {
-    const apiUrl = `https://youwin2.bettorlogic.com/accaattack/youwinservice.svc/getmymultibetsjson?stake=${stake}&win=${win}`;
+    const apiUrl = `${url}/getmymultibetsjson?stake=${stake}&win=${win}`;
     const response = await axios.get(apiUrl);
     return response.data;
   } catch (error) {
@@ -28,9 +30,9 @@ export const multiBetAPI = async (stake, win) => {
   }
 };
 
-export const multiBetAlterSuggestionAPI = async (eventIds, groupId) => {
+export const multiBetAlterSuggestionAPI = async (eventIds, multiGroupIds) => {
   try {
-    const apiUrl = `https://youwin2.bettorlogic.com/accaattack/youwinservice.svc/GetReplaceBet?ExcludeMatches=${eventIds}&MultiGroupId=${groupId}&lang=en`;
+    const apiUrl = `${url}/GetReplaceBet?ExcludeMatches=${eventIds}&MultiGroupId=${multiGroupIds}&lang=en`;
     const response = await axios.get(apiUrl);
     return response.data;
   } catch (error) {

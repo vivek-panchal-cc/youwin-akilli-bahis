@@ -68,7 +68,7 @@ const TipCollectionModal = () => {
     });
 
     // Return the totalOdds rounded to 2 decimal places
-    return totalOdds.toFixed(2);
+    return totalOdds?.toFixed(2);
   };
 
   return (
@@ -95,16 +95,14 @@ const TipCollectionModal = () => {
             <>
               <div className="odds_container">
                 <div className="matches_content">
-                  {tipsCollection?.map((item) => {
+                  {tipsCollection?.map((item, index) => {
                     // const isSelected = tipsCollection?.some(elm => elm.eventId === item?.eventId)
                     const matchItem = fireBaseAllEventsDataBase?.find(
                       (i) => i.eventId === item?.eventId
                     );
+                    const key = item?.eventId ?? `item-${index}`;
                     return (
-                      <div
-                        key={matchItem?.eventId}
-                        className="popular_match_item"
-                      >
+                      <div key={key} className="popular_match_item">
                         <div className="left_content">
                           <div className="team_section">
                             <p>{item?.teamA}</p>
@@ -156,14 +154,14 @@ const TipCollectionModal = () => {
                           typeof item?.price === "string" ? (
                             <p>
                               {item?.odds_decimal
-                                ? parseFloat(item?.odds_decimal).toFixed(2)
-                                : parseFloat(item?.price).toFixed(2)}
+                                ? parseFloat(item?.odds_decimal)?.toFixed(2)
+                                : parseFloat(item?.price)?.toFixed(2)}
                             </p>
                           ) : (
                             <p>
                               {item?.odds_decimal
                                 ? item?.odds_decimal?.toFixed(2)
-                                : item?.price.toFixed(2)}
+                                : item?.price?.toFixed(2)}
                             </p>
                           )}
                         </div>

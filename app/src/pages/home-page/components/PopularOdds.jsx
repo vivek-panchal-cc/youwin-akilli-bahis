@@ -22,7 +22,7 @@ import YouWinIcon from "../../../assets/images/youwin_share.png";
 
 const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
-  const [shareIconsVisible, setShareIconsVisible] = useState(false);
+  const [shareIconsVisible, setShareIconsVisible] = useState(false);  
 
   const handleShareClick = () => {
     setShareIconsVisible(true);
@@ -30,6 +30,24 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
 
   const handleCrossClick = () => {
     setShareIconsVisible(false);
+  };
+
+  const getRandomOdd = (odds, eventId) => {
+    // If there's already a random odd for this item, return it
+    let randomOddsData = JSON.parse(sessionStorage.getItem("randomOddsData")) || {};
+    if (randomOddsData[eventId]) {
+      return randomOddsData[eventId];
+    }
+
+    // Otherwise, generate a new random odd
+    const keys = Object.keys(odds);
+    const randomIndex = Math.floor(Math.random() * keys.length);
+    const randomKey = keys[randomIndex];
+
+    // Store the new random odd in the ref
+    randomOddsData[eventId] = { key: randomKey };
+    sessionStorage.setItem("randomOddsData", JSON.stringify(randomOddsData));
+    return randomOddsData[eventId];
   };
 
   return (
@@ -78,14 +96,16 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
               </div>
             ))
           : data?.map((item, i) => {
+              const randomOddKey =  getRandomOdd(item?.odds, item?.eventId)?.key
+              const randomOdd = item?.odds[randomOddKey];
               const isSelected = tipsCollection?.some(
                 (elm) =>
                   elm.eventId === item?.eventId &&
-                  elm?.selectionId === item?.odds["away"]?.selectionId
-              );              
+                  elm?.selectionId === randomOdd?.selectionId
+              );
               return (
                 <div
-                  key={`${item?.eventId}-${item?.odds["away"].selectionId}-${i}`}
+                  key={`${item?.eventId}-${randomOdd?.selectionId}-${i}`}
                   className="popular_match_item"
                 >
                   <div className="left_content">
@@ -113,23 +133,21 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                     onClick={() =>
                       handleSelectOdd({
                         ...item,
-                        ...item.odds["away"],
-                        name_en: "away",
+                        ...randomOdd,
+                        name_en: randomOddKey,
                       })
                     }
                   >
                     <p>
-                      {getCurrentOddStatus("away", item?.odds["away"].line)}
+                      {getCurrentOddStatus(randomOddKey, randomOdd?.line)}
                     </p>
                     <p>
-                      {typeof item?.odds["away"]?.odds_decimal === "string" ? (
+                      {typeof randomOdd?.odds_decimal === "string" ? (
                         <span>
-                          {parseFloat(
-                            item?.odds["away"]?.odds_decimal
-                          )?.toFixed(2)}
+                          {parseFloat(randomOdd?.odds_decimal)?.toFixed(2)}
                         </span>
                       ) : (
-                        <span>{item?.odds["away"]?.odds_decimal?.toFixed(2)}</span>
+                        <span>{randomOdd?.odds_decimal?.toFixed(2)}</span>
                       )}
                     </p>
                   </div>
