@@ -62,26 +62,26 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
     }
   };
 
-  useEffect(() => {
-    fetchMultiBetData();
-    const debouncedFetchMultiBetData = debounce(fetchMultiBetData, 500);
+  // useEffect(() => {
+  //   fetchMultiBetData();
+  //   const debouncedFetchMultiBetData = debounce(fetchMultiBetData, 500);
 
-    const updateRangeColor = () => {
-      const rangeInput = document.getElementById("vol");
-      const value =
-        ((rangeInput.value - rangeInput.min) /
-          (rangeInput.max - rangeInput.min)) *
-        100;
-      rangeInput.style.background = `linear-gradient(to right, #00CA6B 0%, #00CA6B ${value}%, #BDBDBD ${value}%, #BDBDBD 100%)`;
-    };
+  //   const updateRangeColor = () => {
+  //     const rangeInput = document.getElementById("vol");
+  //     const value =
+  //       ((rangeInput.value - rangeInput.min) /
+  //         (rangeInput.max - rangeInput.min)) *
+  //       100;
+  //     rangeInput.style.background = `linear-gradient(to right, #00CA6B 0%, #00CA6B ${value}%, #BDBDBD ${value}%, #BDBDBD 100%)`;
+  //   };
 
-    updateRangeColor();
-    debouncedFetchMultiBetData();
+  //   updateRangeColor();
+  //   debouncedFetchMultiBetData();
 
-    return () => {
-      debouncedFetchMultiBetData.cancel(); // Cleanup the debounce function on component unmount
-    };
-  }, [rangeValue]);
+  //   return () => {
+  //     debouncedFetchMultiBetData.cancel(); // Cleanup the debounce function on component unmount
+  //   };
+  // }, [rangeValue]);
 
   useEffect(() => {
     // Get the count of items that are not excluded because of empty oddStatus
@@ -181,6 +181,25 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
     [lockedItems]
   );
 
+  useEffect(() => {
+    fetchMultiBetData();
+  },[])
+
+  useEffect(() => {
+    const updateRangeColor = () => {
+      const rangeInput = document.getElementById("vol");
+      const value =
+        ((rangeInput.value - rangeInput.min) /
+          (rangeInput.max - rangeInput.min)) *
+        100;
+      rangeInput.style.background = `linear-gradient(to right, #00CA6B 0%, #00CA6B ${value}%, #BDBDBD ${value}%, #BDBDBD 100%)`;
+    };
+
+    updateRangeColor();
+  },[rangeValue])
+
+  const debouncedFetchMultiBetData = debounce(fetchMultiBetData, 500);
+
   const handleRangeChange = useCallback((event) => {
     const value = event.target.value;
     const winningMoreValue = document.querySelector(".winning_more_value");
@@ -189,6 +208,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
     }
     setRangeValue(value);
     setLockedItems([]); // Clear the lockedItems state
+    debouncedFetchMultiBetData(); // Call the debounced version of fetchMultiBetData
   }, []);
 
   return (
