@@ -54,34 +54,12 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
 
       multiBetData["MultibetItems"] = multiBetFilterItem;
       setMultiBet(multiBetData);
-      console.log("multiBetFilterItem :>> ", multiBetFilterItem);
     } catch (error) {
       console.error("Failed to fetch multiBet data:", error);
     } finally {
       setAlterSuggestion(false);
     }
   };
-
-  // useEffect(() => {
-  //   fetchMultiBetData();
-  //   const debouncedFetchMultiBetData = debounce(fetchMultiBetData, 500);
-
-  //   const updateRangeColor = () => {
-  //     const rangeInput = document.getElementById("vol");
-  //     const value =
-  //       ((rangeInput.value - rangeInput.min) /
-  //         (rangeInput.max - rangeInput.min)) *
-  //       100;
-  //     rangeInput.style.background = `linear-gradient(to right, #00CA6B 0%, #00CA6B ${value}%, #BDBDBD ${value}%, #BDBDBD 100%)`;
-  //   };
-
-  //   updateRangeColor();
-  //   debouncedFetchMultiBetData();
-
-  //   return () => {
-  //     debouncedFetchMultiBetData.cancel(); // Cleanup the debounce function on component unmount
-  //   };
-  // }, [rangeValue]);
 
   useEffect(() => {
     // Get the count of items that are not excluded because of empty oddStatus
@@ -183,7 +161,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
 
   useEffect(() => {
     fetchMultiBetData();
-  },[])
+  }, []);
 
   useEffect(() => {
     const updateRangeColor = () => {
@@ -196,7 +174,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
     };
 
     updateRangeColor();
-  },[rangeValue])
+  }, [rangeValue]);
 
   const debouncedFetchMultiBetData = debounce(fetchMultiBetData, 500);
 
@@ -354,10 +332,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                       className={`odd_button ${isSelected ? "selected" : ""} `}
                       onClick={() => handleSelectOdd(item)}
                     >
-                      <p>
-                        {/* {getCurrentOddStatus(item?.outcomeName, item?.line)} */}
-                        {oddStatus}
-                      </p>
+                      <p>{oddStatus}</p>
                       {typeof item?.price === "string" ? (
                         <p>{parseFloat(item?.price).toFixed(2)}</p>
                       ) : (
@@ -382,9 +357,6 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                 {multiBet.TotalOdds ? multiBet.TotalOdds : 0}
               </p>
             )}
-            {/* <p className="total_odds_value">
-            {multiBet.TotalOdds ? multiBet.TotalOdds : 0}
-          </p> */}
           </div>
           <div className="total_win">
             <p>{settings.staticString.totalWins}:&nbsp;</p>
@@ -402,12 +374,6 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                 TL
               </p>
             )}
-            {/* <p className="total_wins_value">
-            {isNaN(multiBet?.TotalOdds * stack)
-              ? 0
-              : (multiBet?.TotalOdds * stack).toFixed(2)}
-            TL
-          </p> */}
           </div>
         </div>
       </div>

@@ -20,8 +20,7 @@ const TipCollectionModal = () => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
 
   const { dispatch, isModalShow, tipsCollection } = useContext(ReducerContext);
-  const { fireBaseAllEventsDataBase } = useContext(AppContext);
-  console.log("tipsCollection :>> ", tipsCollection);
+  const { fireBaseAllEventsDataBase } = useContext(AppContext);  
 
   const handleClose = () => {
     setTipCollectionModalStatus(dispatch, false);

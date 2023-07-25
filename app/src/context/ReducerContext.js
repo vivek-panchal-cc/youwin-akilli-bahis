@@ -23,8 +23,7 @@ export const ReducerContext = createContext({...initState});
 const ReducerContextProvider = ({children}) => {
     const [state, dispatch] = useReducer(appReducer, reducerInitState);
 
-    const value =  useMemo(() => ({...state, dispatch}),[state])
-    console.log('AKILLI-BAHIS || reducers state', state);
+    const value =  useMemo(() => ({...state, dispatch}),[state])    
 
     return (
         <ReducerContext.Provider value={value}>

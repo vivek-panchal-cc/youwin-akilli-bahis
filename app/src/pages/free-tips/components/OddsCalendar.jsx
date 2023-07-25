@@ -22,11 +22,7 @@ const OddsCalendar = ({ handleDateSelection, selectedDate }) => {
   ];
   const currentDayOfWeek = daysOfWeek[currentDate.getDay()];
   const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
-
-  // Get the first day of the current month
-  // const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-  // const startingDayOfWeek = firstDayOfMonth.getDay();
+  const currentYear = currentDate.getFullYear();  
 
   // Calculate the next six dates with days
   const nextDates = [];
