@@ -11,6 +11,9 @@ import TwitterIcon from "../../../assets/images/twitter_share.png";
 import WhatsappIcon from "../../../assets/images/whatsapp_share.png";
 import TelegramIcon from "../../../assets/images/telegram_share.png";
 import YouWinIcon from "../../../assets/images/youwin_share.png";
+const ImageLoader = React.lazy(() =>
+  import("../../../components/common/imageLoader")
+);
 
 /**
  *
@@ -22,7 +25,7 @@ import YouWinIcon from "../../../assets/images/youwin_share.png";
 
 const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
-  const [shareIconsVisible, setShareIconsVisible] = useState(false);  
+  const [shareIconsVisible, setShareIconsVisible] = useState(false);
 
   const handleShareClick = () => {
     setShareIconsVisible(true);
@@ -34,7 +37,8 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
 
   const getRandomOdd = (odds, eventId) => {
     // If there's already a random odd for this item, return it
-    let randomOddsData = JSON.parse(sessionStorage.getItem("randomOddsData")) || {};
+    let randomOddsData =
+      JSON.parse(sessionStorage.getItem("randomOddsData")) || {};
     if (randomOddsData[eventId]) {
       return randomOddsData[eventId];
     }
@@ -96,7 +100,7 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
               </div>
             ))
           : data?.map((item, i) => {
-              const randomOddKey =  getRandomOdd(item?.odds, item?.eventId)?.key
+              const randomOddKey = getRandomOdd(item?.odds, item?.eventId)?.key;
               const randomOdd = item?.odds[randomOddKey];
               const isSelected = tipsCollection?.some(
                 (elm) =>
@@ -111,9 +115,12 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                   <div className="left_content">
                     <div className="team_section">
                       <p>{item?.teamA}</p>
-                      <img
+                      <ImageLoader
                         src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
                         alt="team logo"
+                        shape="circular"
+                        className="image_loader_teamA"
+                        style={{ height: "20px", width: "20px" }}
                       />
                     </div>
                     <div className="time_section">
@@ -121,9 +128,12 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                       <p>{getFormattedTime(item?.kickOffTime)}</p>
                     </div>
                     <div className="team_section">
-                      <img
+                      <ImageLoader
                         src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
                         alt="team logo"
+                        shape="circular"
+                        className="image_loader_teamB"
+                        style={{ height: "20px", width: "20px" }}
                       />
                       <p>{item?.teamB}</p>
                     </div>
@@ -138,9 +148,7 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                       })
                     }
                   >
-                    <p>
-                      {getCurrentOddStatus(randomOddKey, randomOdd?.line)}
-                    </p>
+                    <p>{getCurrentOddStatus(randomOddKey, randomOdd?.line)}</p>
                     <p>
                       {typeof randomOdd?.odds_decimal === "string" ? (
                         <span>

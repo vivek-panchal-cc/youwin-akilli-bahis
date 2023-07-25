@@ -195,6 +195,7 @@ body{
                 border-radius: 4px;
                 font-size: 13px;
                 cursor: pointer;
+                line-height: 21px;
                 white-space: nowrap;
                 &.selected{
                     font-weight: bold;
@@ -224,13 +225,33 @@ body{
     }
     // .lig_slider_item
     .lig_slider_item{
-        
+        position: relative;
         height: 170px;
         // min-width: 302px;
         // width: 302px;
         border-radius: 4px;
         padding: 5px 16px;
-        background-color: #37003E;
+        // background-color: #37003E;
+        background-repeat: no-repeat;
+        background-position: right -70%;
+        .live{
+            position: absolute;
+            display: flex;
+            align-items: center;
+            top: 8px;
+            left: 0;
+            height: 20px;
+            p{
+                padding: 0px 10px 0px 10px;
+                color: #FFFFFF;
+                font-size: 12px;
+                line-height: 21px;
+                background: #E40000 0% 0% no-repeat padding-box;
+                border-radius: 0px 2px 2px 0px;
+                margin-bottom: 0px;
+                opacity: 1;
+            }
+        }
         .title{
             text-align: center;
             color: $white;
@@ -474,13 +495,13 @@ body{
         display: flex;
         // flex-basis: 20%;
         align-items: center;
-        width: 70px;
+        width: 61px;
     }
     .day_date_name{
         display: flex;
         // flex-basis: 80%;
         align-items: center;
-        width: calc(100% - 70px);
+        width: calc(100% - 61px);
         cursor: pointer;
         > .date{
             //margin: 15px 0 0 20px;
@@ -515,7 +536,8 @@ body{
         border-radius: 4px;
         width: 34px;
         height: 34px;
-        text-align: center;       
+        text-align: center;
+        min-width: 34px;
         span{
             display: block;
             line-height: 1.2;
@@ -961,12 +983,12 @@ body{
                 align-items: center;
                 color: #000;
                 flex-direction: column;
-                gap: 7px;                
+                // gap: 7px;                
                 img {
                     // height: 155px;
-                    padding: 12px 13px 0px 13px;
+                    padding: 12px 13px 12px 13px;
                     width: 100%;
-                    border-radius: 4px;
+                    border-radius: 15px;
                 }
                 h5{
                     font-size: 10px;
@@ -1389,7 +1411,7 @@ body{
     background-color: $black;
     align-items: flex-end;
     justify-content: center;
-    padding: 13px 10px 13px 30px;
+    padding: 10px 10px 13px 30px;
     gap: 26px;
     position: fixed;
     left: 0;
@@ -1402,7 +1424,7 @@ body{
         &.tip_collection{
             margin-left: 20px;
             .tip_collection_icon {
-                top: -30%;
+                top: -33%;
                 position: absolute;
                 background-color: $green;
                 height: 45px;

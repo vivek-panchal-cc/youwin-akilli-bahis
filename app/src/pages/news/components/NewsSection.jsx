@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 import { Skeleton } from "@mui/material";
-import settings from "../../../misc"
+import settings from "../../../misc";
+const ImageLoader = React.lazy(() =>
+  import("../../../components/common/imageLoader")
+);
 
 const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -174,11 +177,28 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
                   <Skeleton variant="rectangular" width={500} height={200} />
                 ) : (
                   <>
-                    {item?.imageUrl && <img src={item?.imageUrl} alt="news" />}
+                    {item?.imageUrl && (
+                      <ImageLoader
+                        src={item?.imageUrl}
+                        alt="news"
+                        className="image_loader_news"
+                        style={{
+                          margin: "12px 10px 12px 10px",
+                          width: "92%",
+                          height: "200px"
+                        }}
+                      />
+                    )}
                     {!item.imageUrl && item.encodedContent && (
-                      <img
+                      <ImageLoader
                         src={extractImageUrl(item.encodedContent)}
                         alt="news"
+                        className="image_loader_news"
+                        style={{
+                          margin: "12px 10px 12px 10px",
+                          width: "92%",
+                          height: "200px"
+                        }}
                       />
                     )}
                   </>
@@ -207,14 +227,16 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
                 {isLoading ? (
                   <Skeleton variant="rectangular" width={"100%"} height={40} />
                 ) : (
-                  <button onClick={() => openModal(item)}>{settings.staticString.readMore}</button>
+                  <button onClick={() => openModal(item)}>
+                    {settings.staticString.readMore}
+                  </button>
                 )}
               </div>
             </div>
           </div>
         ))}
       {isLoading &&
-        [...Array(10)].map((item,index) => (
+        [...Array(10)].map((item, index) => (
           <div key={index} className="news_slider_item">
             <div className="news_slider_content">
               <div className="top_section">
@@ -252,7 +274,9 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
               />
             )}
             <div className="close_button">
-              <button onClick={closeModal}>{settings.staticString.close}</button>
+              <button onClick={closeModal}>
+                {settings.staticString.close}
+              </button>
             </div>
           </div>
         </Modal.Body>

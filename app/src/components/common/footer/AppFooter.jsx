@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import homeIcon from "../../../assets/images/home.svg";
 import logoIcon from "../../../assets/images/logo.svg";
 import multiBetIcon from "../../../assets/images/multi_bet.svg";
@@ -19,12 +19,37 @@ import { AppContext } from "../../../context/AppContext";
 const AppFooter = () => {
   const { dispatch, tipsCollection, isModalShow } = useContext(ReducerContext);
   const navigate = useNavigate();
-  const [activeItem, setActiveItem] = useState(null);
+  const location = useLocation();
+
+  const getLocationItem = useCallback(() => {
+    if (location.pathname.includes("free-tips")) return "freeTips";
+    if (location.pathname.includes("multi-bet")) return "multiBet";
+    if (location.pathname.includes("news")) return "news";
+    // Add more cases if needed
+    return "home";
+  }, [location.pathname]);
+  const [activeItem, setActiveItem] = useState(getLocationItem());
 
   const { fireBaseAllLeaguesDataBase } = useContext(AppContext);
 
   const handleItemClick = (item) => {
     setActiveItem(item);
+    switch (item) {
+      case "home":
+        navigate("/");
+        break;
+      case "freeTips":
+        handleFreeTips();
+        break;
+      case "multiBet":
+        navigate("/multi-bet");
+        break;
+      case "news":
+        navigate("/news");
+        break;
+      default:
+        break;
+    }
   };
 
   const handleShow = () => {
@@ -36,6 +61,7 @@ const AppFooter = () => {
       const firstKey = Object.keys(fireBaseAllLeaguesDataBase)?.[0];
       if (firstKey) {
         navigate(`/free-tips/${firstKey}`);
+        setActiveItem("freeTips");
       } else {
         // Handle the case when fireBaseAllLeaguesDataBase is empty
         console.log("Data is empty. Unable to navigate.");
@@ -65,6 +91,11 @@ const AppFooter = () => {
   const handleMultiBet = () => {
     navigate("/multi-bet");
   };
+
+  // useEffect that listens for changes in location.pathname
+  useEffect(() => {
+    setActiveItem(getLocationItem());
+  }, [location.pathname, getLocationItem]);
 
   useEffect(() => {
     const handleLinkClick = (event) => {

@@ -5,6 +5,9 @@ import OddsCalendar from "./OddsCalendar";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@mui/material";
 import settings from "../../../misc";
+const ImageLoader = React.lazy(() =>
+  import("../../../components/common/imageLoader")
+);
 
 /**
  *
@@ -35,7 +38,7 @@ const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
   let content;
 
   if (isLoading) {
-    content = Array.from({ length: filteredData?.length || 0 }).map(
+    content = Array.from({ length: filteredData?.length || 1 }).map(
       (_, index) => (
         <div key={index} className="odds_section_item skeleton">
           <div className="left_content">
@@ -106,13 +109,27 @@ const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
           <div key={item?.eventId} className="odds_section_item">
             <div className="left_content">
               <div className="team_section">
-                <img
+                <ImageLoader
                   src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
-                  alt="team logo"
+                  alt="logo"
+                  className="image_loader_teamA"
+                  style={{
+                    position: "relative",
+                    zIndex: "2",
+                    top: "-13px",
+                    left: "0px",
+                  }}
                 />
-                <img
+                <ImageLoader
                   src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
-                  alt="team logo"
+                  alt="logo"
+                  className="image_loader_teamB"
+                  style={{
+                    position: "relative",
+                    zIndex: "1",
+                    top: "14px",
+                    left: "-20px",
+                  }}
                 />
               </div>
               <div className="odd_section_details">

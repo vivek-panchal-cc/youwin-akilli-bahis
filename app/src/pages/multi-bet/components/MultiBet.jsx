@@ -21,6 +21,9 @@ import {
 } from "../../../services/vefaAppService";
 import { Skeleton } from "@mui/material";
 import { debounce } from "lodash";
+const ImageLoader = React.lazy(() =>
+  import("../../../components/common/imageLoader")
+);
 
 /**
  *
@@ -298,14 +301,20 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                       <div className="team_section">
                         <p>{item?.teamA}</p>
                         {item?.teamA_logo ? (
-                          <img
+                          <ImageLoader
                             src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
                             alt="logo"
+                            shape="circular"
+                            className="image_loader_teamA"
+                            style={{ height: "20px", width: "20px" }}
                           />
                         ) : matchItem?.teamA_logo ? (
-                          <img
+                          <ImageLoader
                             src={`${IMAGE_BASE_PATH}${matchItem?.teamA_logo}`}
                             alt="logo"
+                            shape="circular"
+                            className="image_loader_teamA"
+                            style={{ height: "20px", width: "20px" }}
                           />
                         ) : (
                           <InformationIcon />
@@ -313,14 +322,20 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                       </div>
                       <div className="team_section">
                         {item?.teamB_logo ? (
-                          <img
+                          <ImageLoader
                             src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
                             alt="logo"
+                            shape="circular"
+                            className="image_loader_teamB"
+                            style={{ height: "20px", width: "20px" }}
                           />
                         ) : matchItem?.teamB_logo ? (
-                          <img
+                          <ImageLoader
                             src={`${IMAGE_BASE_PATH}${matchItem?.teamB_logo}`}
                             alt="logo"
+                            shape="circular"
+                            className="image_loader_teamB"
+                            style={{ height: "20px", width: "20px" }}
                           />
                         ) : (
                           <InformationIcon />

@@ -18,7 +18,8 @@ const staticString = {
     loading: "Loading...",
     readMore: "Read more",
     close: "Close",
-    noDataFound: "No data found"
+    noDataFound: "No data found",
+    live: "Live"
 }
 const settings = {
     staticString

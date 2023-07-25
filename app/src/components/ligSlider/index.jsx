@@ -6,6 +6,7 @@ import {
 } from "../../utils/dateFormat";
 import Skeleton from "react-loading-skeleton";
 import { getCurrentOddStatus } from "../../services/vefaAppService";
+import settings from "../../misc";
 
 /**
  *
@@ -66,8 +67,9 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                 <SwiperSlide key={elm?.eventId}>
                   <div
                     className="lig_slider_item"
-                    style={{ backgroundColor: "#37003E" }}
+                    style={{ backgroundColor: "#37003E", backgroundImage:`url(${IMAGE_BASE_PATH}/uploading_23_07_06/soccer_ball_variant_1688634810196.png)`}}
                   >
+                    <div className="live"><p>{settings.staticString.live}</p></div>
                     <p className="title">
                       {elm?.groupName ? elm?.groupName : <>&nbsp;</>}
                     </p>
