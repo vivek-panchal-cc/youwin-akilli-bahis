@@ -317,7 +317,7 @@ body{
                 width: 100%;
                 display: flex;
                 justify-content: space-between;
-                padding: 0px 10px;
+                padding: 1px 10px;
                 gap: 15px;
                 cursor: pointer;
                 &.selected{
@@ -328,7 +328,7 @@ body{
                 P{
                     margin: 0;
                     font-size: 15px;
-                    line-height: 30px;
+                    line-height: 25px;
                 }
             }
         }
@@ -391,6 +391,7 @@ body{
                 gap: 0px;
                 width: 100%;
                 padding-right: 5px;
+                overflow: hidden;
                 .team_section{
                     &:nth-child(1){
                         justify-content: end;
@@ -400,12 +401,16 @@ body{
                     align-items: center;
                     gap: 5px;
                     flex-basis: 40%;
+                    overflow: hidden;
                     img {
                         height: 20px;
                     }
                     p {
                         font-size: 12px;
                         margin: 0;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
                     }
                 }
                 .time_section{
@@ -784,6 +789,7 @@ body{
                 gap: 0px;
                 width: 100%;
                 align-items: center;
+                overflow: hidden;
                 .team_section{
                     &:nth-child(1){
                         justify-content: end;
@@ -796,6 +802,7 @@ body{
                     // flex-basis: 40%;
                     flex-basis: 45%;
                     align-items: center;
+                    overflow: hidden;
                     img {
                         height: 20px;
                     }
@@ -808,6 +815,9 @@ body{
                         font-size: 12px;
                         margin: 0;
                         line-height: 1;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
                     }
                 }
                 .time_section{
@@ -1036,6 +1046,8 @@ body{
             text-align: center;
             padding: 10px;
             font-size: 14px;
+            height: 150px;
+            padding-top: 55px;
         }
         // padding: 0px 20px 10px;
         .odds_section_item{
@@ -1227,6 +1239,7 @@ body{
                         justify-content: center;
                         gap: 10px;
                         width: 100%;
+                        overflow: hidden;
                         .team_section{
                             &:nth-child(1){
                                 justify-content: end;
@@ -1236,12 +1249,16 @@ body{
                             align-items: center;
                             gap: 5px;
                             flex-basis: 50%;
+                            overflow: hidden;
                             img {
                                 height: 20px;
                             }
                             p {
                                 font-size: 12px;
                                 margin: 0;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
                             }
                             svg{
                                 height: 20px;
