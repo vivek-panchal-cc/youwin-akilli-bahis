@@ -2,6 +2,9 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import images from "../../../constants/allAssets";
 import Skeleton from "react-loading-skeleton";
+const ImageLoader = React.lazy(() =>
+  import("../../../components/common/imageLoader")
+);
 
 /**
  *
@@ -63,15 +66,21 @@ const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
                     <div className="team_section">
                       <div>
                         <h5>{item?.teamA}</h5>
-                        <img
+                        <ImageLoader
                           src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
                           alt="logo"
+                          shape="circular"
+                          className="image_loader_teamA"
+                          style={{ height: "20px", width: "20px" }}
                         />
                       </div>
                       <div>
-                        <img
+                        <ImageLoader
                           src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
                           alt="team logo"
+                          shape="circular"
+                          className="image_loader_teamB"
+                          style={{ height: "20px", width: "20px" }}
                         />
                         <h5>{item?.teamB}</h5>
                       </div>

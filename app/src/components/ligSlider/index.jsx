@@ -7,6 +7,7 @@ import {
 import Skeleton from "react-loading-skeleton";
 import { getCurrentOddStatus } from "../../services/vefaAppService";
 import settings from "../../misc";
+const ImageLoader = React.lazy(() => import("../common/imageLoader"));
 
 /**
  *
@@ -47,15 +48,15 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
       >
         {isLoading
           ? // Render skeleton loading elements when isLoading is true
-          Array.from({ length: 3 }).map((_, index) => (
-            <SwiperSlide key={index}>
-              <div className="lig_slider_item loading">
-                <Skeleton height={100} />                
-              </div>
-            </SwiperSlide>
+            Array.from({ length: 3 }).map((_, index) => (
+              <SwiperSlide key={index}>
+                <div className="lig_slider_item loading">
+                  <Skeleton height={100} />
+                </div>
+              </SwiperSlide>
             ))
-            // Render the actual data when isLoading is false
-          : data?.map((elm) => {
+          : // Render the actual data when isLoading is false
+            data?.map((elm) => {
               const matchedItem = tipsCollection?.filter(
                 (item) => item.eventId === elm?.eventId
               );
@@ -67,17 +68,24 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                 <SwiperSlide key={elm?.eventId}>
                   <div
                     className="lig_slider_item"
-                    style={{ backgroundColor: "#37003E", backgroundImage:`url(${IMAGE_BASE_PATH}/uploading_23_07_06/soccer_ball_variant_1688634810196.png)`}}
+                    style={{
+                      backgroundColor: "#37003E",
+                      backgroundImage: `url(${IMAGE_BASE_PATH}/uploading_23_07_06/soccer_ball_variant_1688634810196.png)`,
+                    }}
                   >
-                    <div className="live"><p>{settings.staticString.live}</p></div>
+                    <div className="live">
+                      <p>{settings.staticString.live}</p>
+                    </div>
                     <p className="title">
                       {elm?.groupName ? elm?.groupName : <>&nbsp;</>}
                     </p>
                     <div className="team_section">
                       <div className="team_content">
-                        <img
+                        <ImageLoader
                           src={`${IMAGE_BASE_PATH}${elm?.teamA_logo}`}
-                          alt="team-logo"
+                          alt="team-logo"                          
+                          className="image_loader_teamA"
+                          style={{ height: "53px", width: "53px", backgroundColor: "darkgray", margin: "auto" }}
                         />
                         <p>{elm?.teamA}</p>
                       </div>
@@ -90,15 +98,17 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                                     <p>89"</p>
                                 </div> */}
                       <div className="team_content">
-                        <img
+                        <ImageLoader
                           src={`${IMAGE_BASE_PATH}${elm?.teamB_logo}`}
-                          alt="team-logo"
+                          alt="team-logo"                          
+                          className="image_loader_teamB"
+                          style={{ height: "53px", width: "53px", backgroundColor: "darkgray", margin: "auto" }}
                         />
                         <p>{elm?.teamB}</p>
                       </div>
                     </div>
                     <div className="win_title">
-                      <p>Match Winner</p>
+                      <p>{settings.staticString.matchWinner}</p>
                     </div>
 
                     <div className={`odd_items ${elm?.odds ? "multiple" : ""}`}>

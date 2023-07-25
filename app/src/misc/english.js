@@ -19,7 +19,8 @@ const staticString = {
     readMore: "Read more",
     close: "Close",
     noDataFound: "No data found",
-    live: "Live"
+    live: "Live",
+    matchWinner: "Match Winner"
 }
 
 const settings = {
