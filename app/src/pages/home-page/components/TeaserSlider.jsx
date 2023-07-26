@@ -71,7 +71,11 @@ const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
                           alt="logo"
                           shape="circular"
                           className="image_loader_teamA"
-                          style={{ height: "20px", width: "20px" }}
+                          style={{
+                            height: "20px",
+                            width: "20px",
+                            backgroundColor: "darkgray",
+                          }}
                         />
                       </div>
                       <div>
@@ -80,7 +84,11 @@ const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
                           alt="team logo"
                           shape="circular"
                           className="image_loader_teamB"
-                          style={{ height: "20px", width: "20px" }}
+                          style={{
+                            height: "20px",
+                            width: "20px",
+                            backgroundColor: "darkgray",
+                          }}
                         />
                         <h5>{item?.teamB}</h5>
                       </div>

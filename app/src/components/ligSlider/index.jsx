@@ -83,9 +83,15 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                       <div className="team_content">
                         <ImageLoader
                           src={`${IMAGE_BASE_PATH}${elm?.teamA_logo}`}
-                          alt="team-logo"                          
+                          alt="team-logo"
                           className="image_loader_teamA"
-                          style={{ height: "53px", width: "53px", backgroundColor: "darkgray", margin: "auto" }}
+                          style={{
+                            height: "53px",
+                            width: "53px",
+                            backgroundColor: "darkgray",
+                            margin: "auto",
+                            borderRadius: "4px",
+                          }}
                         />
                         <p>{elm?.teamA}</p>
                       </div>
@@ -100,9 +106,15 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                       <div className="team_content">
                         <ImageLoader
                           src={`${IMAGE_BASE_PATH}${elm?.teamB_logo}`}
-                          alt="team-logo"                          
+                          alt="team-logo"
                           className="image_loader_teamB"
-                          style={{ height: "53px", width: "53px", backgroundColor: "darkgray", margin: "auto" }}
+                          style={{
+                            height: "53px",
+                            width: "53px",
+                            backgroundColor: "darkgray",
+                            margin: "auto",
+                            borderRadius: "4px",
+                          }}
                         />
                         <p>{elm?.teamB}</p>
                       </div>
