@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import images from "../../../constants/allAssets";
 import Skeleton from "react-loading-skeleton";
@@ -66,30 +66,60 @@ const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
                     <div className="team_section">
                       <div>
                         <h5>{item?.teamA}</h5>
-                        <ImageLoader
-                          src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
-                          alt="logo"
-                          shape="circular"
-                          className="image_loader_teamA"
-                          style={{
-                            height: "20px",
-                            width: "20px",
-                            backgroundColor: "darkgray",
-                          }}
-                        />
+                        <Suspense
+                          fallback={
+                            <Skeleton
+                              variant="circular"
+                              width={60}
+                              height={60}
+                              style={{
+                                height: "20px",
+                                width: "20px",
+                                backgroundColor: "darkgray",
+                              }}
+                            />
+                          }
+                        >
+                          <ImageLoader
+                            src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
+                            alt="logo"
+                            shape="circular"
+                            className="image_loader_teamA"
+                            style={{
+                              height: "20px",
+                              width: "20px",
+                              backgroundColor: "darkgray",
+                            }}
+                          />
+                        </Suspense>
                       </div>
                       <div>
-                        <ImageLoader
-                          src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
-                          alt="team logo"
-                          shape="circular"
-                          className="image_loader_teamB"
-                          style={{
-                            height: "20px",
-                            width: "20px",
-                            backgroundColor: "darkgray",
-                          }}
-                        />
+                        <Suspense
+                          fallback={
+                            <Skeleton
+                              variant="circular"
+                              width={60}
+                              height={60}
+                              style={{
+                                height: "20px",
+                                width: "20px",
+                                backgroundColor: "darkgray",
+                              }}
+                            />
+                          }
+                        >
+                          <ImageLoader
+                            src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
+                            alt="team logo"
+                            shape="circular"
+                            className="image_loader_teamB"
+                            style={{
+                              height: "20px",
+                              width: "20px",
+                              backgroundColor: "darkgray",
+                            }}
+                          />
+                        </Suspense>
                         <h5>{item?.teamB}</h5>
                       </div>
                     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 import { Skeleton } from "@mui/material";
@@ -178,28 +178,58 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
                 ) : (
                   <>
                     {item?.imageUrl && (
-                      <ImageLoader
-                        src={item?.imageUrl}
-                        alt="news"
-                        className="image_loader_news"
-                        style={{
-                          margin: "12px 10px 12px 10px",
-                          width: "92%",
-                          height: "200px"
-                        }}
-                      />
+                      <Suspense
+                        fallback={
+                          <Skeleton
+                            variant="rectangular"
+                            width={60}
+                            height={60}
+                            style={{
+                              margin: "12px 10px 12px 10px",
+                              width: "92%",
+                              height: "200px",
+                            }}
+                          />
+                        }
+                      >
+                        <ImageLoader
+                          src={item?.imageUrl}
+                          alt="news"
+                          className="image_loader_news"
+                          style={{
+                            margin: "12px 10px 12px 10px",
+                            width: "92%",
+                            height: "200px",
+                          }}
+                        />
+                      </Suspense>
                     )}
                     {!item.imageUrl && item.encodedContent && (
-                      <ImageLoader
-                        src={extractImageUrl(item.encodedContent)}
-                        alt="news"
-                        className="image_loader_news"
-                        style={{
-                          margin: "12px 10px 12px 10px",
-                          width: "92%",
-                          height: "200px"
-                        }}
-                      />
+                      <Suspense
+                        fallback={
+                          <Skeleton
+                            variant="rectangular"
+                            width={60}
+                            height={60}
+                            style={{
+                              margin: "12px 10px 12px 10px",
+                              width: "92%",
+                              height: "200px",
+                            }}
+                          />
+                        }
+                      >
+                        <ImageLoader
+                          src={extractImageUrl(item.encodedContent)}
+                          alt="news"
+                          className="image_loader_news"
+                          style={{
+                            margin: "12px 10px 12px 10px",
+                            width: "92%",
+                            height: "200px",
+                          }}
+                        />
+                      </Suspense>
                     )}
                   </>
                 )}

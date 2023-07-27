@@ -1,5 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   ShareIcon,
   LockIcon,
@@ -98,12 +104,6 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
             unlockedItem?.eventId,
             unlockedItem?.multiGroupId
           );
-          // // Set the locked items data along with the new suggestion data
-          // multiBetAlterSuggestionData.MultibetItems = [
-          //   ...lockedItemsData,
-          //   ...multiBetAlterSuggestionData.MultibetItems,
-          // ];
-          // setMultiBet(multiBetAlterSuggestionData);
           allSuggestions = [
             ...allSuggestions,
             ...multiBetAlterSuggestionData.MultibetItems,
@@ -300,46 +300,68 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                     <div className="left_content">
                       <div className="team_section">
                         <p>{item?.teamA}</p>
-                        {item?.teamA_logo ? (
-                          <ImageLoader
-                            src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
-                            alt="logo"
-                            shape="circular"
-                            className="image_loader_teamA"
-                            style={{ height: "20px", width: "20px" }}
-                          />
-                        ) : matchItem?.teamA_logo ? (
-                          <ImageLoader
-                            src={`${IMAGE_BASE_PATH}${matchItem?.teamA_logo}`}
-                            alt="logo"
-                            shape="circular"
-                            className="image_loader_teamA"
-                            style={{ height: "20px", width: "20px" }}
-                          />
-                        ) : (
-                          <InformationIcon />
-                        )}
+                        {(() => {
+                          const teamALogo = item?.teamA_logo
+                            ? item?.teamA_logo
+                            : matchItem?.teamA_logo;
+
+                          if (teamALogo) {
+                            return (
+                              <Suspense
+                                fallback={
+                                  <Skeleton
+                                    variant="circular"
+                                    width={60}
+                                    height={60}
+                                    style={{ height: "20px", width: "20px" }}
+                                  />
+                                }
+                              >
+                                <ImageLoader
+                                  src={`${IMAGE_BASE_PATH}${teamALogo}`}
+                                  alt="logo"
+                                  shape="circular"
+                                  className="image_loader_teamA"
+                                  style={{ height: "20px", width: "20px" }}
+                                />
+                              </Suspense>
+                            );
+                          }
+
+                          return <InformationIcon />;
+                        })()}
                       </div>
                       <div className="team_section">
-                        {item?.teamB_logo ? (
-                          <ImageLoader
-                            src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
-                            alt="logo"
-                            shape="circular"
-                            className="image_loader_teamB"
-                            style={{ height: "20px", width: "20px" }}
-                          />
-                        ) : matchItem?.teamB_logo ? (
-                          <ImageLoader
-                            src={`${IMAGE_BASE_PATH}${matchItem?.teamB_logo}`}
-                            alt="logo"
-                            shape="circular"
-                            className="image_loader_teamB"
-                            style={{ height: "20px", width: "20px" }}
-                          />
-                        ) : (
-                          <InformationIcon />
-                        )}
+                        {(() => {
+                          const teamBLogo = item?.teamB_logo
+                            ? item?.teamB_logo
+                            : matchItem?.teamB_logo;
+
+                          if (teamBLogo) {
+                            return (
+                              <Suspense
+                                fallback={
+                                  <Skeleton
+                                    variant="circular"
+                                    width={60}
+                                    height={60}
+                                    style={{ height: "20px", width: "20px" }}
+                                  />
+                                }
+                              >
+                                <ImageLoader
+                                  src={`${IMAGE_BASE_PATH}${teamBLogo}`}
+                                  alt="logo"
+                                  shape="circular"
+                                  className="image_loader_teamB"
+                                  style={{ height: "20px", width: "20px" }}
+                                />
+                              </Suspense>
+                            );
+                          }
+
+                          return <InformationIcon />;
+                        })()}
                         <p>{item?.teamB}</p>
                       </div>
                     </div>

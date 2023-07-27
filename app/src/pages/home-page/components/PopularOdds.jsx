@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { ShareIcon, CrossIcon } from "../../../assets/svgs";
 import {
   getFormattedTime,
@@ -63,32 +63,37 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
           <h2>{settings.staticString.popularOdds}</h2>
         )}
         <div className={`share_icon${isLoading ? " loading" : ""}`}>
-          {!shareIconsVisible ? (
-            isLoading ? (
-              <Skeleton height={20} width={20} />
-            ) : (
-              <ShareIcon onClick={handleShareClick} />
-            )
-          ) : (
-            <div className="share_icons_line">
-              {isLoading ? (
-                <>
-                  <Skeleton height={20} width={20} />
-                  <Skeleton height={20} width={20} />
-                  <Skeleton height={20} width={20} />
-                  <Skeleton height={20} width={20} />
-                </>
-              ) : (
-                <>
-                  <img src={TwitterIcon} alt="Twitter" />
-                  <img src={TelegramIcon} alt="Telegram" />
-                  <img src={WhatsappIcon} alt="WhatsApp" />
-                  <img src={YouWinIcon} alt="YouWin" />
-                </>
-              )}
-              <CrossIcon onClick={handleCrossClick} />
-            </div>
-          )}
+          {(() => {
+            if (!shareIconsVisible) {
+              if (isLoading) {
+                return <Skeleton height={20} width={20} />;
+              } else {
+                return <ShareIcon onClick={handleShareClick} />;
+              }
+            } else {
+              if (isLoading) {
+                return (
+                  <div className="share_icons_line">
+                    <Skeleton height={20} width={20} />
+                    <Skeleton height={20} width={20} />
+                    <Skeleton height={20} width={20} />
+                    <Skeleton height={20} width={20} />
+                    <CrossIcon onClick={handleCrossClick} />
+                  </div>
+                );
+              } else {
+                return (
+                  <div className="share_icons_line">
+                    <img src={TwitterIcon} alt="Twitter" />
+                    <img src={TelegramIcon} alt="Telegram" />
+                    <img src={WhatsappIcon} alt="WhatsApp" />
+                    <img src={YouWinIcon} alt="YouWin" />
+                    <CrossIcon onClick={handleCrossClick} />
+                  </div>
+                );
+              }
+            }
+          })()}
         </div>
       </div>
       <div className="popular_matches_content">
@@ -115,26 +120,54 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                   <div className="left_content">
                     <div className="team_section">
                       <p>{item?.teamA}</p>
-                      <ImageLoader
-                        src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
-                        alt="team logo"
-                        shape="circular"
-                        className="image_loader_teamA"
-                        style={{ height: "20px", width: "20px" }}
-                      />
+                      <Suspense
+                        fallback={
+                          <Skeleton
+                            variant="circular"
+                            width={60}
+                            height={60}
+                            style={{
+                              height: "20px",
+                              width: "20px",
+                            }}
+                          />
+                        }
+                      >
+                        <ImageLoader
+                          src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
+                          alt="team logo"
+                          shape="circular"
+                          className="image_loader_teamA"
+                          style={{ height: "20px", width: "20px" }}
+                        />
+                      </Suspense>
                     </div>
                     <div className="time_section">
                       <p>{getMonthNameWithDate(item?.kickOffTime)}</p>
                       <p>{getFormattedTime(item?.kickOffTime)}</p>
                     </div>
                     <div className="team_section">
-                      <ImageLoader
-                        src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
-                        alt="team logo"
-                        shape="circular"
-                        className="image_loader_teamB"
-                        style={{ height: "20px", width: "20px" }}
-                      />
+                      <Suspense
+                        fallback={
+                          <Skeleton
+                            variant="circular"
+                            width={60}
+                            height={60}
+                            style={{
+                              height: "20px",
+                              width: "20px",
+                            }}
+                          />
+                        }
+                      >
+                        <ImageLoader
+                          src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
+                          alt="team logo"
+                          shape="circular"
+                          className="image_loader_teamB"
+                          style={{ height: "20px", width: "20px" }}
+                        />
+                      </Suspense>
                       <p>{item?.teamB}</p>
                     </div>
                   </div>

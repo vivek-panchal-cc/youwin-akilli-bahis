@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
   getDateWithOrdinalSuffix,
@@ -81,18 +81,35 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                     </p>
                     <div className="team_section">
                       <div className="team_content">
-                        <ImageLoader
-                          src={`${IMAGE_BASE_PATH}${elm?.teamA_logo}`}
-                          alt="team-logo"
-                          className="image_loader_teamA"
-                          style={{
-                            height: "53px",
-                            width: "53px",
-                            backgroundColor: "darkgray",
-                            margin: "auto",
-                            borderRadius: "4px",
-                          }}
-                        />
+                        <Suspense
+                          fallback={
+                            <Skeleton
+                              variant="rectangular"
+                              width={60}
+                              height={60}
+                              style={{
+                                height: "53px",
+                                width: "53px",
+                                backgroundColor: "darkgray",
+                                margin: "auto",
+                                borderRadius: "4px",
+                              }}
+                            />
+                          }
+                        >
+                          <ImageLoader
+                            src={`${IMAGE_BASE_PATH}${elm?.teamA_logo}`}
+                            alt="team-logo"
+                            className="image_loader_teamA"
+                            style={{
+                              height: "53px",
+                              width: "53px",
+                              backgroundColor: "darkgray",
+                              margin: "auto",
+                              borderRadius: "4px",
+                            }}
+                          />
+                        </Suspense>
                         <p>{elm?.teamA}</p>
                       </div>
                       <div className="team_time">
@@ -104,18 +121,35 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                                     <p>89"</p>
                                 </div> */}
                       <div className="team_content">
-                        <ImageLoader
-                          src={`${IMAGE_BASE_PATH}${elm?.teamB_logo}`}
-                          alt="team-logo"
-                          className="image_loader_teamB"
-                          style={{
-                            height: "53px",
-                            width: "53px",
-                            backgroundColor: "darkgray",
-                            margin: "auto",
-                            borderRadius: "4px",
-                          }}
-                        />
+                        <Suspense
+                          fallback={
+                            <Skeleton
+                              variant="rectangular"
+                              width={60}
+                              height={60}
+                              style={{
+                                height: "53px",
+                                width: "53px",
+                                backgroundColor: "darkgray",
+                                margin: "auto",
+                                borderRadius: "4px",
+                              }}
+                            />
+                          }
+                        >
+                          <ImageLoader
+                            src={`${IMAGE_BASE_PATH}${elm?.teamB_logo}`}
+                            alt="team-logo"
+                            className="image_loader_teamB"
+                            style={{
+                              height: "53px",
+                              width: "53px",
+                              backgroundColor: "darkgray",
+                              margin: "auto",
+                              borderRadius: "4px",
+                            }}
+                          />
+                        </Suspense>
                         <p>{elm?.teamB}</p>
                       </div>
                     </div>

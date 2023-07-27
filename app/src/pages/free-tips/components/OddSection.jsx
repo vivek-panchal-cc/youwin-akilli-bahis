@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { getFormattedTime, getOrdinalDay } from "../../../utils/dateFormat";
 import { getCurrentOddStatus } from "../../../services/vefaAppService";
 import OddsCalendar from "./OddsCalendar";
@@ -109,28 +109,60 @@ const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
           <div key={item?.eventId} className="odds_section_item">
             <div className="left_content">
               <div className="team_section">
-                <ImageLoader
-                  src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
-                  alt="logo"
-                  className="image_loader_teamA"
-                  style={{
-                    position: "relative",
-                    zIndex: "2",
-                    top: "-13px",
-                    left: "0px",
-                  }}
-                />
-                <ImageLoader
-                  src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
-                  alt="logo"
-                  className="image_loader_teamB"
-                  style={{
-                    position: "relative",
-                    zIndex: "1",
-                    top: "14px",
-                    left: "-20px",
-                  }}
-                />
+                <Suspense
+                  fallback={
+                    <Skeleton
+                      variant="rectangular"
+                      width={60}
+                      height={60}
+                      style={{
+                        position: "relative",
+                        zIndex: "2",
+                        top: "-13px",
+                        left: "0px",
+                      }}
+                    />
+                  }
+                >
+                  <ImageLoader
+                    src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
+                    alt="logo"
+                    className="image_loader_teamA"
+                    style={{
+                      position: "relative",
+                      zIndex: "2",
+                      top: "-13px",
+                      left: "0px",
+                    }}
+                  />
+                </Suspense>
+                <Suspense
+                  fallback={
+                    <Skeleton
+                      variant="rectangular"
+                      width={60}
+                      height={60}
+                      style={{
+                        position: "relative",
+                        zIndex: "1",
+                        top: "14px",
+                        left: "-20px",
+                      }}
+                    />
+                  }
+                >
+                  <ImageLoader
+                    src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
+                    alt="logo"
+                    className="image_loader_teamB"
+                    style={{
+                      position: "relative",
+                      zIndex: "1",
+                      top: "14px",
+                      left: "-20px",
+                    }}
+                  />
+                </Suspense>
               </div>
               <div className="odd_section_details">
                 <div className="event_kick_off">
