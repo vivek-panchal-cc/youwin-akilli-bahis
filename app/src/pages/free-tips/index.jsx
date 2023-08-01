@@ -20,6 +20,7 @@ const FreeTips = () => {
     fireBaseAllLeaguesDataBase,
     fireBaseAllEventsDataBase,
     fireBaseHomePageSliderDataBase,
+    fireBaseHomePageSliderLiveDataBase
   } = useContext(AppContext);
 
   const { tipsCollection, dispatch } = useContext(ReducerContext);
@@ -31,7 +32,8 @@ const FreeTips = () => {
     if (
       fireBaseAllLeaguesDataBase &&
       fireBaseAllEventsDataBase &&
-      fireBaseHomePageSliderDataBase
+      fireBaseHomePageSliderDataBase &&
+      fireBaseHomePageSliderLiveDataBase
     ) {
       // Set isLoading to false once data is available
       setIsLoading(false);
@@ -40,6 +42,7 @@ const FreeTips = () => {
     fireBaseAllLeaguesDataBase,
     fireBaseAllEventsDataBase,
     fireBaseHomePageSliderDataBase,
+    fireBaseHomePageSliderLiveDataBase
   ]);
 
   const handleSelect = (item) => {    
@@ -54,7 +57,7 @@ const FreeTips = () => {
     addLigItemToCollection(dispatch, data);
   };
 
-  const filteredLigSliderData = fireBaseHomePageSliderDataBase?.filter(
+  const filteredLigSliderData = fireBaseHomePageSliderLiveDataBase?.filter(
     (item) => item.competitionId === id
   );
 

@@ -10,6 +10,7 @@ const staticString = {
     totalOdds: 'Total Odds',
     totalWins: 'Total Wins',
     shareMyTipCollection: 'Share My Tip Collection',
+    downloadMyTipCollection: 'Download My Tip Collection',
     thisWeeksTopMatches: 'This Week\'s Top Matches',
     thisWeeksTopStories: 'This Week\'s Top Stories',
     winningMoreThan: 'Winning more than',

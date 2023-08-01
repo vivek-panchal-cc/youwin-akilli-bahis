@@ -13,6 +13,7 @@ const useAppState = () => {
 
   const initRealTimeDatabaseObservation = () => {
     const homePageSliderRef = ref(db, 'json_feeds/homepage');
+    const homePageSliderLiveRef = ref(db, 'json_feeds/live');
     const allEventsRef = ref(db, 'pregame/all_events');
     const allLeaguesRef = ref(db, 'pregame/all_leagues');
     const allMarketsRef = ref(db, 'pregame/all_markets');
@@ -23,6 +24,11 @@ const useAppState = () => {
     onValue(homePageSliderRef, (snapshot) => {
       const data = snapshot.val();
       window.akilliBahisDatabase.homePageSlider = data;
+      setAppStateData?.()
+    });
+    onValue(homePageSliderLiveRef, (snapshot) => {
+      const data = snapshot.val();
+      window.akilliBahisDatabase.homePageSliderLive = data;
       setAppStateData?.()
     });
     onValue(allEventsRef, (snapshot) => {
@@ -59,6 +65,7 @@ const useAppState = () => {
   const setAppStateData = () => {
     setAppState({
       fireBaseHomePageSliderDataBase: window.akilliBahisDatabase?.homePageSlider,
+      fireBaseHomePageSliderLiveDataBase: window.akilliBahisDatabase?.homePageSliderLive,
       fireBaseAllEventsDataBase: window.akilliBahisDatabase?.allEventsData,
       fireBaseAllLeaguesDataBase: window.akilliBahisDatabase?.allLeaguesData,
       fireBaseAllMarketsDataBase: window.akilliBahisDatabase?.allMarketsData,

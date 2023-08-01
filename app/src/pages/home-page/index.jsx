@@ -21,6 +21,7 @@ const HomePage = () => {
     fireBaseAllLeaguesDataBase,
     fireBaseFeaturedDataBase,
     fireBasePopularOddsDataBase,
+    fireBaseHomePageSliderLiveDataBase
   } = useContext(AppContext);
 
   const { tipsCollection, dispatch } = useContext(ReducerContext);
@@ -62,10 +63,12 @@ const HomePage = () => {
     fireBasePopularOddsDataBase,
   ]);
 
+  const mergedData = fireBaseFeaturedDataBase?.concat(fireBaseTeaserDataBase);
+
   return (
     <div className="home_page_container">
       <TeaserSlider
-        data={fireBaseTeaserDataBase}
+        data={mergedData}
         handleSelectTeaser={handleSelectTeaserItem}
         isLoading={isLoading} // Pass the isLoading prop
       />
@@ -76,7 +79,7 @@ const HomePage = () => {
         isLoading={isLoading} // Pass the isLoading prop
       />
       <LigSlider
-        data={fireBaseFeaturedDataBase}
+        data={fireBaseHomePageSliderLiveDataBase}
         handleSelectLig={handleSelectLigItem}
         tipsCollection={tipsCollection}
         isLoading={isLoading} // Pass the isLoading prop

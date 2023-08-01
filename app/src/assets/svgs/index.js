@@ -7,3 +7,4 @@ export { default as PlusIcon } from "./Plus";
 export { default as CrossIcon } from "./Cross";
 export { default as InformationIcon } from "./Information";
 export { default as LoadingIcon } from "./Loading";
+export { default as DownloadIcon } from "./Download";

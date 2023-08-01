@@ -7,19 +7,17 @@ import React, {
   useState,
 } from "react";
 import {
-  ShareIcon,
   LockIcon,
   UnLockIcon,
   SyncIcon,
-  CrossIcon,
   InformationIcon,
   LoadingIcon,
+  DownloadIcon,
 } from "../../../assets/svgs";
-import TwitterIcon from "../../../assets/images/twitter_share.png";
-import WhatsappIcon from "../../../assets/images/whatsapp_share.png";
-import TelegramIcon from "../../../assets/images/telegram_share.png";
-import YouWinIcon from "../../../assets/images/youwin_share.png";
 import settings from "../../../misc";
+import LockIconPng from "../../../assets/images/Lock.png";
+import UnlockIconPng from "../../../assets/images/Unlock.png";
+import ScreenShotFooter from "../../../components/common/screenshotFooter";
 import {
   getCurrentOddStatus,
   multiBetAPI,
@@ -27,6 +25,7 @@ import {
 } from "../../../services/vefaAppService";
 import { Skeleton } from "@mui/material";
 import { debounce } from "lodash";
+import html2canvas from "html2canvas";
 const ImageLoader = React.lazy(() =>
   import("../../../components/common/imageLoader")
 );
@@ -42,18 +41,18 @@ const ImageLoader = React.lazy(() =>
 const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const [rangeValue, setRangeValue] = useState(5000);
-  const [multiBet, setMultiBet] = useState([]);
-  const [shareIconsVisible, setShareIconsVisible] = useState(false);
+  const [multiBet, setMultiBet] = useState([]);  
   const [lockedItems, setLockedItems] = useState([]);
   const [isAlterSuggestion, setAlterSuggestion] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const stack = process.env.REACT_APP_STACK;
   const contentRef = useRef(null);
+  const footerRef = useRef();
 
-  const fetchMultiBetData = async () => {
+  const fetchMultiBetData = async (value = 5000) => {
     try {
       setAlterSuggestion(true);
-      let multiBetData = await multiBetAPI(stack, rangeValue);
+      let multiBetData = await multiBetAPI(stack, value);
 
       const lockItem = lockedItems.map((i) => i.eventId);
 
@@ -86,7 +85,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
 
   const handleAlterSuggestions = useCallback(async () => {
     if (lockedItems.length === 0) {
-      fetchMultiBetData(); // If no items are locked, call fetchMultiBetData
+      fetchMultiBetData(rangeValue); // If no items are locked, call fetchMultiBetData
     } else {
       setAlterSuggestion(true);
       const eventIds = lockedItems?.map((item) => item.eventId).join(",");
@@ -108,10 +107,6 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
             ...allSuggestions,
             ...multiBetAlterSuggestionData.MultibetItems,
           ]; // Add new items to allSuggestions
-          console.log(
-            "multiBetAlterSuggestionData :>> ",
-            multiBetAlterSuggestionData
-          );
         } catch (error) {
           console.error("Failed to fetch multiBet data:", error);
         }
@@ -133,12 +128,50 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
     }
   }, [lockedItems, multiBet]);
 
-  const handleShareClick = () => {
-    setShareIconsVisible(true);
-  };
+  const handleDownloadClick = () => {
+    const content = contentRef.current;
+    const footer = footerRef.current.cloneNode(true);
 
-  const handleCrossClick = () => {
-    setShareIconsVisible(false);
+    // Temporarily append the footer to the content
+    content.appendChild(footer);
+
+    html2canvas(content, {
+      onclone: function (document) {
+        const lockSvgIcons = document.querySelectorAll(".lock-svg-icon");
+        lockSvgIcons?.forEach((icon) => {
+          const pngIcon = document.createElement("img");
+          pngIcon.src = LockIconPng; // path to the rasterized lock icon
+          pngIcon.alt = "Lock";
+          pngIcon.style.height = "13px"; // set the height of the PNG icon
+          icon.parentNode.replaceChild(pngIcon, icon);
+        });
+
+        // Replace the SVG unlock icons with PNG icons
+        const unlockSvgIcons = document.querySelectorAll(".unlock-svg-icon");
+        unlockSvgIcons.forEach((icon) => {
+          const pngIcon = document.createElement("img");
+          pngIcon.src = UnlockIconPng; // path to the rasterized unlock icon
+          pngIcon.alt = "Unlock";
+          pngIcon.style.height = "13px"; // set the height of the PNG icon
+          icon.parentNode.replaceChild(pngIcon, icon);
+        });
+
+        const clonedFooter = document.querySelector(".footer");
+        clonedFooter.style.position = "relative";
+        clonedFooter.style.visibility = "visible";
+        clonedFooter.style.opacity = "1";
+        clonedFooter.style.height = "auto";
+      },
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = imgData;
+      link.download = "screenshot.png";
+      link.click();
+
+      // Remove the footer from the content
+      content.removeChild(footer);
+    });
   };
 
   const handleLockToggle = useCallback(
@@ -189,18 +222,18 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
     }
     setRangeValue(value);
     setLockedItems([]); // Clear the lockedItems state
-    debouncedFetchMultiBetData(); // Call the debounced version of fetchMultiBetData
+    debouncedFetchMultiBetData(value); // Call the debounced version of fetchMultiBetData
   }, []);
 
   return (
     <div className="multi_bet_odds_container">
       <div className="multi_bet_odd_header">
         <h2>{settings.staticString.buildYourOwn}</h2>
-        {!shareIconsVisible ? (
-          <div className="share_icon">
-            <ShareIcon onClick={handleShareClick} />
-          </div>
-        ) : (
+        {/* {!shareIconsVisible ? ( */}
+        <div className="share_icon">
+          <DownloadIcon onClick={handleDownloadClick} />
+        </div>
+        {/* ) : (
           <div className="share_icon">
             <div className="share_icons_line">
               <img src={TwitterIcon} alt="Twitter" />
@@ -210,7 +243,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
               <CrossIcon onClick={handleCrossClick} />
             </div>
           </div>
-        )}
+        )} */}
       </div>
       <div className="range_container">
         <div className="winning_more">
@@ -251,7 +284,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                 </div>
               ))
             : multiBet?.MultibetItems &&
-              multiBet?.MultibetItems?.map((item) => {
+              multiBet?.MultibetItems?.map((item, index) => {
                 const isSelected = tipsCollection?.some(
                   (elm) =>
                     elm.eventId === item?.eventId &&
@@ -279,11 +312,12 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
 
                 return (
                   <div
-                    key={matchItem?.eventId}
+                    key={matchItem?.eventId || index}
                     className="multi_bet_match_item"
                   >
                     {isLocked ? (
                       <LockIcon
+                        className="lock-svg-icon"
                         onClick={() => handleLockToggle(item)}
                         style={{
                           pointerEvents: isAlterSuggestion ? "none" : "auto",
@@ -291,6 +325,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                       />
                     ) : (
                       <UnLockIcon
+                        className="unlock-svg-icon"
                         onClick={() => handleLockToggle(item)}
                         style={{
                           pointerEvents: isAlterSuggestion ? "none" : "auto",
@@ -414,6 +449,14 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
           </div>
         </div>
       </div>
+      <div
+        ref={footerRef}
+        className="footer"
+        style={{ visibility: "hidden", height: 0, opacity: 0, padding: "0px" }}
+      >
+        <ScreenShotFooter />
+      </div>
+
       <div className="multi_bet_button">
         <button
           onClick={handleAlterSuggestions}

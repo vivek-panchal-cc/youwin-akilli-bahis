@@ -1,9 +1,5 @@
 import React, { Suspense } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  getDateWithOrdinalSuffix,
-  getFormattedTime,
-} from "../../utils/dateFormat";
 import Skeleton from "react-loading-skeleton";
 import { getCurrentOddStatus } from "../../services/vefaAppService";
 import settings from "../../misc";
@@ -29,11 +25,11 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
         slidesPerView={1}
         breakpoints={{
           300: {
-            slidesPerView: 1.2,
+            slidesPerView: 1.1,
             spaceBetween: 10,
           },
           375: {
-            slidesPerView: 1.3,
+            slidesPerView: 1.1,
             spaceBetween: 10,
           },
           568: {
@@ -41,7 +37,7 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
             spaceBetween: 10,
           },
           768: {
-            slidesPerView: 3,
+            slidesPerView: 2.3,
             spaceBetween: 10,
           },
         }}
@@ -56,7 +52,7 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
               </SwiperSlide>
             ))
           : // Render the actual data when isLoading is false
-            data?.map((elm) => {
+            data?.map((elm, i) => {
               const matchedItem = tipsCollection?.filter(
                 (item) => item.eventId === elm?.eventId
               );
@@ -77,7 +73,7 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                       <p>{settings.staticString.live}</p>
                     </div>
                     <p className="title">
-                      {elm?.groupName ? elm?.groupName : <>&nbsp;</>}
+                      {elm?.competitionName ? elm?.competitionName : <>&nbsp;</>}
                     </p>
                     <div className="team_section">
                       <div className="team_content">
@@ -112,14 +108,14 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                         </Suspense>
                         <p>{elm?.teamA}</p>
                       </div>
-                      <div className="team_time">
+                      {/* <div className="team_time">
                         <p>{getDateWithOrdinalSuffix(elm?.kickOffTime)}</p>
                         <p>{getFormattedTime(elm?.kickOffTime)}</p>
+                      </div> */}
+                      <div className="team_score">
+                        <h2>{`${elm?.liveData?.currentScore[0]}:${elm?.liveData?.currentScore[1]}`}</h2>
+                        <p>{elm?.liveData?.clock}</p>
                       </div>
-                      {/* <div className='team_score'>
-                                    <h2>0 : 1</h2>
-                                    <p>89"</p>
-                                </div> */}
                       <div className="team_content">
                         <Suspense
                           fallback={

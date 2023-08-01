@@ -1,5 +1,5 @@
-import React, { Suspense, useState } from "react";
-import { ShareIcon, CrossIcon } from "../../../assets/svgs";
+import React, { Suspense, useRef } from "react";
+import { DownloadIcon } from "../../../assets/svgs";
 import {
   getFormattedTime,
   getMonthNameWithDate,
@@ -7,10 +7,8 @@ import {
 import settings from "../../../misc";
 import Skeleton from "react-loading-skeleton";
 import { getCurrentOddStatus } from "../../../services/vefaAppService";
-import TwitterIcon from "../../../assets/images/twitter_share.png";
-import WhatsappIcon from "../../../assets/images/whatsapp_share.png";
-import TelegramIcon from "../../../assets/images/telegram_share.png";
-import YouWinIcon from "../../../assets/images/youwin_share.png";
+import html2canvas from "html2canvas";
+import ScreenShotFooter from "../../../components/common/screenshotFooter";
 const ImageLoader = React.lazy(() =>
   import("../../../components/common/imageLoader")
 );
@@ -25,14 +23,44 @@ const ImageLoader = React.lazy(() =>
 
 const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
-  const [shareIconsVisible, setShareIconsVisible] = useState(false);
+  const contentRef = useRef();
+  const footerRef = useRef();
 
-  const handleShareClick = () => {
-    setShareIconsVisible(true);
-  };
+  const handleDownloadClick = () => {
+    const content = contentRef.current;
+    const footer = footerRef.current.cloneNode(true);
 
-  const handleCrossClick = () => {
-    setShareIconsVisible(false);
+    // Temporarily append the footer to the content
+    content.appendChild(footer);
+
+    html2canvas(content, {
+      onclone: function (document) {
+        const items = document.querySelectorAll(".popular_match_item");
+        items?.forEach((item, index) => {
+          if (index >= 10) {
+            item.style.display = "none";
+          } else if (index === 0) {
+            item.style.paddingTop = "10px";
+          }
+        });
+        const clonedFooter = document.querySelector(".footer");
+        clonedFooter.style.position = "relative";
+        clonedFooter.style.visibility = "visible";
+        clonedFooter.style.opacity = "1";
+        clonedFooter.style.left = "-20px";
+        clonedFooter.style.width = "calc(100% + 40px)";
+        clonedFooter.style.marginBottom = "-10px";
+      },
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = imgData;
+      link.download = "screenshot.png";
+      link.click();
+
+      // Remove the footer from the content
+      content.removeChild(footer);
+    });
   };
 
   const getRandomOdd = (odds, eventId) => {
@@ -64,39 +92,15 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
         )}
         <div className={`share_icon${isLoading ? " loading" : ""}`}>
           {(() => {
-            if (!shareIconsVisible) {
-              if (isLoading) {
-                return <Skeleton height={20} width={20} />;
-              } else {
-                return <ShareIcon onClick={handleShareClick} />;
-              }
+            if (isLoading) {
+              return <Skeleton height={20} width={20} />;
             } else {
-              if (isLoading) {
-                return (
-                  <div className="share_icons_line">
-                    <Skeleton height={20} width={20} />
-                    <Skeleton height={20} width={20} />
-                    <Skeleton height={20} width={20} />
-                    <Skeleton height={20} width={20} />
-                    <CrossIcon onClick={handleCrossClick} />
-                  </div>
-                );
-              } else {
-                return (
-                  <div className="share_icons_line">
-                    <img src={TwitterIcon} alt="Twitter" />
-                    <img src={TelegramIcon} alt="Telegram" />
-                    <img src={WhatsappIcon} alt="WhatsApp" />
-                    <img src={YouWinIcon} alt="YouWin" />
-                    <CrossIcon onClick={handleCrossClick} />
-                  </div>
-                );
-              }
+              return <DownloadIcon onClick={handleDownloadClick} />;
             }
           })()}
         </div>
       </div>
-      <div className="popular_matches_content">
+      <div className="popular_matches_content" ref={contentRef}>
         {isLoading
           ? // Render skeleton loading elements when isLoading is true
             Array.from({ length: 5 }).map((_, index) => (
@@ -195,6 +199,13 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                 </div>
               );
             })}
+      </div>
+      <div
+        ref={footerRef}
+        className="footer"
+        style={{ visibility: "hidden", height: 0, opacity: 0, padding: "0px" }}
+      >
+        <ScreenShotFooter />
       </div>
     </div>
   );

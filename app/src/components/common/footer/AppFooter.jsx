@@ -156,7 +156,7 @@ const AppFooter = () => {
         )}
         <div>
           <p>{settings.staticString.poweredBy}</p>
-          <p className="logo-footer">
+          <p className="logo_footer">
             <span>you</span>win
           </p>
         </div>
