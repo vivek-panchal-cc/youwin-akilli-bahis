@@ -1,28 +1,28 @@
 import React from "react";
 import { CalendarIcon } from "../../../assets/svgs";
 
-const OddsCalendar = ({ handleDateSelection, selectedDate }) => {  
+const OddsCalendar = ({ handleDateSelection, selectedDate }) => {
   const currentDate = new Date();
   // Get the current date with day
   const currentDay = currentDate.getDate();
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const monthsOfYear = [
-    "January",
-    "February",
-    "March",
-    "April",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
     "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
   const currentDayOfWeek = daysOfWeek[currentDate.getDay()];
   const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();  
+  const currentYear = currentDate.getFullYear();
 
   // Calculate the next six dates with days
   const nextDates = [];
