@@ -41,9 +41,10 @@ const ImageLoader = React.lazy(() =>
 const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const [rangeValue, setRangeValue] = useState(5000);
-  const [multiBet, setMultiBet] = useState([]);  
+  const [multiBet, setMultiBet] = useState([]);
   const [lockedItems, setLockedItems] = useState([]);
   const [isAlterSuggestion, setAlterSuggestion] = useState(false);
+  const [isSkeleton, setSkeleton] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const stack = process.env.REACT_APP_STACK;
   const contentRef = useRef(null);
@@ -54,13 +55,19 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
       setAlterSuggestion(true);
       let multiBetData = await multiBetAPI(stack, value);
 
-      const lockItem = lockedItems.map((i) => i.eventId);
-
-      let multiBetFilterItem = multiBetData.MultibetItems?.filter(
-        (item) => !lockItem.includes(item.eventId)
-      );
-
-      multiBetData["MultibetItems"] = multiBetFilterItem;
+      // Check if multiBetData.MultibetItems is iterable (not null and is an array)
+      if (
+        !multiBetData.MultibetItems ||
+        !Array.isArray(multiBetData.MultibetItems)
+      ) {
+        multiBetData.MultibetItems = []; // Set it to an empty array if not iterable
+      } else {
+        const lockItem = lockedItems.map((i) => i.eventId);
+        let multiBetFilterItem = multiBetData.MultibetItems.filter(
+          (item) => !lockItem.includes(item.eventId)
+        );
+        multiBetData.MultibetItems = multiBetFilterItem;
+      }
       setMultiBet(multiBetData);
     } catch (error) {
       console.error("Failed to fetch multiBet data:", error);
@@ -87,7 +94,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
     if (lockedItems.length === 0) {
       fetchMultiBetData(rangeValue); // If no items are locked, call fetchMultiBetData
     } else {
-      setAlterSuggestion(true);
+      setSkeleton(true);
       const eventIds = lockedItems?.map((item) => item.eventId).join(",");
       const unlockedItems = multiBet.MultibetItems.filter(
         (item) => !eventIds.includes(item.eventId)
@@ -103,10 +110,16 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
             unlockedItem?.eventId,
             unlockedItem?.multiGroupId
           );
-          allSuggestions = [
-            ...allSuggestions,
-            ...multiBetAlterSuggestionData.MultibetItems,
-          ]; // Add new items to allSuggestions
+          // Check if multiBetAlterSuggestionData.MultibetItems is iterable
+          if (
+            multiBetAlterSuggestionData.MultibetItems &&
+            Array.isArray(multiBetAlterSuggestionData.MultibetItems)
+          ) {
+            allSuggestions = [
+              ...allSuggestions,
+              ...multiBetAlterSuggestionData.MultibetItems,
+            ]; // Add new items to allSuggestions
+          }
         } catch (error) {
           console.error("Failed to fetch multiBet data:", error);
         }
@@ -124,7 +137,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
         ...prevState,
         MultibetItems: allSuggestions,
       })); // Update the multiBet state with allSuggestions
-      setAlterSuggestion(false);
+      setSkeleton(false);
     }
   }, [lockedItems, multiBet]);
 
@@ -148,7 +161,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
 
         // Replace the SVG unlock icons with PNG icons
         const unlockSvgIcons = document.querySelectorAll(".unlock-svg-icon");
-        unlockSvgIcons.forEach((icon) => {
+        unlockSvgIcons?.forEach((icon) => {
           const pngIcon = document.createElement("img");
           pngIcon.src = UnlockIconPng; // path to the rasterized unlock icon
           pngIcon.alt = "Unlock";
@@ -229,21 +242,9 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
     <div className="multi_bet_odds_container">
       <div className="multi_bet_odd_header">
         <h2>{settings.staticString.buildYourOwn}</h2>
-        {/* {!shareIconsVisible ? ( */}
         <div className="share_icon">
           <DownloadIcon onClick={handleDownloadClick} />
         </div>
-        {/* ) : (
-          <div className="share_icon">
-            <div className="share_icons_line">
-              <img src={TwitterIcon} alt="Twitter" />
-              <img src={TelegramIcon} alt="Telegram" />
-              <img src={WhatsappIcon} alt="WhatsApp" />
-              <img src={YouWinIcon} alt="YouWin" />
-              <CrossIcon onClick={handleCrossClick} />
-            </div>
-          </div>
-        )} */}
       </div>
       <div className="range_container">
         <div className="winning_more">
@@ -262,27 +263,25 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
             min="1000"
             max="10000"
             value={rangeValue}
-            disabled={isAlterSuggestion}
+            disabled={isAlterSuggestion || isSkeleton}
             onChange={handleRangeChange}
           />
         </div>
       </div>
       <div ref={contentRef}>
         <div className="multi_bet_matches_content">
-          {isLoading
+          {isLoading || isAlterSuggestion
             ? // Skeletons
-              Array.from({ length: 5 }).map((_, index) => (
-                <div
-                  key={`skeleton-${index}`}
-                  className="multi_bet_match_item skeleton"
-                >
-                  <Skeleton variant="rectangular" width={20} height={20} />
-                  <Skeleton variant="text" width={80} height={20} />
-                  <Skeleton variant="text" width={80} height={20} />
-                  <Skeleton variant="text" width={80} height={20} />
-                  <Skeleton variant="text" width={80} height={20} />
-                </div>
-              ))
+              Array.from({ length: multiBet?.MultibetItems?.length || 5 }).map(
+                (_, index) => (
+                  <div
+                    key={`skeleton-${index}`}
+                    className="multi_bet_match_item skeleton"
+                  >
+                    <Skeleton variant="text" width={"100%"} height={20} />
+                  </div>
+                )
+              )
             : multiBet?.MultibetItems &&
               multiBet?.MultibetItems?.map((item, index) => {
                 const isSelected = tipsCollection?.some(
@@ -418,7 +417,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
         <div className="total_odds_details">
           <div className="total_odds">
             <p>{settings.staticString.totalOdds}:&nbsp;</p>
-            {isLoading ? (
+            {isLoading || isAlterSuggestion ? (
               // Skeleton for totalOdds
               <div className="total_wins_value skeleton">
                 <Skeleton variant="text" width={50} height={28} />
@@ -432,7 +431,7 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
           </div>
           <div className="total_win">
             <p>{settings.staticString.totalWins}:&nbsp;</p>
-            {isLoading ? (
+            {isLoading || isAlterSuggestion ? (
               // Skeleton for totalWins
               <div className="total_wins_value skeleton">
                 <Skeleton variant="text" width={70} />
@@ -460,9 +459,9 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
       <div className="multi_bet_button">
         <button
           onClick={handleAlterSuggestions}
-          disabled={isButtonDisabled || isAlterSuggestion}
+          disabled={isButtonDisabled || isAlterSuggestion || isSkeleton}
         >
-          {isAlterSuggestion ? (
+          {isAlterSuggestion || isSkeleton ? (
             <>
               <div className="loading_icon">
                 <LoadingIcon />

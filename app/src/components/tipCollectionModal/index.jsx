@@ -40,7 +40,7 @@ const TipCollectionModal = () => {
   const calculateTotalOdds = () => {
     let totalOdds = 1;
 
-    tipsCollection.forEach((item) => {
+    tipsCollection?.forEach((item) => {
       const odds =
         typeof item?.odds_decimal === "string"
           ? parseFloat(item?.odds_decimal)

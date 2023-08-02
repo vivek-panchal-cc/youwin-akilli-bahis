@@ -22,6 +22,7 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
       <Swiper
         spaceBetween={10}
         className={`${data?.length === 1 ? "lig_slider_one" : ""}`}
+        style={data === null ? { marginBottom: "0" } : {}}
         slidesPerView={1}
         breakpoints={{
           300: {
@@ -73,7 +74,11 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                       <p>{settings.staticString.live}</p>
                     </div>
                     <p className="title">
-                      {elm?.competitionName ? elm?.competitionName : <>&nbsp;</>}
+                      {elm?.competitionName ? (
+                        elm?.competitionName
+                      ) : (
+                        <>&nbsp;</>
+                      )}
                     </p>
                     <div className="team_section">
                       <div className="team_content">
@@ -88,6 +93,7 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                                 width: "53px",
                                 backgroundColor: "darkgray",
                                 margin: "auto",
+                                marginBottom: "5px",
                                 borderRadius: "4px",
                               }}
                             />
@@ -102,6 +108,7 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                               width: "53px",
                               backgroundColor: "darkgray",
                               margin: "auto",
+                              marginBottom: "5px",
                               borderRadius: "4px",
                             }}
                           />
@@ -128,6 +135,7 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                                 width: "53px",
                                 backgroundColor: "darkgray",
                                 margin: "auto",
+                                marginBottom: "5px",
                                 borderRadius: "4px",
                               }}
                             />
@@ -142,6 +150,7 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                               width: "53px",
                               backgroundColor: "darkgray",
                               margin: "auto",
+                              marginBottom: "5px",
                               borderRadius: "4px",
                             }}
                           />

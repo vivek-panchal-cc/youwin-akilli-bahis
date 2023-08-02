@@ -61,13 +61,13 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
       const responses = await Promise.all(fetchPromises);
 
       const feedItemsData = [];
-      responses.forEach((response) => {
+      responses?.forEach((response) => {
         const xmlText = response.data;
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "application/xml");
 
         const items = xmlDoc.querySelectorAll("item");
-        Array.from(items).forEach((item) => {
+        Array.from(items)?.forEach((item) => {
           const title = item.querySelector("title")?.textContent || "";
           const link = item.querySelector("link")?.textContent || "";
           const pubDate = item.querySelector("pubDate")?.textContent || "";

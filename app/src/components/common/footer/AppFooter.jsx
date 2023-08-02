@@ -103,12 +103,12 @@ const AppFooter = () => {
     };
 
     const links = document.querySelectorAll(".share_icons_line a");
-    links.forEach((link) => {
+    links?.forEach((link) => {
       link.addEventListener("click", handleLinkClick);
     });
 
     return () => {
-      links.forEach((link) => {
+      links?.forEach((link) => {
         link.removeEventListener("click", handleLinkClick);
       });
     };

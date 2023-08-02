@@ -136,6 +136,7 @@ body{
                     color: $white;
                     margin: 0;
                     line-height: 1;
+                    min-height: 20px;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     display: -webkit-box;
@@ -206,13 +207,11 @@ body{
 }
 
 .lig_slider_one  {
-
     .swiper-slide {
         width: 100% !important;
         margin: 0 !important;
-        padding: 0 14px 14px;
+        padding: 0 14px;
     }
-
 }
 .lig_slider{
     .swiper{
