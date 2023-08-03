@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import MultiBet from "./components/MultiBet";
-import { addPopularOddToCollection } from "../../feature/appAction";
+import { addPopularOddToCollection, addAllOddsToCollection } from "../../feature/appAction";
 import { ReducerContext } from "../../context/ReducerContext";
 
 const MultiBetIndex = () => {
@@ -12,6 +12,10 @@ const MultiBetIndex = () => {
 
   const handleSelectOdd = (data) => {
     addPopularOddToCollection(dispatch, data);
+  };
+
+  const handleAddToCollection = (data) => {
+    addAllOddsToCollection(dispatch, data);
   };
 
   useEffect(() => {
@@ -26,6 +30,7 @@ const MultiBetIndex = () => {
       <MultiBet
         data={fireBaseAllEventsDataBase}
         handleSelectOdd={handleSelectOdd}
+        handleAddToCollection={handleAddToCollection}
         tipsCollection={tipsCollection}
         isLoading={isLoading} // Pass the isLoading prop
       />

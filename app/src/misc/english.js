@@ -21,7 +21,8 @@ const staticString = {
     close: "Close",
     noDataFound: "No data found",
     live: "Live",
-    matchWinner: "Match Winner"
+    matchWinner: "Match Winner",
+    addToCollection: "Add to collection"
 }
 
 const settings = {

@@ -25,6 +25,8 @@ const AppContextProvider = ({children}) => {
     
     const value =  useMemo(() => ({...appState}),[appState])   
 
+    console.log('AKHILLI BAHIS Database:>> ', value);
+
     return (
         <AppContext.Provider value={value}>
             {children}

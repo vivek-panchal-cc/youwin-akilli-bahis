@@ -643,7 +643,7 @@ body{
             .range_style{
                 -webkit-appearance: none;
                 appearance: none;                
-                width: 100%;
+                width: 80%;
                 height: 4px;
                 background: #00CA6B;
                 outline: none;
@@ -743,24 +743,25 @@ body{
             color: #707070;
             background-color: white;
             font-size: 12px; 
-            border: 1px solid #A2A2A2;
+            // border: 1px solid #A2A2A2;
+            border: none;
             border-radius: 2px;
             opacity: 100;
-            height: 27px;
-            min-width: 117px;
-            margin-bottom: 33px;
-            margin-top: 21px;
+            // height: 27px;
+            // min-width: 117px;
+            // margin-bottom: 33px;
+            // margin-top: 21px;
             position: relative;
             .loading_icon {
                 display: inline-block;
                 animation: spin 1s infinite linear;
                 color: #707070;
-                position: absolute;
-                left: 0;
+                // position: absolute;
+                // left: 0;
                 svg{
                   fill: #A2A2A2;
                   height: 18px;
-                  width: 25px;
+                  width: 20px;
                 }
               }
               @keyframes spin {
@@ -783,6 +784,41 @@ body{
                 fill: #A2A2A2;
                 height: 20px;
                 width: 21px
+            }
+        }
+    }
+    .add_to_collection_button{
+        text-align: center;
+        button{
+            display: inline-flex;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;            
+            letter-spacing: 0px;
+            color: #707070;
+            background-color: white;
+            font-size: 12px; 
+            border: 1px solid #A2A2A2;
+            border-radius: 2px;
+            opacity: 100;
+            height: 27px;
+            min-width: 117px;
+            margin-bottom: 33px;
+            margin-top: 21px;
+            position: relative;            
+            .plus_sign{
+                line-height: 1;
+                position: relative;
+                top: -3px;
+                color: #A2A2A2;
+                width: 10px;                
+                font-size: 20px;
+                margin: 0;            
+            }
+            .add_to_collection_label{
+                color: #707070;
+                font-size: 12px;
+                margin: 0;
             }
         }
     }
@@ -839,16 +875,22 @@ body{
             padding: 8px 5px;
             border-bottom: 1px solid #F8F8F8;
             svg{                
-                height: 30px;
-                width: fit-content;                
-                margin-right: 5px;
-                margin-left: 15px;
-                max-width: 20px;
+                width: fit-content;
+                min-width: 90px;
+                height: 17px;
+                display: block;
+                margin: 0;
+                max-width: 10px;
                 cursor: pointer;
+                // height: 30px;
+                // margin-right: 5px;
+                // margin-left: 15px;
+                // max-width: 20px;
             }
             .left_content{
                 display: flex;
-                justify-content: center;
+                flex-wrap: wrap;
+                justify-content: flex-start;
                 gap: 0px;
                 width: 100%;
                 align-items: center;
@@ -863,14 +905,15 @@ body{
                     // align-items: center;
                     gap: 5px;
                     // flex-basis: 40%;
-                    flex-basis: 45%;
+                    flex-basis: auto;
                     align-items: center;
                     overflow: hidden;
                     img {
                         height: 20px;
                     }
                     svg{
-                        height: 20px;
+                        // height: 20px;
+                        min-width: 20px;
                         margin-left: 0px;
                         margin-right: 0px;
                     }
@@ -882,7 +925,7 @@ body{
                         text-overflow: ellipsis;
                         white-space: nowrap;
                     }
-                }
+                }                
                 .time_section{
                     text-align: center;
                     flex-basis: 20%;
@@ -894,6 +937,27 @@ body{
                         margin: 0;
                         color: #707070;
                         font-size: 11px;
+                    }
+                }
+                .text_content{
+                    width: 100%;
+                    p {
+                        margin: 0;
+                        font-size: 13px;
+                        text-align: left;
+                        height: 22px;
+                        /* color: black; */
+                        letter-spacing: 0px;
+                        line-height: 22px;
+                        color: #000000;
+                        opacity: 1;
+                        span{
+                            font-weight: bold;
+                            font-size: 13px;
+                            padding-left: 10px;
+                            letter-spacing: 0px;
+                            color: #000000;
+                        }
                     }
                 }
             }
@@ -1295,23 +1359,25 @@ body{
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding: 8px 5px;
+                    padding: 8px 16px;
                     border-bottom: 1px solid #F8F8F8;
                     .left_content{
                         display: flex;
-                        justify-content: center;
-                        gap: 10px;
+                        flex-wrap: wrap;
+                        justify-content: flex-start;
+                        gap: 0;
                         width: 100%;
                         overflow: hidden;
                         .team_section{
                             &:nth-child(1){
-                                justify-content: end;
+                                justify-content: flex-start;
+                                padding-right: 10px;
                                 text-align: end;
                             }
                             display: flex;
                             align-items: center;
                             gap: 5px;
-                            flex-basis: 50%;
+                            flex-basis: auto;
                             overflow: hidden;
                             img {
                                 height: 20px;
@@ -1329,6 +1395,31 @@ body{
                                 margin-left: 0px;
                                 margin-right: 0px;
                             }
+                        }
+                        .text_content{
+                            width: 100%;
+                            p {
+                                margin: 0;
+                                font-size: 13px;
+                                text-align: left;
+                                height: 22px;
+                                /* color: black; */
+                                letter-spacing: 0px;
+                                line-height: 22px;
+                                color: #000000;
+                                opacity: 1;
+                                span{
+                                    font-weight: bold;
+                                    font-size: 13px;
+                                    padding-left: 10px;
+                                    letter-spacing: 0px;
+                                    color: #000000;
+                                }
+                            }
+                        }
+                        .main_team_section{
+                            display: flex;
+                            justify-content: flex-start;
                         }
                     }
                     .odd_button{
@@ -1358,6 +1449,17 @@ body{
                             }
                             margin: 0;
                             font-size: 13px;
+                        }
+                    }
+                    .remove_odds{
+                        p{
+                            font-size: 13px;
+                            letter-spacing: 0px;
+                            color: #000000;
+                            opacity: 1;
+                            text-align: left;
+                            line-height: 1;
+                            margin: 0;
                         }
                     }
                 }

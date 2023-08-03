@@ -10,7 +10,6 @@ import {
 import settings from "../../misc";
 import { InformationIcon, DownloadIcon } from "../../assets/svgs";
 import deleteIcon from "../../assets/svgs/Delete.svg";
-import { getCurrentOddStatus } from "../../services/vefaAppService";
 import html2canvas from "html2canvas";
 import ScreenShotFooter from "../common/screenshotFooter";
 
@@ -91,6 +90,22 @@ const TipCollectionModal = () => {
     });
   };
 
+  const displayOdds = (item) => {
+    let oddsValue;
+
+    if (typeof item?.odds_decimal === "string") {
+      oddsValue = parseFloat(item?.odds_decimal)?.toFixed(2);
+    } else if (typeof item?.price === "string") {
+      oddsValue = parseFloat(item?.price)?.toFixed(2);
+    } else if (item?.odds_decimal) {
+      oddsValue = item?.odds_decimal?.toFixed(2);
+    } else {
+      oddsValue = item?.price?.toFixed(2);
+    }
+
+    return oddsValue;
+  };
+
   return (
     <div className="">
       <Modal
@@ -162,42 +177,27 @@ const TipCollectionModal = () => {
                       return (
                         <div key={key} className="popular_match_item">
                           <div className="left_content">
-                            <div className="team_section">
-                              <p>{item?.teamA}</p>
-                              {teamALogoSrc}
+                            <div className="main_team_section">
+                              <div className="team_section">
+                                <p>{item?.teamA}</p>
+                                {teamALogoSrc}
+                              </div>
+                              <div className="team_section">
+                                {teamBLogoSrc}
+                                <p>{item?.teamB}</p>
+                              </div>
                             </div>
-                            {/* <div className='time_section'>
-                        <p>{getMonthNameWithDate(item?.kickOffTime)}</p>
-                        <p>{getFormattedTime(item?.kickOffTime)}</p>
-                      </div> */}
-                            <div className="team_section">
-                              {teamBLogoSrc}
-                              <p>{item?.teamB}</p>
+                            <div className="text_content">
+                              <p>
+                                {item?.marketName}
+                                <span>{displayOdds(item)}</span>
+                              </p>
                             </div>
                           </div>
-                          <div
-                            className={`odd_button`}
-                            onClick={() => handleRemoveOdds(item?.eventId)}
-                          >
-                            <p>
-                              {item?.name_en
-                                ? getCurrentOddStatus(item?.name_en, item?.line)
-                                : getCurrentOddStatus(item?.outcomeName)}{" "}
+                          <div className="remove_odds">
+                            <p onClick={() => handleRemoveOdds(item?.eventId)}>
+                              X
                             </p>
-                            {typeof item?.odds_decimal === "string" ||
-                            typeof item?.price === "string" ? (
-                              <p>
-                                {item?.odds_decimal
-                                  ? parseFloat(item?.odds_decimal)?.toFixed(2)
-                                  : parseFloat(item?.price)?.toFixed(2)}
-                              </p>
-                            ) : (
-                              <p>
-                                {item?.odds_decimal
-                                  ? item?.odds_decimal?.toFixed(2)
-                                  : item?.price?.toFixed(2)}
-                              </p>
-                            )}
                           </div>
                         </div>
                       );

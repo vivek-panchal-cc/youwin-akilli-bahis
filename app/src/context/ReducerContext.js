@@ -25,6 +25,8 @@ const ReducerContextProvider = ({children}) => {
 
     const value =  useMemo(() => ({...state, dispatch}),[state])    
 
+    console.log('Tips Collection value :>> ', value);
+
     return (
         <ReducerContext.Provider value={value}>
             {children}

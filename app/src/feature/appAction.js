@@ -1,6 +1,7 @@
 import {
   ADD_LIG_ITEM_TO_COLLECTION,
   ADD_POPULAR_ODD_TO_COLLECTION,
+  ADD_ALL_ODDS_TO_COLLECTION,
   ADD_TEASER_ITEM_TO_COLLECTION,
   REMOVE_ITEM_FROM_TIP_COLLECTION,
   SELECT_SPORT_MENU,
@@ -10,6 +11,10 @@ import {
 
 export const addPopularOddToCollection = (dispatch, data) => {
   dispatch({ type: ADD_POPULAR_ODD_TO_COLLECTION, payload: data });
+};
+
+export const addAllOddsToCollection = (dispatch, data) => {
+  dispatch({ type: ADD_ALL_ODDS_TO_COLLECTION, payload: data });
 };
 
 export const addLigItemToCollection = (dispatch, data) => {

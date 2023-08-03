@@ -38,7 +38,13 @@ const ImageLoader = React.lazy(() =>
  *
  */
 
-const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
+const MultiBet = ({
+  data,
+  handleSelectOdd,
+  handleAddToCollection,
+  tipsCollection,
+  isLoading,
+}) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const [rangeValue, setRangeValue] = useState(5000);
   const [multiBet, setMultiBet] = useState([]);
@@ -79,11 +85,8 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   useEffect(() => {
     // Get the count of items that are not excluded because of empty oddStatus
     const validItemsCount = multiBet?.MultibetItems?.reduce((count, item) => {
-      const oddStatus =
-        item?.outcomeName !== ""
-          ? getCurrentOddStatus(item?.outcomeName, item?.line)
-          : "";
-      return oddStatus !== "" ? count + 1 : count;
+      const oddStatus = getCurrentOddStatus(item?.outcomeName, item?.line);
+      return oddStatus !== undefined ? count + 1 : count;
     }, 0);
 
     // Disable the button if all valid items are locked
@@ -238,6 +241,11 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
     debouncedFetchMultiBetData(value); // Call the debounced version of fetchMultiBetData
   }, []);
 
+  const handleAddToCollectionClick = useCallback(() => {
+    const newItems = multiBet?.MultibetItems;
+    handleAddToCollection(newItems);
+  }, [handleAddToCollection, multiBet]);
+
   return (
     <div className="multi_bet_odds_container">
       <div className="multi_bet_odd_header">
@@ -267,6 +275,24 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
             onChange={handleRangeChange}
           />
         </div>
+        <div className="multi_bet_button">
+          <button
+            onClick={handleAlterSuggestions}
+            disabled={isButtonDisabled || isAlterSuggestion || isSkeleton}
+          >
+            {isAlterSuggestion || isSkeleton ? (
+              <>
+                <div className="loading_icon">
+                  <LoadingIcon />
+                </div>
+              </>
+            ) : (
+              <>
+                <SyncIcon />
+              </>
+            )}
+          </button>
+        </div>
       </div>
       <div ref={contentRef}>
         <div className="multi_bet_matches_content">
@@ -284,12 +310,6 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
               )
             : multiBet?.MultibetItems &&
               multiBet?.MultibetItems?.map((item, index) => {
-                const isSelected = tipsCollection?.some(
-                  (elm) =>
-                    elm.eventId === item?.eventId &&
-                    elm?.selectionId === item?.selectionId
-                );
-
                 const isLocked = lockedItems.some(
                   (elm) => elm.eventId === item?.eventId
                 );
@@ -297,17 +317,6 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                 const matchItem = data?.find(
                   (i) => i.eventId === item?.eventId
                 );
-
-                // Check if item?.outcomeName is not blank before rendering the odd status
-                const oddStatus =
-                  item?.outcomeName !== ""
-                    ? getCurrentOddStatus(item?.outcomeName, item?.line)
-                    : "";
-
-                // If the odd status is null, skip rendering this item
-                if (oddStatus === "") {
-                  return "";
-                }
 
                 return (
                   <div
@@ -398,17 +407,16 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                         })()}
                         <p>{item?.teamB}</p>
                       </div>
-                    </div>
-                    <div
-                      className={`odd_button ${isSelected ? "selected" : ""} `}
-                      onClick={() => handleSelectOdd(item)}
-                    >
-                      <p>{oddStatus}</p>
-                      {typeof item?.price === "string" ? (
-                        <p>{parseFloat(item?.price).toFixed(2)}</p>
-                      ) : (
-                        <p>{item?.price?.toFixed(2)}</p>
-                      )}
+                      <div className="text_content">
+                        <p>
+                          {item?.marketName}
+                          <span>
+                            {typeof item?.price === "string"
+                              ? parseFloat(item?.price).toFixed(2)
+                              : item?.price?.toFixed(2)}
+                          </span>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 );
@@ -456,24 +464,15 @@ const MultiBet = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
         <ScreenShotFooter />
       </div>
 
-      <div className="multi_bet_button">
+      <div className="add_to_collection_button">
         <button
-          onClick={handleAlterSuggestions}
-          disabled={isButtonDisabled || isAlterSuggestion || isSkeleton}
+          onClick={handleAddToCollectionClick}
+          // disabled={isButtonDisabled || isAlterSuggestion || isSkeleton}
         >
-          {isAlterSuggestion || isSkeleton ? (
-            <>
-              <div className="loading_icon">
-                <LoadingIcon />
-              </div>
-              <span>{settings.staticString.loading}</span>
-            </>
-          ) : (
-            <>
-              <SyncIcon />
-              &nbsp;{settings.staticString.alterSuggestions}
-            </>
-          )}
+          <p className="plus_sign">+</p>
+          <p className="add_to_collection_label">
+            {settings.staticString.addToCollection}
+          </p>
         </button>
       </div>
     </div>

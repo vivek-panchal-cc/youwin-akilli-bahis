@@ -1,4 +1,4 @@
-import { REMOVE_ALL_ITEMS, ADD_LIG_ITEM_TO_COLLECTION, ADD_POPULAR_ODD_TO_COLLECTION, ADD_TEASER_ITEM_TO_COLLECTION, REMOVE_ITEM_FROM_TIP_COLLECTION, SELECT_SPORT_MENU, SET_TIP_COLLECTION_MODAL_STATUS } from "./types";
+import { REMOVE_ALL_ITEMS, ADD_LIG_ITEM_TO_COLLECTION, ADD_POPULAR_ODD_TO_COLLECTION, ADD_ALL_ODDS_TO_COLLECTION, ADD_TEASER_ITEM_TO_COLLECTION, REMOVE_ITEM_FROM_TIP_COLLECTION, SELECT_SPORT_MENU, SET_TIP_COLLECTION_MODAL_STATUS } from "./types";
 
 const initialState = {
   tipsCollection: [],
@@ -28,6 +28,22 @@ const appReducer = (state = initialState, action) => {
         ...state,
         tipsCollection: tipsCollectionArray
       }
+      case ADD_ALL_ODDS_TO_COLLECTION:
+  let updatedTipsCollection = [...state.tipsCollection];
+
+  action.payload.forEach(item => {
+    const isExistsWithEventId = updatedTipsCollection.some(elm => elm.eventId === item.eventId);
+    const isExistsWithSelectionId = updatedTipsCollection.some(elm => elm.eventId === item.eventId && elm.selectionId === item.selectionId);
+
+    if (!isExistsWithEventId || !isExistsWithSelectionId) {
+      updatedTipsCollection.push(item);
+    }
+  });
+
+  return {
+    ...state,
+    tipsCollection: updatedTipsCollection
+  }
     case SELECT_SPORT_MENU:
       return {
         ...state,

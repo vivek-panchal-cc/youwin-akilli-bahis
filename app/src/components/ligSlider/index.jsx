@@ -22,7 +22,7 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
       <Swiper
         spaceBetween={10}
         className={`${data?.length === 1 ? "lig_slider_one" : ""}`}
-        style={data === null ? { marginBottom: "0" } : {}}
+        style={data === null ? { marginBottom: "0", display: "none" } : {}}
         slidesPerView={1}
         breakpoints={{
           300: {
