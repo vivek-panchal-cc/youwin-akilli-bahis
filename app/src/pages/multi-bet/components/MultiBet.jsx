@@ -158,6 +158,8 @@ const MultiBet = ({
           const pngIcon = document.createElement("img");
           pngIcon.src = LockIconPng; // path to the rasterized lock icon
           pngIcon.alt = "Lock";
+          pngIcon.style.marginRight = "40px"; // Add a margin to the right of the icon
+          pngIcon.style.marginLeft = "30px"; // Add a margin to the left of the icon
           pngIcon.style.height = "13px"; // set the height of the PNG icon
           icon.parentNode.replaceChild(pngIcon, icon);
         });
@@ -168,6 +170,8 @@ const MultiBet = ({
           const pngIcon = document.createElement("img");
           pngIcon.src = UnlockIconPng; // path to the rasterized unlock icon
           pngIcon.alt = "Unlock";
+          pngIcon.style.marginRight = "40px"; // Add a margin to the right of the icon
+          pngIcon.style.marginLeft = "30px"; // Add a margin to the left of the icon
           pngIcon.style.height = "13px"; // set the height of the PNG icon
           icon.parentNode.replaceChild(pngIcon, icon);
         });
@@ -303,8 +307,24 @@ const MultiBet = ({
                   <div
                     key={`skeleton-${index}`}
                     className="multi_bet_match_item skeleton"
+                    // style={{padding: "8px 20px 8px 90px"}}
                   >
-                    <Skeleton variant="text" width={"100%"} height={20} />
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100%",
+                      }}
+                    >
+                      <div style={{ flex: 1, width: "100%" }}>
+                        <Skeleton variant="text" width={"100%"} height={20} />
+                      </div>
+                      <div
+                        style={{ flex: 1, width: "100%", lineHeight: "22px" }}
+                      >
+                        <Skeleton variant="text" width={"100%"} height={20} />
+                      </div>
+                    </div>
                   </div>
                 )
               )

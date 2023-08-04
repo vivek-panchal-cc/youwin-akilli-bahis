@@ -1,5 +1,5 @@
 import { Modal } from "react-bootstrap";
-import React, { useContext, useRef } from "react";
+import React, { Suspense, useContext, useRef } from "react";
 import { ReducerContext } from "../../context/ReducerContext";
 import { AppContext } from "../../context/AppContext";
 import {
@@ -12,6 +12,10 @@ import { InformationIcon, DownloadIcon } from "../../assets/svgs";
 import deleteIcon from "../../assets/svgs/Delete.svg";
 import html2canvas from "html2canvas";
 import ScreenShotFooter from "../common/screenshotFooter";
+import { Skeleton } from "@mui/material";
+const ImageLoader = React.lazy(() =>
+  import("../../components/common/imageLoader")
+);
 
 /**
  * TipCollectionModal - component use for tip collection modal.
@@ -139,39 +143,61 @@ const TipCollectionModal = () => {
                       const key = item?.eventId ?? `item-${index}`;
 
                       // Get the teamA_logo
-                      let teamALogoSrc = <InformationIcon />;
-                      if (item?.teamA_logo) {
+                      let teamALogoSrc;
+                      if (item?.teamA_logo || matchItem?.teamA_logo) {
                         teamALogoSrc = (
-                          <img
-                            src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
-                            alt="logo"
-                          />
+                          <Suspense
+                            fallback={
+                              <Skeleton
+                                variant="circular"
+                                width={60}
+                                height={60}
+                                style={{ height: "20px", width: "20px" }}
+                              />
+                            }
+                          >
+                            <ImageLoader
+                              src={`${IMAGE_BASE_PATH}${
+                                item?.teamA_logo ?? matchItem?.teamA_logo
+                              }`}
+                              alt="logo"
+                              shape="circular"
+                              className="image_loader_teamA"
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                          </Suspense>
                         );
-                      } else if (matchItem?.teamA_logo) {
-                        teamALogoSrc = (
-                          <img
-                            src={`${IMAGE_BASE_PATH}${matchItem?.teamA_logo}`}
-                            alt="logo"
-                          />
-                        );
+                      } else {
+                        teamALogoSrc = <InformationIcon />;
                       }
 
                       // Get the teamB_logo
-                      let teamBLogoSrc = <InformationIcon />;
-                      if (item?.teamB_logo) {
+                      let teamBLogoSrc;
+                      if (item?.teamB_logo || matchItem?.teamB_logo) {
                         teamBLogoSrc = (
-                          <img
-                            src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
-                            alt="logo"
-                          />
+                          <Suspense
+                            fallback={
+                              <Skeleton
+                                variant="circular"
+                                width={60}
+                                height={60}
+                                style={{ height: "20px", width: "20px" }}
+                              />
+                            }
+                          >
+                            <ImageLoader
+                              src={`${IMAGE_BASE_PATH}${
+                                item?.teamB_logo ?? matchItem?.teamB_logo
+                              }`}
+                              alt="logo"
+                              shape="circular"
+                              className="image_loader_teamB"
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                          </Suspense>
                         );
-                      } else if (matchItem?.teamB_logo) {
-                        teamBLogoSrc = (
-                          <img
-                            src={`${IMAGE_BASE_PATH}${matchItem?.teamB_logo}`}
-                            alt="logo"
-                          />
-                        );
+                      } else {
+                        teamBLogoSrc = <InformationIcon />;
                       }
 
                       return (
@@ -189,7 +215,9 @@ const TipCollectionModal = () => {
                             </div>
                             <div className="text_content">
                               <p>
-                                {item?.marketName}
+                                {item?.marketName
+                                  ? item?.marketName
+                                  : item?.name}
                                 <span>{displayOdds(item)}</span>
                               </p>
                             </div>

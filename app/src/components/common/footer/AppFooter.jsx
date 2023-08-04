@@ -146,7 +146,16 @@ const AppFooter = () => {
       </div>
       <div className="footer_item tip_collection">
         {tipsCollection?.length > 0 && (
-          <div className="tip_collection_icon" onClick={handleShow}>
+          <div
+            className="tip_collection_icon"
+            onClick={() => {
+              if (isModalShow) {
+                setTipCollectionModalStatus(dispatch, false);
+              } else {
+                handleShow();
+              }
+            }}
+          >
             <img
               src={isModalShow ? tipCollectionTop : collectionIcon}
               alt="collection"
