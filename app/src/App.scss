@@ -888,6 +888,24 @@ body{
                 // margin-left: 15px;
                 // max-width: 20px;
             }
+            .lock_svg_icon{
+                width: fit-content;
+                min-width: 10px;
+                height: 14px;
+                display: block;
+                margin: 0px 40px 0px 30px;
+                max-width: 10px;
+                cursor: pointer;
+            }
+            .unlock_svg_icon{
+                width: fit-content;
+                min-width: 15px;
+                height: 14px;
+                display: block;
+                margin: 0px 40px 0px 30px;
+                max-width: 10px;
+                cursor: pointer;
+            }
             .left_content{
                 display: flex;
                 flex-wrap: wrap;

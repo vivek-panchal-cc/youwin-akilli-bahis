@@ -153,7 +153,7 @@ const MultiBet = ({
 
     html2canvas(content, {
       onclone: function (document) {
-        const lockSvgIcons = document.querySelectorAll(".lock-svg-icon");
+        const lockSvgIcons = document.querySelectorAll(".lock_svg_icon");
         lockSvgIcons?.forEach((icon) => {
           const pngIcon = document.createElement("img");
           pngIcon.src = LockIconPng; // path to the rasterized lock icon
@@ -165,7 +165,7 @@ const MultiBet = ({
         });
 
         // Replace the SVG unlock icons with PNG icons
-        const unlockSvgIcons = document.querySelectorAll(".unlock-svg-icon");
+        const unlockSvgIcons = document.querySelectorAll(".unlock_svg_icon");
         unlockSvgIcons?.forEach((icon) => {
           const pngIcon = document.createElement("img");
           pngIcon.src = UnlockIconPng; // path to the rasterized unlock icon
@@ -344,16 +344,20 @@ const MultiBet = ({
                     className="multi_bet_match_item"
                   >
                     {isLocked ? (
-                      <LockIcon
-                        className="lock-svg-icon"
+                      <img
+                        className="lock_svg_icon"
+                        src={LockIconPng}
+                        alt="Lock"
                         onClick={() => handleLockToggle(item)}
                         style={{
                           pointerEvents: isAlterSuggestion ? "none" : "auto",
                         }}
                       />
                     ) : (
-                      <UnLockIcon
-                        className="unlock-svg-icon"
+                      <img
+                        className="unlock_svg_icon"
+                        src={UnlockIconPng}
+                        alt="Unlock"
                         onClick={() => handleLockToggle(item)}
                         style={{
                           pointerEvents: isAlterSuggestion ? "none" : "auto",
