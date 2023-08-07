@@ -7,8 +7,6 @@ import React, {
   useState,
 } from "react";
 import {
-  LockIcon,
-  UnLockIcon,
   SyncIcon,
   InformationIcon,
   LoadingIcon,
