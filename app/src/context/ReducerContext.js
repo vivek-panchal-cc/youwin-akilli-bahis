@@ -23,9 +23,7 @@ export const ReducerContext = createContext({...initState});
 const ReducerContextProvider = ({children}) => {
     const [state, dispatch] = useReducer(appReducer, reducerInitState);
 
-    const value =  useMemo(() => ({...state, dispatch}),[state])    
-
-    console.log('Tips Collection value :>> ', value);
+    const value =  useMemo(() => ({...state, dispatch}),[state])        
 
     return (
         <ReducerContext.Provider value={value}>

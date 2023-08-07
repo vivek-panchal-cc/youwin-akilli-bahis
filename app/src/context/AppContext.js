@@ -23,9 +23,7 @@ export const AppContext = createContext({...appInitState});
 const AppContextProvider = ({children}) => {
     const {appState} = useAppState();
     
-    const value =  useMemo(() => ({...appState}),[appState])   
-
-    console.log('AKHILLI BAHIS Database:>> ', value);
+    const value =  useMemo(() => ({...appState}),[appState])       
 
     return (
         <AppContext.Provider value={value}>
