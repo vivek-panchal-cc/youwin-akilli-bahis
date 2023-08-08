@@ -18,7 +18,7 @@ const appReducer = (state = initialState, action) => {
       const isOddExistsWithEventId = state.tipsCollection.some(elm => elm.eventId === action.payload.eventId);
       const isOddExistsWithSelectionId = state.tipsCollection.some(elm => elm.eventId === action.payload.eventId && elm.selectionId === action.payload.selectionId);
 
-      let tipsCollectionArray = state.tipsCollection.filter(item => item.eventId !== action.payload.eventId);
+      let tipsCollectionArray = state.tipsCollection?.filter(item => item.eventId !== action.payload.eventId);
 
       if (!isOddExistsWithEventId || !isOddExistsWithSelectionId) {
         tipsCollectionArray.push(action.payload);
@@ -55,7 +55,7 @@ const appReducer = (state = initialState, action) => {
       const isExistsWithEventId = state.tipsCollection.some(elm => elm.eventId === eventId);
       const isExistsWithSelectionId = state.tipsCollection.some(elm => elm.eventId === eventId && elm.selectionId === selectionId);
 
-      let tipsCollectionArr = state.tipsCollection.filter(item => item.eventId !== eventId);
+      let tipsCollectionArr = state.tipsCollection?.filter(item => item.eventId !== eventId);
 
       if (!isExistsWithEventId || !isExistsWithSelectionId) {
         tipsCollectionArr.push(action.payload);
@@ -77,7 +77,7 @@ const appReducer = (state = initialState, action) => {
         isModalShow: action.payload
       }
     case REMOVE_ITEM_FROM_TIP_COLLECTION: 
-      const filterArray = state.tipsCollection.filter(elm => elm.eventId !== action.payload)
+      const filterArray = state.tipsCollection?.filter(elm => elm.eventId !== action.payload)
       return {
         ...state,
         tipsCollection: filterArray

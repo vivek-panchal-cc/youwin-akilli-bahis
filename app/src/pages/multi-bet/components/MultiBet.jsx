@@ -67,7 +67,7 @@ const MultiBet = ({
         multiBetData.MultibetItems = []; // Set it to an empty array if not iterable
       } else {
         const lockItem = lockedItems.map((i) => i.eventId);
-        let multiBetFilterItem = multiBetData.MultibetItems.filter(
+        let multiBetFilterItem = multiBetData.MultibetItems?.filter(
           (item) => !lockItem.includes(item.eventId)
         );
         multiBetData.MultibetItems = multiBetFilterItem;
@@ -97,7 +97,7 @@ const MultiBet = ({
     } else {
       setSkeleton(true);
       const eventIds = lockedItems?.map((item) => item.eventId).join(",");
-      const unlockedItems = multiBet.MultibetItems.filter(
+      const unlockedItems = multiBet.MultibetItems?.filter(
         (item) => !eventIds.includes(item.eventId)
       );
       // Filter out the locked items from the received suggestion data
@@ -200,7 +200,7 @@ const MultiBet = ({
 
       if (isItemLocked) {
         // Unlock the item by removing it from the lockedItems array
-        const updatedLockedItems = lockedItems.filter(
+        const updatedLockedItems = lockedItems?.filter(
           (elm) => elm.eventId !== item.eventId
         );
         setLockedItems(updatedLockedItems);

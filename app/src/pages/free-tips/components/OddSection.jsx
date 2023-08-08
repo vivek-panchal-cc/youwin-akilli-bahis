@@ -78,7 +78,7 @@ const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
       )
     );
   } else if (filteredData && filteredData.length > 0) {
-    const nonEmptyOddStatusItems = filteredData.filter((item) => {
+    const nonEmptyOddStatusItems = filteredData?.filter((item) => {
       const oddStatus =
         item?.name_en !== ""
           ? getCurrentOddStatus(item?.name_en, item?.line)
