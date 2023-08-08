@@ -31,7 +31,7 @@ const appReducer = (state = initialState, action) => {
       case ADD_ALL_ODDS_TO_COLLECTION:
   let updatedTipsCollection = [...state.tipsCollection];
 
-  action.payload.forEach(item => {
+  action.payload?.forEach(item => {
     const isExistsWithEventId = updatedTipsCollection.some(elm => elm.eventId === item.eventId);
     const isExistsWithSelectionId = updatedTipsCollection.some(elm => elm.eventId === item.eventId && elm.selectionId === item.selectionId);
 
