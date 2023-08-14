@@ -8,11 +8,12 @@ import {
   removeAllItemsFromTipCollection,
 } from "../../feature/appAction";
 import settings from "../../misc";
-import { InformationIcon, DownloadIcon } from "../../assets/svgs";
+import { DownloadIcon } from "../../assets/svgs";
 import deleteIcon from "../../assets/svgs/Delete.svg";
 import html2canvas from "html2canvas";
 import ScreenShotFooter from "../common/screenshotFooter";
 import { Skeleton } from "@mui/material";
+import images from "../../constants/allAssets";
 const ImageLoader = React.lazy(() =>
   import("../../components/common/imageLoader")
 );
@@ -168,7 +169,9 @@ const TipCollectionModal = () => {
                           </Suspense>
                         );
                       } else {
-                        teamALogoSrc = <InformationIcon />;
+                        teamALogoSrc = (
+                          <img src={`${images?.defaultHome}`} alt="Home" />
+                        );
                       }
 
                       // Get the teamB_logo
@@ -197,7 +200,9 @@ const TipCollectionModal = () => {
                           </Suspense>
                         );
                       } else {
-                        teamBLogoSrc = <InformationIcon />;
+                        teamBLogoSrc = (
+                          <img src={`${images?.defaultAway}`} alt="Away" />
+                        );
                       }
 
                       return (

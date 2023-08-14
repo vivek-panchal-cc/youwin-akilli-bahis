@@ -6,12 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  SyncIcon,
-  InformationIcon,
-  LoadingIcon,
-  DownloadIcon,
-} from "../../../assets/svgs";
+import { SyncIcon, LoadingIcon, DownloadIcon } from "../../../assets/svgs";
 import settings from "../../../misc";
 import LockIconPng from "../../../assets/images/Lock.png";
 import UnlockIconPng from "../../../assets/images/Unlock.png";
@@ -24,6 +19,7 @@ import {
 import { Skeleton } from "@mui/material";
 import { debounce } from "lodash";
 import html2canvas from "html2canvas";
+import images from "../../../constants/allAssets";
 const ImageLoader = React.lazy(() =>
   import("../../../components/common/imageLoader")
 );
@@ -236,7 +232,9 @@ const MultiBet = ({
     const value = event.target.value;
     const winningMoreValue = document.querySelector(".winning_more_value");
     if (winningMoreValue) {
-      winningMoreValue.textContent = `${parseFloat(value)?.toFixed(3)}TL`;
+      winningMoreValue.textContent = `${parseFloat(value)?.toLocaleString(
+        "en-US"
+      )}TL`;
     }
     setRangeValue(value);
     setLockedItems([]); // Clear the lockedItems state
@@ -260,7 +258,8 @@ const MultiBet = ({
         <div className="winning_more">
           <p>{settings.staticString.winningMoreThan}</p>
           <p className="winning_more_value">
-            {parseFloat(rangeValue)?.toFixed(3)}TL
+            {/* {parseFloat(rangeValue)?.toFixed(3)}TL */}
+            {parseFloat(rangeValue)?.toLocaleString("en-US")}TL
           </p>
         </div>
         <div className="select_range">
@@ -393,7 +392,9 @@ const MultiBet = ({
                             );
                           }
 
-                          return <InformationIcon />;
+                          return (
+                            <img src={`${images?.defaultHome}`} alt="Home" />
+                          );
                         })()}
                       </div>
                       <div className="team_section">
@@ -424,8 +425,9 @@ const MultiBet = ({
                               </Suspense>
                             );
                           }
-
-                          return <InformationIcon />;
+                          return (
+                            <img src={`${images?.defaultAway}`} alt="Away" />
+                          );
                         })()}
                         <p>{item?.teamB}</p>
                       </div>
@@ -471,7 +473,8 @@ const MultiBet = ({
               <p className="total_wins_value">
                 {isNaN(multiBet?.TotalOdds * stack)
                   ? 0
-                  : (multiBet?.TotalOdds * stack)?.toFixed(2)}
+                  : (multiBet?.TotalOdds * stack)?.toLocaleString("en-US")}
+                {/* : (multiBet?.TotalOdds * stack)?.toFixed(2)} */}
                 TL
               </p>
             )}

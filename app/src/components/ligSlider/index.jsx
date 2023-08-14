@@ -3,6 +3,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Skeleton from "react-loading-skeleton";
 import { getCurrentOddStatus } from "../../services/vefaAppService";
 import settings from "../../misc";
+import images from "../../constants/allAssets";
+
 const ImageLoader = React.lazy(() => import("../common/imageLoader"));
 
 /**
@@ -67,7 +69,7 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                     className="lig_slider_item"
                     style={{
                       backgroundColor: "#37003E",
-                      backgroundImage: `url(${IMAGE_BASE_PATH}/uploading_23_07_06/soccer_ball_variant_1688634810196.png)`,
+                      backgroundImage: `url(${images.ligSliderBackgroundImage})`,
                     }}
                   >
                     <div className="live">
@@ -158,9 +160,9 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                         <p>{elm?.teamB}</p>
                       </div>
                     </div>
-                    <div className="win_title">
+                    {/* <div className="win_title">
                       <p>{settings.staticString.matchWinner}</p>
-                    </div>
+                    </div> */}
 
                     <div className={`odd_items ${elm?.odds ? "multiple" : ""}`}>
                       {/* NOTE - 'multiple' class add when odd_item is more than one */}

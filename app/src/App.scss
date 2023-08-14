@@ -16,7 +16,20 @@ body{
     padding: 0px 16px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
+    .logo_container{
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .header_lang_change{
+        img{
+            height: 19px;
+            width: auto;
+            margin: auto;
+        }
+    }
     .logo_img {
         background-color: $red;
         height: 25px;
@@ -56,16 +69,28 @@ body{
             width: 30px;
             position: relative;
             p{
-                transform: rotate(270deg);
-                line-height: unset;
-                height: 30px;
+                // transform: rotate(270deg);
+                line-height: 1;
+                // height: 30px;
                 position: absolute;
-                left: -46px;
-                margin: 0;
-                padding: 0;
-                bottom: 0;
-                top: 39px;
-                width: 122px;
+                left: -43px;
+                // margin: 0;
+                // padding: 0;
+                // bottom: 0;
+                // top: 44px;
+                width: 116px;
+                // display: flex;
+                font-size: 13px;
+                // align-items: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                // updatedStyles
+                top: 50%;
+                transform: translateY(-50%) rotate(-90deg);
+                // text-align: center;
             }
             img{
                 transform: rotate(270deg);
@@ -231,7 +256,7 @@ body{
     // .lig_slider_item
     .lig_slider_item{
         position: relative;
-        min-height: 170px;
+        min-height: 166px;
         height: auto;
         // min-width: 302px;
         // width: 302px;
@@ -342,7 +367,7 @@ body{
             &.multiple{
                 justify-content: center;
                 gap: 20px;
-                margin: 0 10px 9px;
+                margin: 10px 9px 0px;
                 .odd_item {
                     width: 65px;
                     padding: 1px 5px;
