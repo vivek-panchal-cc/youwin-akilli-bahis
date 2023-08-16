@@ -7,9 +7,8 @@ import {
   setTipCollectionModalStatus,
   removeAllItemsFromTipCollection,
 } from "../../feature/appAction";
-import settings from "../../misc";
-import { DownloadIcon } from "../../assets/svgs";
-import deleteIcon from "../../assets/svgs/Delete.svg";
+import useCurrentLanguage from "../../misc";
+import { DeleteIcon, DownloadIcon } from "../../assets/svgs";
 import html2canvas from "html2canvas";
 import ScreenShotFooter from "../common/screenshotFooter";
 import { Skeleton } from "@mui/material";
@@ -26,6 +25,8 @@ const TipCollectionModal = () => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const contentRef = useRef(null);
   const footerRef = useRef();
+  const settings = useCurrentLanguage()
+
   const { dispatch, isModalShow, tipsCollection } = useContext(ReducerContext);
   const { fireBaseAllEventsDataBase } = useContext(AppContext);
 
@@ -247,7 +248,8 @@ const TipCollectionModal = () => {
                       className="btn delete_button"
                       onClick={() => handleRemoveAllOdds()}
                     >
-                      <img src={deleteIcon} alt="Delete" />
+                      <DeleteIcon />
+                      {/* <img src={deleteIcon} alt="Delete" /> */}
                     </button>
                   </div>
                   <div>

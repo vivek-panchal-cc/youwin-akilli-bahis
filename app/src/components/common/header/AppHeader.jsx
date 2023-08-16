@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { Suspense, useContext } from "react";
 import { Link } from "react-router-dom";
 import logoImg from "../../../assets/images/logo.svg";
 import images from "../../../constants/allAssets";
+import { AppContext } from "../../../context/AppContext";
+import { Skeleton } from "@mui/material";
+const ImageLoader = React.lazy(() =>
+  import("../../../components/common/imageLoader")
+);
 
 /**
  *
@@ -10,11 +15,12 @@ import images from "../../../constants/allAssets";
  */
 
 const AppHeader = () => {
-  const [showHomeImage, setShowHomeImage] = useState(true);
-
-  const toggleImage = () => {
-    setShowHomeImage((prev) => !prev);
+  const { language, setLanguage } = useContext(AppContext);
+  const toggleLanguage = () => {
+    setLanguage((prevLang) => (prevLang === "tr" ? "en" : "tr"));
   };
+
+  const nextFlag = language === "tr" ? images.enFlag : images.trFlag;
 
   return (
     <div className="header">
@@ -29,11 +35,30 @@ const AppHeader = () => {
         </Link>
       </div>
       <div className="header_lang_change">
-        <img
-          src={showHomeImage ? images.defaultHome : images.defaultAway}
-          alt={showHomeImage ? "tr" : "en"}
-          onClick={toggleImage}
-        />
+        <Suspense
+          fallback={
+            <Skeleton
+              width={60}
+              height={60}
+              style={{
+                height: "17px",
+                width: "19px",
+                backgroundColor: "darkgray",
+              }}
+            />
+          }
+        >
+          <ImageLoader
+            src={nextFlag}
+            alt={language === "tr" ? "en" : "tr"}
+            style={{
+              height: "17px",
+              width: "19px",
+              backgroundColor: "darkgray",
+            }}
+            onClick={toggleLanguage}
+          />
+        </Suspense>
       </div>
     </div>
   );

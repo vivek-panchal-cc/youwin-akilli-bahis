@@ -3,7 +3,7 @@ const staticString = {
     freeTips: "Free Tips",
     multiBet: "Multi Bet",
     news: "News",
-    poweredBy: "powered by",
+    katkılarıyla: "katkılarıyla",
     popularOdds: "Popular Odds",
     buildYourOwn: "Build your own",
     myTipCollection: 'My Tip Collection',

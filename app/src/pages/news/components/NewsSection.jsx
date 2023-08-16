@@ -2,13 +2,14 @@ import React, { Suspense, useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 import { Skeleton } from "@mui/material";
-import settings from "../../../misc";
+import useCurrentLanguage from "../../../misc";
 const ImageLoader = React.lazy(() =>
   import("../../../components/common/imageLoader")
 );
 
 const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const settings = useCurrentLanguage();
   const [selectedNews, setSelectedNews] = useState(null);
   const [feedItems, setFeedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

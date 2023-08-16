@@ -7,7 +7,7 @@ import newsIcon from "../../../assets/images/news.svg";
 import collectionIcon from "../../../assets/images/tip_collection.svg";
 import tipCollectionTop from "../../../assets/images/tip_collection_top.svg";
 
-import settings from "../../../misc";
+import useCurrentLanguage from "../../../misc";
 import { ReducerContext } from "../../../context/ReducerContext";
 import { setTipCollectionModalStatus } from "../../../feature/appAction";
 import { AppContext } from "../../../context/AppContext";
@@ -18,6 +18,7 @@ import { AppContext } from "../../../context/AppContext";
  */
 const AppFooter = () => {
   const { dispatch, tipsCollection, isModalShow } = useContext(ReducerContext);
+  const settings = useCurrentLanguage()
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -164,10 +165,10 @@ const AppFooter = () => {
           </div>
         )}
         <div>
-          <p>{settings.staticString.poweredBy}</p>
           <p className="logo_footer">
-            <span>you</span>win
+            <span>you</span>win 'in
           </p>
+          <p>{settings.staticString.katkılarıyla}</p>
         </div>
       </div>
     </div>

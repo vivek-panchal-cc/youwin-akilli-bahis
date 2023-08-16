@@ -1,7 +1,8 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import images from "../../../constants/allAssets";
 import Skeleton from "react-loading-skeleton";
+import { AppContext } from "../../../context/AppContext";
 const ImageLoader = React.lazy(() =>
   import("../../../components/common/imageLoader")
 );
@@ -16,6 +17,8 @@ const ImageLoader = React.lazy(() =>
 
 const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
+  const { fireBaseHomePageTeaserSliderDataBase } = useContext(AppContext);
+
   return (
     <div className="first_slider">
       <Swiper
@@ -39,104 +42,122 @@ const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
             ))
           : // Render the actual data when isLoading is false
             data?.length > 0 &&
-            data?.map((item) => (
-              <SwiperSlide key={item?.eventId}>
-                <div className="first_slider_item">
-                  <div
-                    className="slider_strip"
-                    style={{ background: "#5D5858" }}
-                  >
-                  {/* <img
-                        src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
-                        alt="logo"
-                    /> */}
-                    <p>{item?.eventName}</p>
-                  </div>
-                  <div
-                    className="slider_content"
-                    style={{
-                      background: `url(${images.firstSliderBackgroundImg})`,
-                    }}
-                  >
-                    <div className="top_section">
-                      <img src={images.redLogoImage} alt="logo" />
-                      <h5>{item?.kickOffTime}</h5>
-                      {/* <p>{item?.eventName}</p> */}
-                    </div>
-                    <div className="team_section">
-                      <div>
-                        <h5>{item?.teamA}</h5>
-                        <Suspense
-                          fallback={
-                            <Skeleton
-                              variant="circular"
-                              width={60}
-                              height={60}
-                              style={{
-                                height: "20px",
-                                width: "20px",
-                                backgroundColor: "darkgray",
-                              }}
-                            />
-                          }
-                        >
-                          <ImageLoader
-                            src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
-                            alt="logo"
-                            shape="circular"
-                            className="image_loader_teamA"
-                            style={{
-                              height: "20px",
-                              width: "20px",
-                              backgroundColor: "darkgray",
-                            }}
+            data?.map((item) => {
+              const matchedLeagueData =
+                fireBaseHomePageTeaserSliderDataBase[item?.groupId];
+              const logoImageUrl =
+                fireBaseHomePageTeaserSliderDataBase[item?.groupId]?.image;
+              const logoImage = logoImageUrl?.slice(
+                logoImageUrl?.lastIndexOf("external") + 8,
+                logoImageUrl?.length
+              );
+              return (
+                <SwiperSlide key={item?.eventId}>
+                  <div className="first_slider_item">
+                    {matchedLeagueData && (
+                      <div
+                        className="slider_strip"
+                        style={{
+                          background: matchedLeagueData
+                            ? matchedLeagueData.color
+                            : "#5D5858",
+                        }}
+                      >
+                        {matchedLeagueData && (
+                          <img
+                            src={`${IMAGE_BASE_PATH}${logoImage}`}
+                            alt="league logo"
+                            className="league_logo"
                           />
-                        </Suspense>
+                        )}
                       </div>
-                      <div>
-                        <Suspense
-                          fallback={
-                            <Skeleton
-                              variant="circular"
-                              width={60}
-                              height={60}
-                              style={{
-                                height: "20px",
-                                width: "20px",
-                                backgroundColor: "darkgray",
-                              }}
-                            />
-                          }
-                        >
-                          <ImageLoader
-                            src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
-                            alt="team logo"
-                            shape="circular"
-                            className="image_loader_teamB"
-                            style={{
-                              height: "20px",
-                              width: "20px",
-                              backgroundColor: "darkgray",
-                            }}
-                          />
-                        </Suspense>
-                        <h5>{item?.teamB}</h5>
-                      </div>
-                    </div>
-                    <div className="dec">
-                      <p>{item?.stats}</p>
-                    </div>
+                    )}
                     <div
-                      className="odds_section"
-                      onClick={() => handleSelectTeaser(item)}
+                      className="slider_content"
+                      style={{
+                        background: `url(${images.firstSliderBackgroundImg})`,
+                      }}
                     >
-                      <p>{item?.title}</p>
-                      <h5>{item?.odds_decimal}</h5>
+                      <div className="top_section">
+                        <img src={images.redLogoImage} alt="logo" />
+                        <h5>{item?.kickOffTime}</h5>
+                        {!matchedLeagueData && <p>{item?.eventName}</p>}
+                      </div>
+                      <div className="team_section">
+                        <div>
+                          <h5>{item?.teamA}</h5>
+                          <Suspense
+                            fallback={
+                              <Skeleton
+                                variant="circular"
+                                width={60}
+                                height={60}
+                                style={{
+                                  height: "20px",
+                                  width: "20px",
+                                  backgroundColor: "darkgray",
+                                }}
+                              />
+                            }
+                          >
+                            <ImageLoader
+                              src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
+                              alt="logo"
+                              shape="circular"
+                              className="image_loader_teamA"
+                              style={{
+                                height: "20px",
+                                width: "20px",
+                                backgroundColor: "darkgray",
+                              }}
+                            />
+                          </Suspense>
+                        </div>
+                        <div>
+                          <Suspense
+                            fallback={
+                              <Skeleton
+                                variant="circular"
+                                width={60}
+                                height={60}
+                                style={{
+                                  height: "20px",
+                                  width: "20px",
+                                  backgroundColor: "darkgray",
+                                }}
+                              />
+                            }
+                          >
+                            <ImageLoader
+                              src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
+                              alt="team logo"
+                              shape="circular"
+                              className="image_loader_teamB"
+                              style={{
+                                height: "20px",
+                                width: "20px",
+                                backgroundColor: "darkgray",
+                              }}
+                            />
+                          </Suspense>
+                          <h5>{item?.teamB}</h5>
+                        </div>
+                      </div>
+                      <div className="dec">
+                        <p>{item?.stats}</p>
+                      </div>
+                      <div
+                        className="odds_section"
+                        onClick={() => handleSelectTeaser(item)}
+                      >
+                        <p>{item?.title}</p>
+                        <h5>{item?.odds_decimal}</h5>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </SwiperSlide>
-            ))}
+                </SwiperSlide>
+              );
+            })}
       </Swiper>
     </div>
   );

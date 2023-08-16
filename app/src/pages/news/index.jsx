@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import NewsSection from "./components/NewsSection";
-import settings from "../../misc";
+import useCurrentLanguage from "../../misc";
 import { addPopularOddToCollection } from "../../feature/appAction";
 import { ReducerContext } from "../../context/ReducerContext";
 
 const News = () => {
   const { tipsCollection, dispatch } = useContext(ReducerContext);
+  const settings = useCurrentLanguage();
 
   const handleSelectOdd = (data) => {
     addPopularOddToCollection(dispatch, data);

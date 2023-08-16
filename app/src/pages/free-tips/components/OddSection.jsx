@@ -4,7 +4,7 @@ import { getCurrentOddStatus } from "../../../services/vefaAppService";
 import OddsCalendar from "./OddsCalendar";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@mui/material";
-import settings from "../../../misc";
+import useCurrentLanguage from "../../../misc";
 const ImageLoader = React.lazy(() =>
   import("../../../components/common/imageLoader")
 );
@@ -19,6 +19,7 @@ const ImageLoader = React.lazy(() =>
 
 const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
+  const settings = useCurrentLanguage();
   const currentDate = new Date();
   const currentDay = currentDate.getDate();
   const [selectedDate, setSelectedDate] = useState(currentDay);

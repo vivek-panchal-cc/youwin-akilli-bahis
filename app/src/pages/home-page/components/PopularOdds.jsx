@@ -4,7 +4,7 @@ import {
   getFormattedTime,
   getMonthNameWithDate,
 } from "../../../utils/dateFormat";
-import settings from "../../../misc";
+import useCurrentLanguage from "../../../misc";
 import Skeleton from "react-loading-skeleton";
 import { getCurrentOddStatus } from "../../../services/vefaAppService";
 import html2canvas from "html2canvas";
@@ -25,6 +25,7 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const contentRef = useRef();
   const footerRef = useRef();
+  const settings = useCurrentLanguage();
 
   const handleDownloadClick = () => {
     const content = contentRef.current;

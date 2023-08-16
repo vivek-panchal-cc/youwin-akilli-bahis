@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { SyncIcon, LoadingIcon, DownloadIcon } from "../../../assets/svgs";
-import settings from "../../../misc";
+import useCurrentLanguage from "../../../misc";
 import LockIconPng from "../../../assets/images/Lock.png";
 import UnlockIconPng from "../../../assets/images/Unlock.png";
 import ScreenShotFooter from "../../../components/common/screenshotFooter";
@@ -49,6 +49,21 @@ const MultiBet = ({
   const stack = process.env.REACT_APP_STACK;
   const contentRef = useRef(null);
   const footerRef = useRef();
+  const settings = useCurrentLanguage();
+
+  let totalWinsValue = 1;
+  // Check if multiBet?.MultibetItems is both non-null and has items
+  if (multiBet?.MultibetItems && multiBet?.MultibetItems.length > 0) {
+    multiBet?.MultibetItems?.forEach((item) => {
+      if (item?.price) {
+        totalWinsValue *= item.price;
+      }
+    });
+    totalWinsValue *= stack;
+    totalWinsValue = Math.round(totalWinsValue); // Round to nearest whole number
+  } else {
+    totalWinsValue = 0;
+  }
 
   const fetchMultiBetData = async (value = 5000) => {
     try {
@@ -471,10 +486,10 @@ const MultiBet = ({
             ) : (
               // Actual content for totalWins
               <p className="total_wins_value">
-                {isNaN(multiBet?.TotalOdds * stack)
+                {isNaN(totalWinsValue)
                   ? 0
-                  : (multiBet?.TotalOdds * stack)?.toLocaleString("en-US")}
-                {/* : (multiBet?.TotalOdds * stack)?.toFixed(2)} */}
+                  : totalWinsValue?.toLocaleString("en-US")}
+                {/* : (totalWinsValue)?.toFixed(2)} */}
                 TL
               </p>
             )}

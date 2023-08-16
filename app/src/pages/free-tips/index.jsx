@@ -3,7 +3,7 @@ import { AppContext } from "../../context/AppContext";
 import SportsMenu from "../../components/sportsMenu";
 import LigSlider from "../../components/ligSlider";
 import OddSection from "./components/OddSection";
-import settings from "../../misc";
+import useCurrentLanguage from "../../misc";
 import {
   addPopularOddToCollection,
   addLigItemToCollection,
@@ -26,6 +26,7 @@ const FreeTips = () => {
   const { tipsCollection, dispatch } = useContext(ReducerContext);
   const { id } = useParams();
   const navigate = useNavigate();
+  const settings = useCurrentLanguage()
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
 
   useEffect(() => {
@@ -77,6 +78,7 @@ const FreeTips = () => {
           handleSelectLig={handleSelectLigItem}
           tipsCollection={tipsCollection}
           isLoading={isLoading} // Pass the isLoading prop
+          displayLiveLabel={true}
         />
       )}
       <OddSection

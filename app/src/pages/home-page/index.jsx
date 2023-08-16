@@ -83,6 +83,7 @@ const HomePage = () => {
         handleSelectLig={handleSelectLigItem}
         tipsCollection={tipsCollection}
         isLoading={isLoading} // Pass the isLoading prop
+        displayLiveLabel={false}
       />
       <PopularOdds
         data={fireBasePopularOddsDataBase}

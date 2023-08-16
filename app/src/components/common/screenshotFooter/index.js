@@ -1,6 +1,6 @@
 import React from "react";
 import logoImg from "../../../assets/images/logo.svg";
-import settings from "../../../misc";
+import useCurrentLanguage from "../../../misc";
 
 /**
  *
@@ -9,6 +9,7 @@ import settings from "../../../misc";
  */
 
 const ScreenShotFooter = () => {
+  const settings = useCurrentLanguage()
   return (
     <div className="screenshot">
       <div className="header">
@@ -18,10 +19,10 @@ const ScreenShotFooter = () => {
         <h4>AKILLI BAHIS</h4>
       </div>
       <div className="screenshot_logo">
-        <p>{settings.staticString.poweredBy}</p>
         <p className="logo_footer">
-          <span>you</span>win
+          <span>you</span>win 'in
         </p>
+        <p>{settings.staticString.katkılarıyla}</p>
       </div>
     </div>
   );

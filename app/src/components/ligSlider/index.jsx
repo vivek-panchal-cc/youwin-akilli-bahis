@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Skeleton from "react-loading-skeleton";
 import { getCurrentOddStatus } from "../../services/vefaAppService";
-import settings from "../../misc";
+import useCurrentLanguage from "../../misc";
 import images from "../../constants/allAssets";
 
 const ImageLoader = React.lazy(() => import("../common/imageLoader"));
@@ -13,8 +13,15 @@ const ImageLoader = React.lazy(() => import("../common/imageLoader"));
  *
  */
 
-const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
+const LigSlider = ({
+  data,
+  handleSelectLig,
+  tipsCollection,
+  isLoading,
+  displayLiveLabel,
+}) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
+  const settings = useCurrentLanguage();
 
   // Define the custom order of odd item statuses
   const order = ["home", "draw", "away"];
@@ -72,9 +79,11 @@ const LigSlider = ({ data, handleSelectLig, tipsCollection, isLoading }) => {
                       backgroundImage: `url(${images.ligSliderBackgroundImage})`,
                     }}
                   >
-                    <div className="live">
-                      <p>{settings.staticString.live}</p>
-                    </div>
+                    {displayLiveLabel && (
+                      <div className="live">
+                        <p>{settings.staticString.live}</p>
+                      </div>
+                    )}
                     <p className="title">
                       {elm?.competitionName ? (
                         elm?.competitionName
