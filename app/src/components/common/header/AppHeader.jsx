@@ -4,6 +4,7 @@ import logoImg from "../../../assets/images/logo.svg";
 import images from "../../../constants/allAssets";
 import { AppContext } from "../../../context/AppContext";
 import { Skeleton } from "@mui/material";
+import useCurrentLanguage from "../../../misc";
 const ImageLoader = React.lazy(() =>
   import("../../../components/common/imageLoader")
 );
@@ -16,6 +17,7 @@ const ImageLoader = React.lazy(() =>
 
 const AppHeader = () => {
   const { language, setLanguage } = useContext(AppContext);
+  const settings = useCurrentLanguage();
   const toggleLanguage = () => {
     setLanguage((prevLang) => (prevLang === "tr" ? "en" : "tr"));
   };
@@ -31,7 +33,7 @@ const AppHeader = () => {
           </div>
         </Link>
         <Link to="/" style={{ textDecoration: "none" }}>
-          <h4>AKILLI BAHIS</h4>
+          <h4>{settings.staticString.akilliBahis}</h4>
         </Link>
       </div>
       <div className="header_lang_change">

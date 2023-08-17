@@ -65,6 +65,18 @@ const MultiBet = ({
     totalWinsValue = 0;
   }
 
+  let totalOdds = 1;
+  // Check if multiBet?.MultibetItems is both non-null and has items
+  if (multiBet?.MultibetItems && multiBet?.MultibetItems.length > 0) {
+    multiBet?.MultibetItems?.forEach((item) => {
+      if (item?.price) {
+        totalOdds *= item.price;
+      }
+    });
+  } else {
+    totalOdds = 0;
+  }
+
   const fetchMultiBetData = async (value = 5000) => {
     try {
       setAlterSuggestion(true);
@@ -100,7 +112,7 @@ const MultiBet = ({
 
     // Disable the button if all valid items are locked
     setIsButtonDisabled(lockedItems.length === validItemsCount);
-  }, [lockedItems, multiBet?.MultibetItems]);
+  }, [lockedItems, multiBet?.MultibetItems]);  
 
   const handleAlterSuggestions = useCallback(async () => {
     if (lockedItems.length === 0) {
@@ -111,17 +123,20 @@ const MultiBet = ({
       const unlockedItems = multiBet.MultibetItems?.filter(
         (item) => !eventIds.includes(item.eventId)
       );
-      // Filter out the locked items from the received suggestion data
-      const lockedItemsData = multiBet.MultibetItems?.filter((item) =>
-        lockedItems.some((lockedItem) => lockedItem.eventId === item.eventId)
-      );
-      let allSuggestions = [...lockedItemsData]; // Define a new array to hold all the new suggestion items
-      for (const unlockedItem of unlockedItems) {
-        try {
-          let multiBetAlterSuggestionData = await multiBetAlterSuggestionAPI(
+
+      try {
+        const suggestionPromises = unlockedItems.map((unlockedItem) =>
+          multiBetAlterSuggestionAPI(
             unlockedItem?.eventId,
             unlockedItem?.multiGroupId
-          );
+          )
+        );
+
+        const suggestionResponses = await Promise.all(suggestionPromises);
+
+        let allSuggestions = [...lockedItems]; // Define a new array to hold all the new suggestion items
+
+        suggestionResponses.forEach((multiBetAlterSuggestionData) => {
           // Check if multiBetAlterSuggestionData.MultibetItems is iterable
           if (
             multiBetAlterSuggestionData.MultibetItems &&
@@ -132,24 +147,27 @@ const MultiBet = ({
               ...multiBetAlterSuggestionData.MultibetItems,
             ]; // Add new items to allSuggestions
           }
-        } catch (error) {
-          console.error("Failed to fetch multiBet data:", error);
-        }
+        });
+
+        // Remove duplicates based on eventId
+        allSuggestions = allSuggestions.reduce((acc, current) => {
+          const x = acc.find((item) => item.eventId === current.eventId);
+          if (!x) {
+            return acc.concat([current]);
+          } else {
+            return acc;
+          }
+        }, []);
+
+        setMultiBet((prevState) => ({
+          ...prevState,
+          MultibetItems: allSuggestions,
+        })); // Update the multiBet state with allSuggestions
+      } catch (error) {
+        console.error("Failed to fetch multiBet data:", error);
+      } finally {
+        setSkeleton(false);
       }
-      // Remove duplicates based on eventId
-      allSuggestions = allSuggestions.reduce((acc, current) => {
-        const x = acc.find((item) => item.eventId === current.eventId);
-        if (!x) {
-          return acc.concat([current]);
-        } else {
-          return acc;
-        }
-      }, []);
-      setMultiBet((prevState) => ({
-        ...prevState,
-        MultibetItems: allSuggestions,
-      })); // Update the multiBet state with allSuggestions
-      setSkeleton(false);
     }
   }, [lockedItems, multiBet]);
 
@@ -471,9 +489,7 @@ const MultiBet = ({
               </div>
             ) : (
               // Actual content for totalOdds
-              <p className="total_odds_value">
-                {multiBet.TotalOdds ? multiBet.TotalOdds : 0}
-              </p>
+              <p className="total_odds_value">{totalOdds?.toFixed(2)}</p>
             )}
           </div>
           <div className="total_win">

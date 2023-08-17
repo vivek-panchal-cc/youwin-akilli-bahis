@@ -20,6 +20,20 @@ export const getCurrentOddStatus = (title, line) => {
   }
 };
 
+export const getNameValue = (name_en, settings) => {
+  const marketName = name_en?.toLowerCase();
+  switch (marketName) {
+    case "home":
+      return settings.marketNames.home;
+    case "away":
+      return settings.marketNames.away;
+    case "draw":
+      return settings.marketNames.draw;
+    default:
+      return null; // Or return undefined or another distinguishable value.
+  }
+};
+
 export const multiBetAPI = async (stake, win) => {
   try {
     const apiUrl = `${url}/getmymultibetsjson?stake=${stake}&win=${win}`;

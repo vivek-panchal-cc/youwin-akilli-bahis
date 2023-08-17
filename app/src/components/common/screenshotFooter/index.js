@@ -16,7 +16,7 @@ const ScreenShotFooter = () => {
         <div className="logo_img">
           <img src={logoImg} alt="main logo" />
         </div>
-        <h4>AKILLI BAHIS</h4>
+        <h4>{settings.staticString.akilliBahis}</h4>
       </div>
       <div className="screenshot_logo">
         <p className="logo_footer">

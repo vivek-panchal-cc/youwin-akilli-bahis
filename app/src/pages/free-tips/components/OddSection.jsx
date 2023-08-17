@@ -205,7 +205,8 @@ const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
       <OddsCalendar
         handleDateSelection={handleDateSelection}
         selectedDate={selectedDate}
-      />
+        data={data?.filter((item) => item.groupId === id)}
+        />
       <div className="odds_section_content">{content}</div>
     </div>
   );

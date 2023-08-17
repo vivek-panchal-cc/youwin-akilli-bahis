@@ -617,14 +617,20 @@ body{
             color: #2D2A2B;
             opacity: 1;
             font-size: 11px;
-            font-weight: bold;
+            // font-weight: bold;
             text-align: center;
+            &.bold{
+                font-weight: bold;
+            }
         }
         .number{
             color: #2D2A2B;
             opacity: 1;
             font-size: 11px;
-            font-weight: bold;
+            // font-weight: bold;
+            &.bold{
+                font-weight: bold;
+            }
         }
     }  
     .selected {
@@ -649,6 +655,7 @@ body{
             color: #000000;
             opacity: 1;
             font-size: 12px;
+            flex-basis: 35%;
             // margin: 10px 0px 0px 20px;
             p{
                 margin: 0px;                
@@ -1634,8 +1641,8 @@ body{
     background-color: $black;
     align-items: flex-end;
     justify-content: center;
-    padding: 10px 10px 13px 30px;
-    gap: 26px;
+    padding: 10px 10px 13px 44px;
+    gap: 0px;
     position: fixed;
     left: 0;
     right: 0;
@@ -1644,14 +1651,17 @@ body{
     cursor: pointer;
     .footer_item {
         text-align: center;
+        flex-basis: 25%;
         &.tip_collection{
             margin-left: 20px;
+            margin-right: 8px;
             .tip_collection_icon {
                 top: -33%;
                 position: absolute;
                 background-color: $green;
                 height: 45px;
                 width: 45px;
+                right: 7.8%;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;

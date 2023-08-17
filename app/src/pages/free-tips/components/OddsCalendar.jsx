@@ -1,24 +1,26 @@
 import React from "react";
 import { CalendarIcon } from "../../../assets/svgs";
+import useCurrentLanguage from "../../../misc";
 
-const OddsCalendar = ({ handleDateSelection, selectedDate }) => {
+const OddsCalendar = ({ handleDateSelection, selectedDate, data }) => {
   const currentDate = new Date();
+  const settings = useCurrentLanguage();
   // Get the current date with day
   const currentDay = currentDate.getDate();
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const monthsOfYear = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sept",
-    "Oct",
-    "Nov",
-    "Dec",
+    settings.staticString.january,
+    settings.staticString.february,
+    settings.staticString.march,
+    settings.staticString.april,
+    settings.staticString.may,
+    settings.staticString.june,
+    settings.staticString.july,
+    settings.staticString.august,
+    settings.staticString.september,
+    settings.staticString.october,
+    settings.staticString.november,
+    settings.staticString.december,
   ];
   const currentDayOfWeek = daysOfWeek[currentDate.getDay()];
   const currentMonth = currentDate.getMonth();
@@ -33,6 +35,10 @@ const OddsCalendar = ({ handleDateSelection, selectedDate }) => {
     nextDates.push({ date: nextDay, dayOfWeek: nextDayOfWeek });
   }
 
+  const hasDataOnDate = (date) => {
+    return data?.some((item) => new Date(item.kickOffTime).getDate() === date);
+  };
+
   return (
     <div className="calendar">
       <div className="month_name">
@@ -45,7 +51,9 @@ const OddsCalendar = ({ handleDateSelection, selectedDate }) => {
           onClick={() => handleDateSelection(currentDay)}
         >
           <span className="day">{currentDayOfWeek}</span>
-          <span className="number">{currentDay}</span>
+          <span className={`number ${hasDataOnDate(currentDay) ? "bold" : ""}`}>
+            {currentDay}
+          </span>
         </div>
         <div className="next_dates_column">
           {nextDates.map((dateObj, index) => (
@@ -57,7 +65,13 @@ const OddsCalendar = ({ handleDateSelection, selectedDate }) => {
               onClick={() => handleDateSelection(dateObj.date)}
             >
               <span className="day_of_week">{dateObj.dayOfWeek}</span>
-              <span className="date_number">{dateObj.date}</span>
+              <span
+                className={`date_number ${
+                  hasDataOnDate(dateObj.date) ? "bold" : ""
+                }`}
+              >
+                {dateObj.date}
+              </span>
             </div>
           ))}
         </div>

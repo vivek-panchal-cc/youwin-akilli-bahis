@@ -13,6 +13,7 @@ import html2canvas from "html2canvas";
 import ScreenShotFooter from "../common/screenshotFooter";
 import { Skeleton } from "@mui/material";
 import images from "../../constants/allAssets";
+import { getNameValue } from "../../services/vefaAppService";
 const ImageLoader = React.lazy(() =>
   import("../../components/common/imageLoader")
 );
@@ -25,9 +26,9 @@ const TipCollectionModal = () => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const contentRef = useRef(null);
   const footerRef = useRef();
-  const settings = useCurrentLanguage()
+  const settings = useCurrentLanguage();
 
-  const { dispatch, isModalShow, tipsCollection } = useContext(ReducerContext);
+  const { dispatch, isModalShow, tipsCollection } = useContext(ReducerContext);  
   const { fireBaseAllEventsDataBase } = useContext(AppContext);
 
   const handleClose = () => {
@@ -221,9 +222,7 @@ const TipCollectionModal = () => {
                             </div>
                             <div className="text_content">
                               <p>
-                                {item?.marketName
-                                  ? item?.marketName
-                                  : item?.name}
+                                {getNameValue(item?.name_en, settings) || item?.name || item?.marketName}
                                 <span>{displayOdds(item)}</span>
                               </p>
                             </div>
