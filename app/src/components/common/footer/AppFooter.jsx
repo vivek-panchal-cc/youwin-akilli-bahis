@@ -18,7 +18,7 @@ import { AppContext } from "../../../context/AppContext";
  */
 const AppFooter = () => {
   const { dispatch, tipsCollection, isModalShow } = useContext(ReducerContext);
-  const settings = useCurrentLanguage()
+  const settings = useCurrentLanguage();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -59,7 +59,15 @@ const AppFooter = () => {
 
   const handleFreeTips = () => {
     if (fireBaseAllLeaguesDataBase) {
-      const firstKey = Object.keys(fireBaseAllLeaguesDataBase)?.[0];
+      // Sort the keys in ascending order based on the numeric part
+      const sortedKeys = Object.keys(fireBaseAllLeaguesDataBase).sort(
+        (a, b) => {
+          const numA = parseInt(a.match(/\d+/)[0]);
+          const numB = parseInt(b.match(/\d+/)[0]);
+          return numA - numB;
+        }
+      );
+      const firstKey = sortedKeys[0]; // Take the first key from the sorted array
       if (firstKey) {
         navigate(`/free-tips/${firstKey}`);
         setActiveItem("freeTips");

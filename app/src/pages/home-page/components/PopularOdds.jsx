@@ -43,6 +43,11 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
           } else if (index === 0) {
             item.style.paddingTop = "10px";
           }
+          // Add a condition for the 9th item (10th considering 0-index) 
+          // to adjust bottom margin or padding
+          else if (index === 9) {
+            item.style.marginBottom = "20px"; // Adjust the value as needed
+          }
         });
         const clonedFooter = document.querySelector(".footer");
         clonedFooter.style.position = "relative";
@@ -51,6 +56,7 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
         clonedFooter.style.left = "-20px";
         clonedFooter.style.width = "calc(100% + 40px)";
         clonedFooter.style.marginBottom = "-10px";
+        clonedFooter.style.marginTop = "50px"; // Added some margin to top of footer
       },
     }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");

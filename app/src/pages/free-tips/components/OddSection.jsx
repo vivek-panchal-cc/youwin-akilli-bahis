@@ -206,7 +206,7 @@ const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
         handleDateSelection={handleDateSelection}
         selectedDate={selectedDate}
         data={data?.filter((item) => item.groupId === id)}
-        />
+      />
       <div className="odds_section_content">{content}</div>
     </div>
   );

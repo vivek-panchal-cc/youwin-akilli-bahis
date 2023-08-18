@@ -1,8 +1,11 @@
 import React, { Suspense, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import images from "../../../constants/allAssets";
+import logoImg from "../../../assets/images/logo.svg";
 import Skeleton from "react-loading-skeleton";
 import { AppContext } from "../../../context/AppContext";
+import { getFormattedTime, getOrdinalDay } from "../../../utils/dateFormat";
+import useCurrentLanguage from "../../../misc";
 const ImageLoader = React.lazy(() =>
   import("../../../components/common/imageLoader")
 );
@@ -18,6 +21,7 @@ const ImageLoader = React.lazy(() =>
 const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const { fireBaseHomePageTeaserSliderDataBase } = useContext(AppContext);
+  const settings = useCurrentLanguage();
 
   return (
     <div className="first_slider">
@@ -79,9 +83,16 @@ const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
                       }}
                     >
                       <div className="top_section">
-                        <img src={images.redLogoImage} alt="logo" />
-                        <h5>{item?.kickOffTime}</h5>
-                        {!matchedLeagueData && <p>{item?.eventName}</p>}
+                        <div className="logo_section">
+                          <img src={logoImg} alt="logo" />
+                          <span>{settings.staticString.akilliBahis}</span>
+                        </div>
+                        <h5>
+                          {getOrdinalDay(item?.kickOffTime)} at{" "}
+                          {getFormattedTime(item?.kickOffTime)}
+                        </h5>
+
+                        {!matchedLeagueData && <p>{item?.parentgroupName}</p>}
                       </div>
                       <div className="team_section">
                         <div>
@@ -150,7 +161,7 @@ const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
                         className="odds_section"
                         onClick={() => handleSelectTeaser(item)}
                       >
-                        <p>{item?.title}</p>
+                        <p>{item?.name}</p>
                         <h5>{item?.odds_decimal}</h5>
                       </div>
                     </div>

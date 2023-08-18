@@ -7,14 +7,14 @@ import Skeleton from "react-loading-skeleton";
  *
  */
 
-const SportsMenu = ({ data, handleSelect, selectedItem, isLoading }) => { 
-
-  const mergedObj =
-    data &&
-    Object.entries(data)?.map(([key, value]) => ({
-      key,
-      value,
-    }));
+const SportsMenu = ({ data, handleSelect, selectedItem, isLoading }) => {
+  const mergedObj = data
+    ? Object.keys(data).sort((a, b) => {
+        const numA = parseInt(a.match(/\d+/)[0]); // extract the numeric part from the key
+        const numB = parseInt(b.match(/\d+/)[0]);
+        return numA - numB; // numerical comparison
+      })
+    : [];
 
   const containerRef = useRef(null);
   const selectedRef = useRef(null);
@@ -38,7 +38,11 @@ const SportsMenu = ({ data, handleSelect, selectedItem, isLoading }) => {
 
   return (
     <div className="league_tabs">
-      <div className={isLoading ? "league_tab_slider loading" : "league_tab_slider"}>
+      <div
+        className={
+          isLoading ? "league_tab_slider loading" : "league_tab_slider"
+        }
+      >
         <ul ref={containerRef} data-scrollable="true">
           {isLoading
             ? Array.from({ length: mergedObj?.length || 5 }).map((_, index) => (
@@ -46,14 +50,14 @@ const SportsMenu = ({ data, handleSelect, selectedItem, isLoading }) => {
                   <Skeleton height={100} />
                 </li>
               ))
-            : mergedObj?.map((item) => (
+            : mergedObj?.map((key) => (
                 <li
-                  key={item?.key}
-                  ref={selectedItem === item?.key ? selectedRef : null}
-                  className={selectedItem === item?.key ? "selected" : null}
-                  onClick={() => handleSelect(item?.key)}
+                  key={key}
+                  ref={selectedItem === key ? selectedRef : null}
+                  className={selectedItem === key ? "selected" : null}
+                  onClick={() => handleSelect(key)}
                 >
-                  {item?.value}
+                  {data[key]}
                 </li>
               ))}
         </ul>

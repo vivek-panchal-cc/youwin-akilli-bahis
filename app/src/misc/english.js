@@ -20,7 +20,7 @@ const staticString = {
   loading: "Loading...",
   readMore: "Read more",
   close: "Close",
-  noDataFound: "No data found",
+  noDataFound: "No matches with the selected league found",
   live: "Live",
   matchWinner: "Match Winner",
   addToCollection: "Add to collection",
