@@ -115,7 +115,7 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
                 <Skeleton height={100} />
               </div>
             ))
-          : data?.map((item, i) => {
+          : data?.slice(0, 10).map((item, i) => {
               const randomOddKey = getRandomOdd(item?.odds, item?.eventId)?.key;
               const randomOdd = item?.odds[randomOddKey];
               const isSelected = tipsCollection?.some(

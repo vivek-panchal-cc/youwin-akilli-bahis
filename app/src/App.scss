@@ -1661,7 +1661,7 @@ body{
     background-color: $black;
     align-items: flex-end;
     justify-content: center;
-    padding: 10px 10px 13px 44px;
+    padding: 10px;
     gap: 0px;
     position: fixed;
     left: 0;
@@ -1673,8 +1673,7 @@ body{
         text-align: center;
         flex-basis: 25%;
         &.tip_collection{
-            margin-left: 20px;
-            margin-right: 8px;
+            margin-left: 40px;
             .tip_collection_icon {
                 top: -33%;
                 position: absolute;
