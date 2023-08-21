@@ -7,7 +7,8 @@ import Skeleton from "react-loading-skeleton";
  *
  */
 
-const SportsMenu = ({ data, handleSelect, selectedItem, isLoading }) => {
+const SportsMenu = ({ data, handleSelect, selectedItem }) => {
+  const isLoading = data !== undefined ? false : true;
   const mergedObj = data
     ? Object.keys(data).sort((a, b) => {
         const numA = parseInt(a.match(/\d+/)[0]); // extract the numeric part from the key

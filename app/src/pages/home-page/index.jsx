@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import TeaserSlider from "./components/TeaserSlider";
 import { AppContext } from "../../context/AppContext";
@@ -21,16 +21,14 @@ const HomePage = () => {
     fireBaseAllLeaguesDataBase,
     fireBaseFeaturedDataBase,
     fireBasePopularOddsDataBase,
-    fireBaseHomePageSliderLiveDataBase
+    fireBaseHomePageSliderLiveDataBase,
   } = useContext(AppContext);
-
   const { tipsCollection, dispatch } = useContext(ReducerContext);
-  const navigate = useNavigate();
+  const navigate = useNavigate();  
+  // const fireBasePopularOddsDataBase = [];
   // @futureUse const selectedMenuTab = fireBaseAllLeaguesDataBase && Object.keys(fireBaseAllLeaguesDataBase)?.[0];
 
-  const [isLoading, setIsLoading] = useState(true); // Add isLoading state
-
-  const handleSelect = (item) => {    
+  const handleSelect = (item) => {
     navigate(`/free-tips/${item}`);
   };
 
@@ -46,50 +44,34 @@ const HomePage = () => {
     addTeaserItemToCollection(dispatch, data);
   };
 
-  useEffect(() => {
-    if (
-      fireBaseTeaserDataBase &&
-      fireBaseAllLeaguesDataBase &&
-      fireBaseFeaturedDataBase &&
-      fireBasePopularOddsDataBase
-    ) {
-      // Set isLoading to false once data is available
-      setIsLoading(false);
-    }
-  }, [
-    fireBaseTeaserDataBase,
-    fireBaseAllLeaguesDataBase,
-    fireBaseFeaturedDataBase,
-    fireBasePopularOddsDataBase,
-  ]);
-
-  const mergedData = fireBaseFeaturedDataBase?.concat(fireBaseTeaserDataBase);
+  const mergedData = fireBaseTeaserDataBase
+    ? fireBaseFeaturedDataBase?.concat(fireBaseTeaserDataBase)
+    : fireBaseFeaturedDataBase;
 
   return (
     <div className="home_page_container">
       <TeaserSlider
         data={mergedData}
         handleSelectTeaser={handleSelectTeaserItem}
-        isLoading={isLoading} // Pass the isLoading prop
       />
       <SportsMenu
         data={fireBaseAllLeaguesDataBase}
         handleSelect={handleSelect}
         selectedItem={""}
-        isLoading={isLoading} // Pass the isLoading prop
       />
       <LigSlider
         data={fireBaseHomePageSliderLiveDataBase}
         handleSelectLig={handleSelectLigItem}
         tipsCollection={tipsCollection}
-        isLoading={isLoading} // Pass the isLoading prop
+        isLoading={
+          fireBaseHomePageSliderLiveDataBase !== undefined ? false : true
+        }
         displayLiveLabel={false}
       />
       <PopularOdds
         data={fireBasePopularOddsDataBase}
         handleSelectOdd={handleSelectOdd}
         tipsCollection={tipsCollection}
-        isLoading={isLoading} // Pass the isLoading prop
       />
     </div>
   );

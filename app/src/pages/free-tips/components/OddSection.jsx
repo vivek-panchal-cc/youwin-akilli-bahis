@@ -17,7 +17,8 @@ const ImageLoader = React.lazy(() =>
  *
  */
 
-const OddSection = ({ data, handleSelectOdd, selectedItem, isLoading }) => {
+const OddSection = ({ data, handleSelectOdd, selectedItem }) => {
+  const isLoading = data !== undefined ? false : true;
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const settings = useCurrentLanguage();
   const currentDate = new Date();

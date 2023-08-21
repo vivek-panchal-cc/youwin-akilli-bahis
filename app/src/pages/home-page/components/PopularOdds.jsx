@@ -21,7 +21,8 @@ const ImageLoader = React.lazy(() =>
  *
  */
 
-const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
+const PopularOdds = ({ data, handleSelectOdd, tipsCollection }) => {
+  const isLoading = data !== undefined ? false : true;
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const contentRef = useRef();
   const footerRef = useRef();
@@ -43,7 +44,7 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
           } else if (index === 0) {
             item.style.paddingTop = "10px";
           }
-          // Add a condition for the 9th item (10th considering 0-index) 
+          // Add a condition for the 9th item (10th considering 0-index)
           // to adjust bottom margin or padding
           else if (index === 9) {
             item.style.marginBottom = "20px"; // Adjust the value as needed
@@ -80,7 +81,7 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
 
     // Otherwise, generate a new random odd
     const keys = Object.keys(odds);
-    const randomIndex = Math.floor(Math.random() * keys.length);
+    const randomIndex = Math.floor(Math.random() * keys?.length);
     const randomKey = keys[randomIndex];
 
     // Store the new random odd in the ref
@@ -108,105 +109,112 @@ const PopularOdds = ({ data, handleSelectOdd, tipsCollection, isLoading }) => {
         </div>
       </div>
       <div className="popular_matches_content" ref={contentRef}>
-        {isLoading
-          ? // Render skeleton loading elements when isLoading is true
-            Array.from({ length: 5 }).map((_, index) => (
-              <div key={index} className="popular_match_item loading">
-                <Skeleton height={100} />
-              </div>
-            ))
-          : data?.slice(0, 10).map((item, i) => {
-              const randomOddKey = getRandomOdd(item?.odds, item?.eventId)?.key;
-              const randomOdd = item?.odds[randomOddKey];
-              const isSelected = tipsCollection?.some(
-                (elm) =>
-                  elm.eventId === item?.eventId &&
-                  elm?.selectionId === randomOdd?.selectionId
-              );
-              return (
-                <div
-                  key={`${item?.eventId}-${randomOdd?.selectionId}-${i}`}
-                  className="popular_match_item"
-                >
-                  <div className="left_content">
-                    <div className="team_section">
-                      <p>{item?.teamA}</p>
-                      <Suspense
-                        fallback={
-                          <Skeleton
-                            variant="circular"
-                            width={60}
-                            height={60}
-                            style={{
-                              height: "20px",
-                              width: "20px",
-                            }}
-                          />
-                        }
-                      >
-                        <ImageLoader
-                          src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
-                          alt="team logo"
-                          shape="circular"
-                          className="image_loader_teamA"
-                          style={{ height: "20px", width: "20px" }}
+        {isLoading ? (
+          // Render skeleton loading elements when isLoading is true
+          Array.from({ length: 5 }).map((_, index) => (
+            <div key={index} className="popular_match_item loading">
+              <Skeleton height={100} />
+            </div>
+          ))
+        ) : data?.length > 0 ? (
+          data?.map((item, i) => {
+            const randomOddKey = getRandomOdd(item?.odds, item?.eventId)?.key;
+            const randomOdd = item?.odds[randomOddKey];
+            const isSelected = tipsCollection?.some(
+              (elm) =>
+                elm.eventId === item?.eventId &&
+                elm?.selectionId === randomOdd?.selectionId
+            );
+            return (
+              <div
+                key={`${item?.eventId}-${randomOdd?.selectionId}-${i}`}
+                className="popular_match_item"
+              >
+                <div className="left_content">
+                  <div className="team_section">
+                    <p>{item?.teamA}</p>
+                    <Suspense
+                      fallback={
+                        <Skeleton
+                          variant="circular"
+                          width={60}
+                          height={60}
+                          style={{
+                            height: "20px",
+                            width: "20px",
+                          }}
                         />
-                      </Suspense>
-                    </div>
-                    <div className="time_section">
-                      <p>{getMonthNameWithDate(item?.kickOffTime)}</p>
-                      <p>{getFormattedTime(item?.kickOffTime)}</p>
-                    </div>
-                    <div className="team_section">
-                      <Suspense
-                        fallback={
-                          <Skeleton
-                            variant="circular"
-                            width={60}
-                            height={60}
-                            style={{
-                              height: "20px",
-                              width: "20px",
-                            }}
-                          />
-                        }
-                      >
-                        <ImageLoader
-                          src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
-                          alt="team logo"
-                          shape="circular"
-                          className="image_loader_teamB"
-                          style={{ height: "20px", width: "20px" }}
-                        />
-                      </Suspense>
-                      <p>{item?.teamB}</p>
-                    </div>
+                      }
+                    >
+                      <ImageLoader
+                        src={`${IMAGE_BASE_PATH}${item?.teamA_logo}`}
+                        alt="team logo"
+                        shape="circular"
+                        className="image_loader_teamA"
+                        style={{ height: "20px", width: "20px" }}
+                      />
+                    </Suspense>
                   </div>
-                  <div
-                    className={`odd_button ${isSelected ? "selected" : ""} `}
-                    onClick={() =>
-                      handleSelectOdd({
-                        ...item,
-                        ...randomOdd,
-                        name_en: randomOddKey,
-                      })
-                    }
-                  >
-                    <p>{getCurrentOddStatus(randomOddKey, randomOdd?.line)}</p>
-                    <p>
-                      {typeof randomOdd?.odds_decimal === "string" ? (
-                        <span>
-                          {parseFloat(randomOdd?.odds_decimal)?.toFixed(2)}
-                        </span>
-                      ) : (
-                        <span>{randomOdd?.odds_decimal?.toFixed(2)}</span>
-                      )}
-                    </p>
+                  <div className="time_section">
+                    <p>{getMonthNameWithDate(item?.kickOffTime)}</p>
+                    <p>{getFormattedTime(item?.kickOffTime)}</p>
+                  </div>
+                  <div className="team_section">
+                    <Suspense
+                      fallback={
+                        <Skeleton
+                          variant="circular"
+                          width={60}
+                          height={60}
+                          style={{
+                            height: "20px",
+                            width: "20px",
+                          }}
+                        />
+                      }
+                    >
+                      <ImageLoader
+                        src={`${IMAGE_BASE_PATH}${item?.teamB_logo}`}
+                        alt="team logo"
+                        shape="circular"
+                        className="image_loader_teamB"
+                        style={{ height: "20px", width: "20px" }}
+                      />
+                    </Suspense>
+                    <p>{item?.teamB}</p>
                   </div>
                 </div>
-              );
-            })}
+                <div
+                  className={`odd_button ${isSelected ? "selected" : ""} `}
+                  onClick={() =>
+                    handleSelectOdd({
+                      ...item,
+                      ...randomOdd,
+                      name_en: randomOddKey,
+                    })
+                  }
+                >
+                  <p>{getCurrentOddStatus(randomOddKey, randomOdd?.line)}</p>
+                  <p>
+                    {typeof randomOdd?.odds_decimal === "string" ? (
+                      <span>
+                        {parseFloat(randomOdd?.odds_decimal)?.toFixed(2)}
+                      </span>
+                    ) : (
+                      <span>{randomOdd?.odds_decimal?.toFixed(2)}</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="text-center py-4">
+            {settings.staticString.emptyData}
+          </div>
+        )}
       </div>
+
       <div
         ref={footerRef}
         className="footer"
