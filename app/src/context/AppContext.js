@@ -4,12 +4,14 @@ import useAppState from "../hooks/useAppState";
 // InitState use for context
 const appInitState = {
   fireBaseHomePageSliderDataBase: null,
-  fireBaseAllEventsDataBase: null,
-  fireBaseAllLeaguesDataBase: null,
+  fireBaseAllEventsDataBase: undefined,
+  fireBaseAllLeaguesDataBase: undefined,
   fireBaseAllMarketsDataBase: null,
-  fireBasePopularOddsDataBase: null,
-  fireBaseTeaserDataBase: null,
+  fireBasePopularOddsDataBase: undefined,
+  fireBaseTeaserDataBase: undefined,
   fireBaseHomePageTeaserSliderDataBase: null,
+  fireBaseHomePageSliderLiveDataBase: undefined,
+  fireBaseFeaturedDataBase: undefined,
   language: "tr", // default language set to 'tr'
 };
 

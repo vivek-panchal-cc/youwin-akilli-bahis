@@ -1,6 +1,7 @@
 import React from "react";
 import { CalendarIcon } from "../../../assets/svgs";
 import useCurrentLanguage from "../../../misc";
+import { getCurrentOddStatus } from "../../../services/vefaAppService";
 
 const OddsCalendar = ({ handleDateSelection, selectedDate, data }) => {
   const currentDate = new Date();
@@ -35,8 +36,18 @@ const OddsCalendar = ({ handleDateSelection, selectedDate, data }) => {
     nextDates.push({ date: nextDay, dayOfWeek: nextDayOfWeek });
   }
 
+  const filterData = data?.filter((item) => {
+    const oddStatus =
+      item?.name_en !== ""
+        ? getCurrentOddStatus(item?.name_en, item?.line)
+        : "";
+    return oddStatus !== "";
+  });
+
   const hasDataOnDate = (date) => {
-    return data?.some((item) => new Date(item.kickOffTime).getDate() === date);
+    return filterData?.some(
+      (item) => new Date(item.kickOffTime).getDate() === date
+    );
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import SportsMenu from "../../components/sportsMenu";
 import LigSlider from "../../components/ligSlider";
@@ -19,34 +19,14 @@ const FreeTips = () => {
   const {
     fireBaseAllLeaguesDataBase,
     fireBaseAllEventsDataBase,
-    fireBaseHomePageSliderDataBase,
-    fireBaseHomePageSliderLiveDataBase
+    fireBaseHomePageSliderLiveDataBase,
   } = useContext(AppContext);
-
   const { tipsCollection, dispatch } = useContext(ReducerContext);
   const { id } = useParams();
   const navigate = useNavigate();
-  const settings = useCurrentLanguage()
-  const [isLoading, setIsLoading] = useState(true); // Add isLoading state
+  const settings = useCurrentLanguage();
 
-  useEffect(() => {
-    if (
-      fireBaseAllLeaguesDataBase &&
-      fireBaseAllEventsDataBase &&
-      fireBaseHomePageSliderDataBase &&
-      fireBaseHomePageSliderLiveDataBase
-    ) {
-      // Set isLoading to false once data is available
-      setIsLoading(false);
-    }
-  }, [
-    fireBaseAllLeaguesDataBase,
-    fireBaseAllEventsDataBase,
-    fireBaseHomePageSliderDataBase,
-    fireBaseHomePageSliderLiveDataBase
-  ]);
-
-  const handleSelect = (item) => {    
+  const handleSelect = (item) => {
     navigate(`/free-tips/${item}`);
   };
 
@@ -72,20 +52,22 @@ const FreeTips = () => {
         handleSelect={handleSelect}
         selectedItem={id}
       />
-      {filteredLigSliderData?.length > 0 && (
-        <LigSlider
-          data={filteredLigSliderData}
-          handleSelectLig={handleSelectLigItem}
-          tipsCollection={tipsCollection}
-          isLoading={isLoading} // Pass the isLoading prop
-          displayLiveLabel={true}
-        />
-      )}
+      <LigSlider
+        data={filteredLigSliderData}
+        handleSelectLig={handleSelectLigItem}
+        tipsCollection={tipsCollection}
+        isLoading={
+          filteredLigSliderData === undefined ||
+          filteredLigSliderData?.length > 0
+            ? false
+            : true
+        } // Pass the isLoading prop
+        displayLiveLabel={true}
+      />
       <OddSection
         data={fireBaseAllEventsDataBase}
         handleSelectOdd={handleSelectOdd}
         selectedItem={tipsCollection}
-        isLoading={isLoading} // Pass the isLoading prop
       />
     </div>
   );

@@ -18,7 +18,8 @@ const ImageLoader = React.lazy(() =>
  *
  */
 
-const TeaserSlider = ({ data, handleSelectTeaser, isLoading }) => {
+const TeaserSlider = ({ data, handleSelectTeaser }) => {
+  const isLoading = data !== undefined ? false : true;
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const { fireBaseHomePageTeaserSliderDataBase } = useContext(AppContext);
   const settings = useCurrentLanguage();

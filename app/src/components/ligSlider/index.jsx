@@ -17,15 +17,17 @@ const LigSlider = ({
   data,
   handleSelectLig,
   tipsCollection,
-  isLoading,
   displayLiveLabel,
+  isLoading,
 }) => {
   const IMAGE_BASE_PATH = process.env.REACT_APP_IMAGE_BASE_PATH;
   const settings = useCurrentLanguage();
 
   // Define the custom order of odd item statuses
   const order = ["home", "draw", "away"];
-
+  if (!data) {
+    return null;
+  }
   return (
     <div className="lig_slider">
       <Swiper
