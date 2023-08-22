@@ -20,6 +20,7 @@ const staticString = {
   loading: "Yükleniyor...",
   readMore: "Devamını oku",
   close: "Kapalı",
+  noNewsAvailable: "Haber yok",
   emptyData: "Veri bulunamadı",
   noDataFound: "Seçilen lig ile eşleşme bulunamadı",
   live: "Canlı",

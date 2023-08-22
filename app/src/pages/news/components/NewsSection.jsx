@@ -1,4 +1,10 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, {
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 import { Skeleton } from "@mui/material";
@@ -7,73 +13,81 @@ const ImageLoader = React.lazy(() =>
   import("../../../components/common/imageLoader")
 );
 
-const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
+const NewsSection = ({
+  data,
+  handleSelectOdd,
+  selectedItem,
+  setNoNewsAvailable,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const settings = useCurrentLanguage();
   const [selectedNews, setSelectedNews] = useState(null);
   const [feedItems, setFeedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const URL = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH;
-  const URL_ONE = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_ONE;
-  const URL_TWO = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_TWO;
-  const URL_THREE = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_THREE;
-  const URL_FOUR = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_FOUR;
-  const URL_FIVE = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_FIVE;
-  const URL_SIX = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_SIX;
-  const URL_SEVEN = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_SEVEN;
-  const URL_EIGHT = process.env.REACT_APP_NEWS_FEED_API_BASE_PATH_EIGHT;
 
-  useEffect(() => {
-    const rssFeedUrls = [
-      URL,
-      URL_ONE,
-      URL_TWO,
-      URL_THREE,
-      URL_FOUR,
-      URL_FIVE,
-      URL_SIX,
-      URL_SEVEN,
-      URL_EIGHT,
-    ];
-    parseRSSFeed(rssFeedUrls);
-  }, [
-    URL,
-    URL_ONE,
-    URL_TWO,
-    URL_THREE,
-    URL_FOUR,
-    URL_FIVE,
-    URL_SIX,
-    URL_SEVEN,
-    URL_EIGHT,
-  ]);
+  const envKeys = [
+    "REACT_APP_NEWS_FEED_API_BASE_PATH",
+    "REACT_APP_NEWS_FEED_API_BASE_PATH_ONE",
+    "REACT_APP_NEWS_FEED_API_BASE_PATH_TWO",
+    "REACT_APP_NEWS_FEED_API_BASE_PATH_THREE",
+    "REACT_APP_NEWS_FEED_API_BASE_PATH_FOUR",
+    "REACT_APP_NEWS_FEED_API_BASE_PATH_FIVE",
+    "REACT_APP_NEWS_FEED_API_BASE_PATH_SIX",
+    "REACT_APP_NEWS_FEED_API_BASE_PATH_SEVEN",
+    "REACT_APP_NEWS_FEED_API_BASE_PATH_EIGHT",
+  ];
 
-  const parseRSSFeed = async (urls) => {
-    try {
+  const rssFeedUrlsRef = useRef(envKeys.map((key) => process.env[key]));
+
+  const parseRSSFeed = useCallback(
+    async (urls) => {
       setIsLoading(true);
-      const fetchPromises = urls.map((url) => {
-        return axios.get(url, {
-          headers: {
-            Accept: "application/xml",
-          },
-        });
-      });
+      const fetchPromises = urls.map(
+        (url) =>
+          axios
+            .get(url, {
+              headers: {
+                Accept: "application/xml",
+              },
+            })
+            .then((response) => ({ data: response.data }))
+            .catch((error) => ({ error, data: null })) // Handle error here
+      );
 
       const responses = await Promise.all(fetchPromises);
 
       const feedItemsData = [];
       responses?.forEach((response) => {
+        if (response.error) {
+          console.warn("Error fetching a RSS feed:", response.error);
+          return; // Skip processing for this feed
+        }
         const xmlText = response.data;
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "application/xml");
 
-        const items = xmlDoc.querySelectorAll("item");
+        let items;
+        if (xmlDoc.querySelectorAll("entry").length > 0) {
+          // This is an Atom feed
+          items = xmlDoc.querySelectorAll("entry");
+        } else {
+          // This is an RSS feed
+          items = xmlDoc.querySelectorAll("item");
+        }
         Array.from(items)?.forEach((item) => {
           const title = item.querySelector("title")?.textContent || "";
-          const link = item.querySelector("link")?.textContent || "";
-          const pubDate = item.querySelector("pubDate")?.textContent || "";
+          const link =
+            item.querySelector("link[rel='alternate']")?.getAttribute("href") ||
+            item.querySelector("link")?.textContent ||
+            "";
+          const pubDate =
+            item.querySelector("published")?.textContent ||
+            item.querySelector("pubDate")?.textContent ||
+            "";
           let description =
-            item.querySelector("description")?.textContent || "";
+            item.querySelector("content")?.textContent ||
+            item.querySelector("description")?.textContent ||
+            "";
           let encodedContent =
             item.getElementsByTagNameNS("*", "encoded")[0]?.textContent || "";
           let imageUrl = "";
@@ -135,13 +149,23 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
         });
       });
 
-      feedItemsData.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-      setFeedItems(feedItemsData);
+      if (feedItemsData.length === 0 && responses.length === urls.length) {
+        setNoNewsAvailable(true);
+      } else {
+        setNoNewsAvailable(false);
+      }
+
+      feedItemsData?.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+      const topFeedItems = feedItemsData?.slice(0, 10);
+      setFeedItems(topFeedItems);
       setIsLoading(false);
-    } catch (error) {
-      console.log("Error fetching or parsing RSS feeds:", error);
-    }
-  };
+    },
+    [setIsLoading, setNoNewsAvailable, setFeedItems]
+  );
+
+  useEffect(() => {
+    parseRSSFeed(rssFeedUrlsRef.current);
+  }, [parseRSSFeed]);
 
   const extractImageUrl = (content) => {
     const imageRegex = /<img[^>]+src=["']([^"'>]+)["'][^>]*>/;
@@ -162,15 +186,19 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
     setIsModalOpen(false);
   };
 
-  const sortedFeedItems = feedItems
-    ?.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
-    .slice(0, 10);
+  const sanitizeDescription = (desc) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(`<div>${desc}</div>`, "text/html");
+    const images = doc.querySelectorAll("img");
+    images?.forEach((img) => img.remove());
+    return doc.body.innerHTML;
+  };
 
   return (
     <div className="news_slider">
       {!isLoading &&
-        sortedFeedItems?.length > 0 &&
-        sortedFeedItems.map((item) => (
+        feedItems?.length > 0 &&
+        feedItems.map((item) => (
           <div key={item?.link} className="news_slider_item">
             <div className="news_slider_content">
               <div className="top_section">
@@ -244,7 +272,9 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
                   <>
                     {item?.description && (
                       <p
-                        dangerouslySetInnerHTML={{ __html: item.description }}
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeDescription(item.description),
+                        }}
                         className={`news_description ${
                           item.imageUrl ? "" : "no_image"
                         }`}
@@ -266,6 +296,21 @@ const NewsSection = ({ data, handleSelectOdd, selectedItem }) => {
             </div>
           </div>
         ))}
+      {/* In case of no any news available in urls or failed to fetch */}
+      {!isLoading && setNoNewsAvailable && feedItems.length === 0 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh", // take the full viewport height
+            width: "100%",
+            textAlign: "center",
+          }}
+        >
+          {settings.staticString.noNewsAvailable}
+        </div>
+      )}
       {isLoading &&
         [...Array(10)].map((item, index) => (
           <div key={index} className="news_slider_item">
